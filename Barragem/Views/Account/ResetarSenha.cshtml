@@ -1,0 +1,25 @@
+﻿    <div class="container">
+    @if (ViewBag.MsgErro != "")
+        {
+        <div class="alert alert-danger alert-dismissable" style="max-width: 300px; margin: 0 auto 10px; text-align: center">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Erro!</strong> @ViewBag.MsgErro
+        </div>
+        }
+
+        @using (Html.BeginForm("ResetarSenha", "Account", FormMethod.Post, new { @class = "form-signin" }))
+        {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <h3 class="form-signin-heading">Reiniciar Senha</h3>
+        <div class="form-group">
+            <div class="input-group col-md-3">
+                <input type="text" class="form-control" placeholder="Login" id="UserName" name="UserName" required autofocus>
+            </div>
+        </div>
+        <button class="btn btn-sm btn-success" type="submit">Enviar</button>
+
+        }
+    </div>
+        

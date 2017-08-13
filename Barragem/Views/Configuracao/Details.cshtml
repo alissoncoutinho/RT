@@ -1,0 +1,29 @@
+﻿@model Barragem.Models.Configuracao
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Configuracao</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.regulamento)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.regulamento)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cotatos)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cotatos)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

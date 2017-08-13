@@ -1,0 +1,112 @@
+﻿@model Barragem.Models.Email
+
+@{
+    ViewBag.Title = "Enviar E-mail";
+}
+
+<h3>Formulário para teste de envio de  E-mail</h3>
+<br />
+@{
+    if (ViewBag.MsgErro != "")
+    {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>@ViewBag.MsgOk</strong>
+            <p>
+                @ViewBag.MsgErro
+            </p>
+        </div>
+    }
+    else
+    {
+        if (ViewBag.MsgOk != "")
+        {
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p>
+                    @ViewBag.MsgOk
+                </p>
+            </div>
+        }
+    }
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Formulário de Email</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.de)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.de)
+            @Html.ValidationMessageFor(model => model.de)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.para)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.para)
+            @Html.ValidationMessageFor(model => model.para)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.assunto)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.assunto)
+            @Html.ValidationMessageFor(model => model.assunto)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.conteudo)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.conteudo)
+            @Html.ValidationMessageFor(model => model.conteudo)
+        </div>
+
+        <div class="editor-label">
+            Formato
+        </div>
+        <div class="editor-field">
+            <select id="formato" name="formato">
+                <option value="1">Texto</option>
+                <option value="2" selected="selected">HTML</option>
+            </select>
+        </div>
+
+        <p>
+            <input type="submit" value="Enviar" />
+        </p>
+    </fieldset>
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/editor")
+    <script type="text/javascript">
+		tinyMCE.baseURL = '@Url.Content("~/Scripts/tinymce/")'
+		tinyMCE.init({
+			selector: 'textarea#conteudo',
+			language: 'pt_BR',
+			theme: "modern",
+			theme_advanced_font_sizes: "10px,12px,13px,14px,16px,18px,20px",
+			font_size_style_values: "12px,13px,14px,16px,18px,20px",
+			width: 700,
+			height: 300,
+			plugins: [
+						"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+						"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+						"save table contextmenu directionality template paste textcolor"
+			],
+			toolbar1: "insertfile undo redo  | bold italic | underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage",
+			toolbar2: "forecolor backcolor | fontselect |  fontsizeselect | styleselect"
+
+		});
+    </script>
+}

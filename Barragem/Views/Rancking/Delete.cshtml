@@ -1,0 +1,47 @@
+﻿@model Barragem.Models.Rancking
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Ranking</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.rodada.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.rodada.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.data)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.data)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.pontuacao)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.pontuacao)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.userProfile.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.userProfile.UserName)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -1,0 +1,180 @@
+﻿@model Barragem.Models.Jogo
+@{
+        ViewBag.Title = "Controlar Jogo";
+}
+
+@if (Model != null) { 
+    using (Html.BeginForm()){
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.rodada_id)
+    
+    <legend>
+        @Html.Raw("Jogo Atual da Rodada:" + Model.rodada.codigoSeq + "")
+    </legend>
+    <div class="form-horizontal form-inline">
+        <div class="form-group">
+            <label class="control-label col-sm-3">Situação</label>
+            <div class="col-sm-5">
+                @Html.DropDownList("situacao_Id", null, new { @class = "form-control input-sm" })
+            </div>
+        </div>
+        <span id="dadosJogo">
+            <div class="form-group">
+                @Html.LabelFor(model => model.dataJogo, new { @class = "control-label col-sm-4" })
+                <div class="col-sm-6">
+                    <div class="input-group date" id="dataJogo" data-date-format="dd/mm/yyyy">
+                        <input id="dataJogo" name="dataJogo" value="@Html.Raw(Model.dataJogo)" placeholder="dd/mm/yyyy" type="text" class="form-control col-md-5" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label class="control-label col-sm-3">Hora</label>
+                    <div class="col-sm-2">
+                        <div class="input-group">
+                            <div class="form-group col-sm-2">
+                                <input id="horaJogo" name="horaJogo" value="@Html.Raw(Model.horaJogo)" placeholder="hh:mm" type="text" class="form-control col-sm-2" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </span>
+    </div>
+    <br>
+    <table class="table table-striped table-condensed table-bordered">
+        <tr class="placar">
+            <th>Sets</th>
+            <th>
+                @Html.Raw("Desafiado ("+ ViewBag.ptDefendidosDesafiado +" pt. a expirar):<br>" + Model.desafiado.nome)
+                @Html.HiddenFor(model => model.desafiado_id)
+            </th>
+            <th>
+                @Html.Raw("Desafiante (" + ViewBag.ptDefendidosDesafiante + " pt. a expirar):<br> " + Model.desafiante.nome)
+                @Html.HiddenFor(model => model.desafiante_id)
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div id="divFoto" class="img-thumbnail" style="width:158px;height:208px; cursor:pointer;">
+                @if (Model.desafiado.foto != null)
+                {
+                    <img id="imgFoto" src="@Url.Action("BuscaFoto","Account", new { id = Model.desafiado_id})" style="width: 148px; height: 198px;" />
+                }
+                else
+                {
+                    <img id="imgFoto" src="/Content/image/sem-foto.jpg" style="width: 148px; height: 198px;" />
+                }
+                </div>
+            </td>
+            <td>
+                <div id="divFoto" class="img-thumbnail" style="width:158px;height:208px; cursor:pointer;">
+                @if (Model.desafiante.foto != null){
+                    <img id="imgFoto" src="@Url.Action("BuscaFoto","Account", new { id = Model.desafiante_id})" style="width:148px;height:198px;" />
+                }else{
+                    <img id="imgFoto" src="/Content/image/sem-foto.jpg" style="width: 148px; height: 198px;" />
+                }
+                </div>
+            </td>
+            </tr>
+        <tr>
+                <td>1º</td>
+                <td>
+                    <div id="set1_2">
+                        @Html.EditorFor(model => model.qtddGames1setDesafiado)
+                    </div>
+                    @Html.ValidationMessageFor(model => model.qtddGames1setDesafiado)
+                </td>
+                <td>
+                    <div id="set1">
+                        @Html.EditorFor(model => model.qtddGames1setDesafiante, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.qtddGames1setDesafiante)
+                </td>
+            </tr>
+        <tr>
+                <td>2º</td>
+                <td>
+                    <div id="set2_2">
+                        @Html.EditorFor(model => model.qtddGames2setDesafiado)
+                        </div>
+                        @Html.ValidationMessageFor(model => model.qtddGames2setDesafiado)
+                </td>
+                <td>
+                    <div id="set2">
+                        @Html.EditorFor(model => model.qtddGames2setDesafiante)
+                    </div>
+                    @Html.ValidationMessageFor(model => model.qtddGames2setDesafiante)
+                </td>
+            </tr>
+        <tr>
+                <td>3º</td>
+                <td>
+                    <div id="set3_2">
+                        @Html.EditorFor(model => model.qtddGames3setDesafiado)
+                    </div>
+                    @Html.ValidationMessageFor(model => model.qtddGames3setDesafiado)
+                </td>
+                <td>
+                    <div id="set3">
+                        @Html.EditorFor(model => model.qtddGames3setDesafiante)
+                    </div>
+                    @Html.ValidationMessageFor(model => model.qtddGames3setDesafiante)
+                </td>
+            </tr>
+                    
+    </table>
+    <p>
+    @if ((ViewBag.Editar == null) || (ViewBag.Editar)){
+        <input type="submit" class="btn btn-primary btn-small" value="Salvar" />
+    }else{
+        @Html.Raw("<b>Rodada Já Encerrada.</b>")
+    }
+    </p>
+    }
+}
+
+@section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryform")
+<script type="text/javascript">
+    $("#dataJogo").datepicker({
+        language: 'pt-BR',
+        pickTime: false
+    });
+
+    $("select").change(function () {
+        var str = "";
+        str = $("select option:selected").text();
+        if (str != "pendente") {
+            $("#dadosJogo").show();
+        } else {
+            $("#dadosJogo").hide();
+        }
+        if (str == "pendente" || str == "marcado" || str == "WO") {
+            $("#set1").hide();
+            $("#set1_2").hide();
+            $("#set2").hide();
+            $("#set2_2").hide();
+            $("#set3").hide();
+            $("#set3_2").hide();
+                                
+        } else {
+            $("#set1").show();
+            $("#set1_2").show();
+            $("#set2").show();
+            $("#set2_2").show();
+            $("#set3").show();
+            $("#set3_2").show();
+
+                                
+        }
+    })
+    .change();
+</script>
+}

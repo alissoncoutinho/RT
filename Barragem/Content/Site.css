@@ -1,0 +1,377 @@
+html,
+body {
+    
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    background-image: url("/Content/images/glyphicons-halflings.png");
+}
+
+#footer {
+    position: fixed !important;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #27ae60;
+    border-top: 1px solid #92e273;
+    
+}
+
+.container .credit {
+    margin: 6px 0;
+    font-size: 11px;
+}
+
+.text-muted {
+    color:#fff !important;
+}
+
+.container .conteudoView {
+    margin: 60px 0;
+}
+
+.container-fluid .conteudoView {
+    margin: 60px 0;
+}
+
+
+#footer > .container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+code {
+    font-size: 80%;
+}
+
+
+.custom-navbar-default {
+    background-color: #2ecc71;
+    border-color: #149B19 !important;
+}
+
+.navbar-nav li p {
+    padding-top: 8px;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.largura-1 {
+    width: 50px !important;
+}
+
+.largura-2 {
+    width: 100px !important;
+}
+
+.largura-3 {
+    width: 150px !important;
+}
+
+.largura-4 {
+    width: 200px !important;
+}
+
+.largura-5 {
+    width: 250px !important;
+}
+
+fieldset {
+    border: 0px solid red !important;
+    padding-left: 32px !important;
+}
+
+.conteudo_na_esquerda {
+    float: left !important;
+    text-align: left !important;
+}
+
+.text-align-midle {
+    vertical-align: middle !important;
+}
+
+.text-align-right {
+    text-align: right !important;
+}
+
+.text-align-center {
+    text-align: center !important;
+}
+
+
+.navbar-toolbar {
+    height: 40px !important;
+}
+
+
+/* para autocomplete do jquery*/
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    display: none;
+    min-width: 160px;
+    _width: 160px;
+    padding: 4px 0;
+    margin: 2px 0 0 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    .ui-menu-item > a.ui-corner-all;
+
+{
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap;
+    &.ui-state-hover, &.ui-state-active;
+
+{
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none;
+}
+
+}
+}
+
+.tab-content {
+    padding-left: 3px;
+    padding-top: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: -1px;
+}
+
+/*css para questões*/
+.bootstrap-dialog .modal-header.bootstrap-dialog-draggable {
+    cursor: move;
+}
+
+/*bootstrap-dialog*/
+.imagem-dialog .modal-dialog {
+    width: 900px !important;
+}
+
+
+.grupo-resposta:hover {
+    background-color: #dff0d8;
+}
+
+.grupo-resposta > span:hover {
+    background-color: #dff0d8;
+}
+
+
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+    content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+    float: right; /* adjust as needed */
+    color: grey; /* adjust as needed */
+}
+
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+}
+
+.add-margin-bottom-15px {
+    margin-bottom: 15px;
+}
+
+.add-margin-top-15px {
+    margin-top: 15px;
+}
+
+.add-margin-15px {
+    margin: 15px;
+}
+
+.list-group-item-checked {
+    color: #3c763d;
+    background-color: #dff0d8 !important;
+}
+
+.list-group-item-close {
+    margin-right: 5px;
+}
+
+.list-group-item-close:hover {
+    color: #ff0000;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.form-group .button-file-select {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.form-group .button-file-select:hover {
+    color: #fff;
+    background-color: #3276b1;
+    border-color: #285e8e;
+}
+
+.form-group .button-file-select, .form-group .input {
+    position: relative;
+    display: block;
+    font-weight: 400;
+}
+
+.placar{
+    font-size: 12px;
+
+}
+
+.form-group .input input {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -moz-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-group .input input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+
+.form-group .input-file input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+.form-group .input-file .button-file-select {
+    position: absolute;
+    top: 6px;
+    right: 4px;
+    float: none;
+    height: 22px;
+    margin: 0;
+    padding: 0 14px;
+    font-size: 13px;
+    line-height: 20px;
+    border-radius: 4px;
+}
+
+.form-group .input-file .button-file-select:hover {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.form-group .input-file .button-file-select input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    font-size: 30px;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.table {
+    font-size: 11px !important;
+}
+
+.table > tbody > tr > td {
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+.table > thead > tr > th {
+    text-wrap: none;
+    white-space: nowrap;
+}
+
+
+/*Video*/
+
+video[Attributes Style] {
+    width: 568px;
+    height: 330px;
+}
+
+video {
+    -o-object-fit: contain;
+    object-fit: contain;
+}
+
+
+#divClasse {
+    border: 1px solid #eee;
+    width: 242px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+}
+
+#sortable1, #sortable2, #sortable3 {
+    border: 1px solid #eee;
+    width: 242px;
+    min-height: 20px;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+}
+
+    #sortable1 li, #sortable2 li, #sortable3 li {
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 1.2em;
+        width: 220px;
+    }
+
+.ui-state-classe3 {
+    border: 1px solid #dad55e;
+    background: green;
+    color: black;
+}

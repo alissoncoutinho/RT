@@ -1,0 +1,187 @@
+﻿@model Barragem.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+    
+}
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+<div class="form-horizontal">
+    <legend>Cadastro</legend>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.foto, new { @class = "control-label col-md-2" })
+        <div class="col-md-3">
+            <div id="divFoto" class="img-thumbnail" title="Clique na foto para alterar" style="width:154px;height:204px; cursor:pointer;">
+                <img id="imgFoto" src="/Content/image/sem-foto.jpg" style="width:148px;height:198px; cursor:pointer;" />
+            </div>
+        </div>
+        <input type="file" id="inputfoto" name="inputfoto" accept=".jpg,.png" style="display:none">
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "control-label col-md-2" })*
+        <div class="col-md-5">
+            @Html.TextBoxFor(m => m.UserName,new { @class = "form-control", placeholder = "ex.: nome.sobrenome ou email" })
+            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.nome, new { @class = "control-label col-md-2" })*
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.nome, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.nome, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.dataNascimento, new { @class = "control-label col-md-2" })*
+        <div class="col-md-2">
+            <div class="input-group date" id="dataNascimento" data-date-format="dd/mm/yyyy">
+                <input id="dataNascimento" name="dataNascimento" value="" type="text" class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar">
+                    </span>
+                </span>
+                @Html.ValidationMessageFor(model => model.dataNascimento, "", new { @class = "alert-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.naturalidade, new { @class = "control-label col-md-2" })*
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.naturalidade, new { @class = "form-control", placeholder = "ex.: Rio de Janeiro - RJ" })
+            @Html.ValidationMessageFor(m => m.naturalidade, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.altura, new { @class = "control-label col-md-2" })*
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.altura, new { @class = "form-control", placeholder = "ex.: 180" })
+            @Html.ValidationMessageFor(m => m.altura, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.lateralidade, new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            <select id="lateralidade" name="lateralidade" class="form-control">
+                <option value="destro">destro</option>
+                <option value="canhoto">canhoto</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.email, new { @class = "control-label col-md-2" })*
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.email, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.telefoneFixo, new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.telefoneFixo, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.telefoneCelular, new { @class = "control-label col-md-2" })*
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.telefoneCelular, new { @class = "form-control",placeholder="ex.:(61)99999-9999/vivo" })
+            @Html.ValidationMessageFor(m => m.telefoneCelular, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.telefoneCelular2, new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.telefoneCelular2, new { @class = "form-control", placeholder = "ex.:(61)99999-9999/tim" })
+            @Html.ValidationMessageFor(m => m.telefoneCelular2)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.bairro, new { @class = "control-label col-md-2" })*
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.bairro, new { @class = "form-control", placeholder = "ex.: águas claras"})
+            @Html.ValidationMessageFor(m => m.bairro, "", new { @class = "alert-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.classeId, new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("classeId", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.classeId)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.barragemId, new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("barragemId", null, new { @class = "form-control", @readonly = "readonly"})
+            @Html.ValidationMessageFor(model => model.barragemId)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.matriculaClube, new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+            @Html.TextBoxFor(m => m.matriculaClube, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Cadastrar" />
+    </div>
+</div>
+}
+            @section Scripts {
+                @Scripts.Render("~/bundles/load-image")
+                @Scripts.Render("~/bundles/jqueryval")
+                <script type="text/javascript">
+                    $(document).ready(function () {
+
+                        $("#dataNascimento").datepicker({
+                            language: 'pt-BR',
+                            pickTime: false
+                        });
+
+                        $("#telefoneFixo").mask("(99) 9999-9999");
+                        $("#telefoneCelular").mask("(99) 99999-9999/AAAAAA");
+                        $("#telefoneCelular2").mask("(99) 99999-9999/AAAAAA");
+
+                        $("#divFoto").click(function () {
+                            $("#inputfoto").click();
+                        });
+                        var currentFile;
+                        $("#inputfoto").change(function (e) {
+                            var fileName = $(this).val();
+                            var input = $(this);
+                            currentFile = e.target.files[0];
+                            loadImage(currentFile,
+                                    mostraFoto,
+                                    { maxWidth: 148, maxHeight: 189, }
+                                );
+                        });
+
+                        var mostraFoto = function (img) {
+                            if (!(img.src || img instanceof HTMLCanvasElement)) {
+                                alert("Erro na imagem");
+                                return;
+                            } else {
+                                $("#divFoto").empty();
+                                $("#divFoto").append(img).show();
+                            }
+                        }
+                    })
+                </script>
+            }

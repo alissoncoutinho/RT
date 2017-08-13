@@ -1,0 +1,177 @@
+﻿@model Barragem.Models.Torneio
+<section class="content-header">
+    <h1>Torneio</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Detalhes</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        @Html.LabelFor(m => m.nome, new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @Html.Raw(Model.nome)
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Patrocinador", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @Html.Raw(Model.barragem.nome)
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Período", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @Html.Raw(Model.dataInicio.ToShortDateString()) a @Html.Raw(Model.dataFim.ToShortDateString())
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Jogos", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            De @Html.Raw(Model.periodicidadeJogos) em @Html.Raw(Model.periodicidadeJogos) dias
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Classes", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @Html.Raw(Model.qtddClasses)
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Repescagem", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @if (Model.temRepescagem)
+                            { @Html.Raw("Sim") }
+                            else
+                            { @Html.Raw("Não")}
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Label("Premiação", new { @class = "col-sm-3" })
+                        <div class="col-sm-8 info-box-text">
+                            @Html.Raw(Model.premiacao)
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <a href="@Url.Action("TorneiosDisponiveis")" title="Voltar" class="btn btn-default">Voltar</a>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="col-md-6">
+            <!-- Horizontal Form -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Inscrição</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                @using (Html.BeginForm("Inscricao", "Torneio", FormMethod.Post, new { @class = "form-horizontal",@name="formInscricao" })){
+                    <div class="box-body">
+                        <div class="row">
+                            @Html.Label("Valor", new { @class = "col-sm-4" })
+                            <div class="col-sm-8 info-box-text">
+                                @Html.Hidden("torneioId", Model.Id)
+                                @if (ViewBag.valor=="gratuito")
+                                {
+                                    @Html.Raw(ViewBag.valor)
+                                    @Html.Hidden("vrInscricao","0");
+                                }else{ 
+                                    @Html.Raw("R$ " + Model.valor + ",00")
+                                    @Html.Hidden("vrInscricao", Model.valor);
+                                }
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            @Html.Label("Inscrições até", new { @class = "col-sm-4" })
+                            <div class="col-sm-8 info-box-text">
+                                @Html.Raw(Model.dataFimInscricoes.ToShortDateString())
+                            </div>
+                        </div>
+                        <div class="row">
+                            @Html.Label("Nível", new { @class = "col-sm-4" })
+                            <div class="col-sm-8 info-box-text">
+                                @if (ViewBag.ClasseInscricao > 0){
+                                    @Html.Raw(ViewBag.ClasseInscricao+"ª Classe")
+                                    int classe = ViewBag.ClasseInscricao;
+                                    @Html.Hidden("classeInscricao", classe);
+                                }
+                                else
+                                {
+                                    <select name="classeInscricao" class="form-control">
+                                        @for (int i = 1; i <= Model.qtddClasses; i++) { 
+                                            <option value="@i">@i ª Classe</option>
+                                        }
+                                    </select>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        @if (Model.dataFimInscricoes >= DateTime.Now) { 
+                            if (ViewBag.isInscrito){
+                                <button type="button" class="btn btn-danger pull-right confirmCancel">Cancelar</button>
+                            } else {
+                                <button type="button" class="btn btn-info pull-right confirmInscricao">Inscrever-me</button>
+                            }
+                        }else{
+                            @Html.Raw("Inscrições Encerradas.")
+                        }
+                        
+                    </div>
+                    <!-- /.box-footer -->
+                }
+            </div>
+            <!-- /.box -->
+        </div>
+        <!--/.col (right) -->
+    </div>
+    <!-- /.row -->
+</section>
+    
+</div>
+@section Scripts {
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".confirmInscricao").confirm({
+            title: "Confirmação",
+            text: "Aperte SIM para confirmar sua inscrição!",
+            confirm: function (button) {
+                //window.location.href = button.data("link");
+                document.formInscricao.submit();
+            },
+            cancel: function (button) {
+
+            },
+            confirmButton: "Sim",
+            cancelButton: "Não"
+        });
+
+        $(".confirmCancel").confirm({
+            title: "Confirmação",
+            text: "Aperte SIM para confirmar o cancelamento da inscrição!",
+            confirm: function (button) {
+                //window.location.href = button.data("link");
+                document.formInscricao.submit();
+            },
+            cancel: function (button) {
+
+            },
+            confirmButton: "Sim",
+            cancelButton: "Não"
+        });
+
+    });
+    </script>
+}

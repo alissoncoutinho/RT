@@ -1,0 +1,46 @@
+﻿@model Barragem.Models.Jogo
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Trocar Jogadores</legend>
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.rodada_id)
+        <input type="hidden" name="situacao_Id" value="1"/>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desafiante_id, "desafiante")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("desafiante_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.desafiante_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desafiado_id, "desafiado")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("desafiado_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.desafiado_id)
+        </div>
+        <br>
+        <p>
+            <input type="submit" value="Salvar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Voltar para lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

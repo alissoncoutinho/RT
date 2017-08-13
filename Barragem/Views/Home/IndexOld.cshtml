@@ -1,0 +1,254 @@
+﻿@model IEnumerable<Barragem.Models.Jogo>
+@{
+    ViewBag.Title = "Tênis Ranking - Brasília";
+        string dataFim = ""; 
+        try{
+            dataFim = (String)ViewBag.dataFinal.ToString("dd/MM/yyyy");
+        }catch(Exception e){}
+
+        HttpCookie cookie = Request.Cookies["_barragemId"];
+        var barragId = "";
+        var linkParceiro = "https://goo.gl/WqNGx2";
+        if (cookie != null)
+        {
+            barragId = cookie.Value.ToString();
+            if (barragId == "1") { 
+                barragId = "";
+                linkParceiro = "https://goo.gl/WqNGx2";
+            }
+            else if (barragId == "2")
+            {
+                linkParceiro = "https://goo.gl/WqNGx2";
+            }
+        }
+        var scrRegul = "/Content/REGULAMENTO_DA_BARRAGEM_CERRADO" + barragId + ".doc";    
+        var scrInf = "/Content/INFORMACOES_GERAIS" + barragId + ".doc";
+        var imgParceiro = "/Content/image/banner_parceria.gif";
+		var scrTorn = "/Content/INFORMACOES_TORNEIO" + barragId + ".doc";
+}
+    @section featured {
+        <section class="featured">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>
+                            @ViewBag.NomeBarragem - Tênis Ranking
+                        </h3>
+                        Aperfeiçoamento, lazer e amizade para os amantes de tênis.
+                        <br><br>
+                        <a class="btn btn-primary btn-large" href="@scrRegul">Regulamento</a>
+                        <a class="btn btn-primary btn-large" href="@scrInf">Informações Iniciais</a>
+                        @if ((barragId == "2")||(barragId == "")){
+							<a class="btn btn-primary btn-success" href="@scrTorn">Informações do Torneio</a>
+                        }
+						@if (ViewBag.solicitarAtivacao != "")
+                        {
+                            <a class="btn btn-primary btn-danger" href="/Account/SolicitarAtivacao?token=@Html.Raw(ViewBag.solicitarAtivacao)">Solicitar Ativação</a>
+                        }<br><br><br>
+                    </div>
+					@if (barragId == "") {
+						<div class="col-md-6">
+							<a href="@linkParceiro" target="_blank">
+								<div class="parceiro">
+									<img src="@imgParceiro" class="img-responsive">
+								</div>
+							</a>
+						</div>
+					}
+                </div>
+            </div>
+        </section>
+    }
+
+
+    <div class="row clearfix">
+        @if (cookie == null){
+            <div class="col-md-4 column">
+            <h3 style="color:forestgreen">
+                Barragens Disponíveis
+            </h3>
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                    <tr style="background-color:#5cb85c;color:white">
+                        <th>
+                            Nome
+                        </th>
+                        <th>
+                            
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @foreach (var barragem in (List<Barragem.Models.Barragens>) ViewBag.barragens){
+                            <tr>
+                                <td>
+                                    @barragem.nome
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("../Account/Register", new { barragemId = @barragem.Id })" title="associar">
+                                        associar
+                                    </a>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+            </table>
+            
+        </div>
+        }
+        <div class="col-md-4 column">
+            <h3 class="text-primary">
+                Rodada @ViewBag.rodada até @dataFim
+            </h3>
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                    <tr style="background-color:#428bca;color:white">
+                        <th>
+                            desafiado
+                        </th>
+                        <th>
+                            desafiante
+                        </th>
+                        <th>
+                            Placar
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var jogo in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("../Account/Detalhes", new { userId = @jogo.desafiado.UserId })" title="Detalhes do jogador">
+                                    @jogo.desafiado.nome
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("../Account/Detalhes", new { userId = @jogo.desafiante.UserId })" title="Detalhes do jogador">
+                                    @jogo.desafiante.nome
+                                </a>
+                            </td>
+                            <td>
+                                @jogo.qtddGames1setDesafiado/@jogo.qtddGames1setDesafiante - @jogo.qtddGames2setDesafiado/@jogo.qtddGames2setDesafiante - @jogo.qtddGames3setDesafiado/@jogo.qtddGames3setDesafiante
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            @if (Request.IsAuthenticated)
+            {
+                <a href="@Url.Action("../Jogo/Index")" class="btn btn-primary btn-sm">Ver todos</a>
+            }
+            else
+            {
+                <a href="@Url.Action("../Account/Login")" class="btn btn-primary btn-sm">Logar para ver todos</a>
+            }
+        </div>
+        <div class="col-md-4 column">
+            <h3 style="color:forestgreen">
+                Meus Jogos
+            </h3>
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                    <tr style="background-color:#5cb85c;color:white">
+                        <th>
+                            Rodada
+                        </th>
+                        <th>
+                            desafiado
+                        </th>
+                        <th>
+                            desafiante
+                        </th>
+                        <th>
+                            Placar
+                        </th>
+                    </tr>
+                </thead>
+
+                @if (Request.IsAuthenticated)
+                {
+                    <tbody>
+
+                        @foreach (var jogo in (List<Barragem.Models.Jogo>)ViewBag.meusJogos)
+                        {
+                            <tr>
+                                <td>
+                                    @jogo.rodada.codigoSeq
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("../Account/Detalhes", new { userId = @jogo.desafiado.UserId })" title="Detalhes do jogador">
+                                        @jogo.desafiado.nome
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("../Account/Detalhes", new { userId = @jogo.desafiante.UserId })" title="Detalhes do jogador">
+                                        @jogo.desafiante.nome
+                                    </a>
+                                </td>
+                                <td>
+                                    @jogo.qtddGames1setDesafiado/@jogo.qtddGames1setDesafiante - @jogo.qtddGames2setDesafiado/@jogo.qtddGames2setDesafiante - @jogo.qtddGames3setDesafiado/@jogo.qtddGames3setDesafiante
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (Request.IsAuthenticated)
+            {
+                <a href="@Url.Action("../Jogo/ListarJogosJogador")" class="btn btn-success btn-sm">Ver todos</a>
+            }
+        </div>
+
+        <!-- torneio-->
+        <!--div class="col-md-4 column">
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <a href="/Content/INSCRICAO_NO_TORNEIO.doc"><img id="imgFoto" src="/Content/image/torneio.jpg" /></a>
+                    </tr>
+                </thead>
+            </table>
+        </div-->
+        <!-- torneio-->
+        @if (Request.IsAuthenticated){
+        <div class="col-md-4 column">
+            <h3 class="text-info">
+                Ranking
+            </h3>
+            
+            <table class="table table-striped table-condensed table-bordered">
+                <thead>
+                    <tr style="background-color:goldenrod;color:white">
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Jogador
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var ran in (List<Barragem.Models.Rancking>)ViewBag.Rancking)
+                    {
+                        <tr>
+                            <td>
+                                @ran.posicao
+                            </td>
+                            <td>
+                                @ran.userProfile.nome
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            
+                <a href="@Url.Action("../Rancking/Index")" class="btn btn-warning btn-sm">Ver todos</a>
+        </div>
+        }
+    </div>

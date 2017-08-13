@@ -1,0 +1,63 @@
+﻿@model Barragem.Models.Temporada
+
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title">Temporada</h3>
+    </div>
+
+
+    @using (Html.BeginForm("Create", "Temporada", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="box-body">
+            <div class="form-group">
+                @Html.LabelFor(model => model.nome, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(model => model.nome, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.nome)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.qtddRodadas, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-6">
+                    @Html.TextBoxFor(model => model.qtddRodadas, new { @class = "form-control", @placeholder = "Caso seja temporada" })
+                </div>
+                @Html.ValidationMessageFor(model => model.qtddRodadas)
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(model => model.isAtivo, new { @checked = "checked" }) Ativo
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            @if (Roles.IsUserInRole("admin"))
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.barragem, new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-8">
+                        @Html.DropDownList("barragemId", null, new { @class = "form-control" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.barragemId)
+                </div>
+            }
+            else
+            {
+                <input type="hidden" name="barragemId" value="@ViewBag.barraId" />
+            }
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            @Html.ActionLink("Voltar", "Index", new { @class = "btn btn-default" })
+            <button type="submit" class="btn btn-info pull-right">Gravar</button>
+        </div>
+
+    }
+
+</div>
+
+

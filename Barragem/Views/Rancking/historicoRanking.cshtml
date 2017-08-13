@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Barragem.Models.Rancking>
+    @{
+        ViewBag.Title = "Histórico de pontos";
+    }
+
+    <h2>Histórico de pontos</h2>
+
+    @if (Model != null)
+    {
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th>
+                    Rodada
+                </th>
+                <th>
+                    @Html.DisplayName("Data")
+                </th>
+                <th>
+                    @Html.DisplayName("Pontos")
+                </th>
+                <th>
+                    @Html.DisplayName("Total")
+                </th>
+                <th>
+                    @Html.DisplayName("Posição")
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.rodada.codigoSeq)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.rodada.dataFim)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.pontuacao, 2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.totalAcumulado, 2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.posicao)º
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }

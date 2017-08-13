@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@model IEnumerable<Barragem.Models.Rodada>
+<h2 class="title">Rodadas</h2>
+
+@if (Roles.IsUserInRole("admin") || Roles.IsUserInRole("organizador")){
+    <p>
+        <a href="@Url.Action("Create")" class="btn btn-primary btn-small"><span class="glyphicon glyphicon-plus"></span> Nova</a>
+    </p>
+    
+}
+                      <div class="box-body table-responsive no-padding">
+                          <table class="table table table-hover">
+                              <tr>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.codigo)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.dataInicio)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.dataFim)
+                                  </th>
+                                  <th>
+                                      @Html.Raw("Situação")
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.temporada)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.barragem)
+                                  </th>
+                                  <th></th>
+                              </tr>
+                              @foreach (var item in Model)
+                              {
+                                  <tr>
+                                      <td>
+                                          @Html.DisplayFor(modelItem => item.codigoSeq)
+                                      </td>
+                                      <td>
+                                          @Html.DisplayFor(modelItem => item.dataInicio)
+                                      </td>
+                                      <td>
+                                          @Html.DisplayFor(modelItem => item.dataFim)
+                                      </td>
+                                      <td>
+                                          @if (item.isAberta)
+                                          {@Html.Raw("Aberta")}
+                                          else
+                                          {@Html.Raw("Fechada")}
+                                      </td>
+                                      <td>
+                                          @if (item.temporadaId != null)
+                                          {
+                                              @Html.DisplayFor(modelItem => item.temporada.nome)
+                                          }
+
+                                      </td>
+                                      <td>
+                                          @Html.DisplayFor(modelItem => item.barragem.nome)
+                                      </td>
+                                      <td>
+                                          @if (item.codigoSeq != "91010")
+                                          {
+                                              if (Roles.IsUserInRole("admin") || Roles.IsUserInRole("organizador"))
+                                              {
+                                                  if (item.isAberta)
+                                                  {
+                                                      <a href="@Url.Action("Edit", new {id = @item.Id })" title="Editar/Detalhar" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                                                      <button data-link="@Url.Action("SortearJogos", new {id = @item.Id, barragemId = @item.barragemId })" data-title="Sortear Jogos" title="Sortear Jogos" class="btn btn-default btn-xs confirmDialog"><span class="glyphicon glyphicon-random"></span></button>
+                                                  }
+                                              }
+                                              <a href="@Url.Action("../Jogo/Index", new { rodadaId = item.Id })" title="Jogos da Rodada" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
+                                              if (Roles.IsUserInRole("admin") || Roles.IsUserInRole("organizador"))
+                                              {
+                                                  <button data-link="@Url.Action("FecharRodada", new { id = item.Id })" data-title="Fechar Rodada!" title="Fechar Rodada" class="btn btn-default btn-xs confirmDialog"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                                                  //if (!item.isAberta){
+                        <!--a href="//Url.Action("ProcessarJogosAtrasados", new { id = item.Id })" title="Processar Jogos atrasados" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-refresh"></span></a-->
+                                                  //}
+                                                  <a href="@Url.Action("notificarGeracaoRodada", new { Id = item.Id })" title="enviar email de criação de rodada" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-envelope"></span></a>
+                                              }
+                                          }
+                                      </td>
+                                  </tr>
+                              }
+                          </table>
+                      </div>
+                          @if (Roles.IsUserInRole("admin"))
+                          {
+                              <p>@Html.ActionLink("Configurações do Sistema", "../Configuracao/Edit/1")</p>
+                          }

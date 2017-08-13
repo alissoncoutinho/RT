@@ -1,0 +1,98 @@
+﻿@model Barragem.Models.ConfirmaSenhaModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Confirma troca de senha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    @Styles.Render("~/css")
+
+    <style type="text/css">
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+            .form-signin .form-signin-heading,
+            .form-signin .checkbox {
+                margin-bottom: 10px;
+            }
+
+            .form-signin .checkbox {
+                font-weight: normal;
+            }
+
+            .form-signin .form-control {
+                position: relative;
+                font-size: 16px;
+                height: auto;
+                padding: 10px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+                .form-signin .form-control:focus {
+                    z-index: 2;
+                }
+
+            .form-signin input[type="text"] {
+                margin-bottom: -1px;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .form-signin input[type="password"] {
+                margin-bottom: 10px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        @if (ViewBag.MsgErro != "")
+        {
+            <div class="alert alert-danger alert-dismissable" style="max-width: 300px; margin: 0 auto 10px; text-align: center">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Erro!</strong> @ViewBag.MsgErro
+            </div>
+        }
+
+        @using (Html.BeginForm("ConfirmaSenha", "Account", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <h3 class="form-signin-heading">Confirmar troca de senha</h3>
+            <input type="hidden" id="TokenId" name="TokenId" value="@Model.TokenId">
+            <input type="password" class="form-control" placeholder="Nova senha" id="Senha" name="Senha" required autofocus>
+            <input type="password" class="form-control" placeholder="Confirmar senha" id="SenhaConfirmacao" name="SenhaConfirmacao" required>
+            <button class="btn btn-small btn-success" type="submit">Enviar</button>
+        }
+        <p style="max-width: 300px;margin: 0 auto 10px;text-align:center">
+            &copy; Barragem do Cerrado
+        </p>
+    </div>
+
+
+    @Scripts.Render("~/js")
+
+</body>
+</html>

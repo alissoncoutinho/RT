@@ -1,0 +1,132 @@
+﻿@model Barragem.Models.Jogo
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Jogo</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.rodada_id, "rodada")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("rodada_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.rodada_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dataCadastroResultado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dataCadastroResultado)
+            @Html.ValidationMessageFor(model => model.dataCadastroResultado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.usuarioInformResultado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.usuarioInformResultado)
+            @Html.ValidationMessageFor(model => model.usuarioInformResultado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desafiante_id, "desafiante")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("desafiante_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.desafiante_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desafiado_id, "desafiado")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("desafiado_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.desafiado_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames1setDesafiante)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames1setDesafiante)
+            @Html.ValidationMessageFor(model => model.qtddGames1setDesafiante)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames2setDesafiante)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames2setDesafiante)
+            @Html.ValidationMessageFor(model => model.qtddGames2setDesafiante)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames3setDesafiante)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames3setDesafiante)
+            @Html.ValidationMessageFor(model => model.qtddGames3setDesafiante)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames1setDesafiado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames1setDesafiado)
+            @Html.ValidationMessageFor(model => model.qtddGames1setDesafiado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames2setDesafiado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames2setDesafiado)
+            @Html.ValidationMessageFor(model => model.qtddGames2setDesafiado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qtddGames3setDesafiado)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qtddGames3setDesafiado)
+            @Html.ValidationMessageFor(model => model.qtddGames3setDesafiado)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idVencedor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idVencedor)
+            @Html.ValidationMessageFor(model => model.idVencedor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idPerderdor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idPerderdor)
+            @Html.ValidationMessageFor(model => model.idPerderdor)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "Index";
+    var qtddRodadas = ViewBag.QtddRodada;
+    var listFase3 = ViewBag.JogosFase3;
+    var listFase4 = ViewBag.JogosFase4;
+    var listFase5 = ViewBag.JogosFase5;
+    var listFase6 = ViewBag.JogosFase6;
+}
+@model IEnumerable<Barragem.Models.Jogo>
+    <legend>Tabela de Jogos</legend>
+                      <div class="row">
+                          <div class="pull-right" style="padding-bottom: 6px">
+                              <a href="@Url.Action("EfetuarSorteioFase2", new {torneioId = @ViewBag.torneioId })" title="Voltar" class="btn btn-default">Efetuar Sorteio</a>
+                          </div>
+                      </div>
+    <div class="box-body table-responsive no-padding no-border table-hover">
+        
+        <table class="table table-hover" style='margin-right: 30px; table-layout: fixed; width: 978px;'>
+                <thead>
+                    <tr>
+                        @if (qtddRodadas == 6) { 
+                            <th>
+                                <span>R32</span>
+                            </th>
+                            <th>
+                                <span>R16</span>
+                            </th>
+                            <th>
+                                <span>R8</span>
+                            </th>
+                        }
+                        @if (qtddRodadas == 5){
+                            <th>
+                                <span>R16</span>
+                            </th>
+                            <th>
+                                <span>R8</span>
+                            </th>
+                        }
+                        @if (qtddRodadas == 4){
+                            <th>
+                                <span>R8</span>
+                            </th>
+                        }
+                        <th>
+                            <span>QF</span>
+                        </th>
+                        <th>
+                            <span>SF</span>
+                        </th>
+                        <th>
+                            <span>F</span>
+                        </th>
+                        <th>
+                            <span>Vencedor</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model){
+                        <tr>
+                            <td>
+                                <table style='border:1px dashed silver; table-layout: fixed; width: 120px;'>
+                                    <tr>
+                                        <td style="font-size: 13px; padding-left: 5px;">
+                                            @Html.DisplayFor(modelItem => item.desafiado.nome)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style ="font-size: 13px; padding-left: 5px;">
+                                            @if (item.desafiante == null)
+                                            { @Html.Raw("bye") }
+                                            else
+                                            { @Html.DisplayFor(modelItem => item.desafiante.nome) }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            @if (item.ordemJogo % 2 != 0) {
+                                foreach (var item2 in ViewBag.JogosFase2){
+                                    <td rowspan="2" style="vertical-align:middle">
+                                        <table style='border:1px dashed silver; table-layout: fixed; width: 120px; height:100px'>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item2.desafiado == null){ @Html.Raw("Aguardando") }
+                                                    else{ @Html.Raw(item2.desafiado.nome) }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item2.desafiante == null){ @Html.Raw("Aguardando") }
+                                                else { @Html.Raw(item2.desafiante.nome) }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    ViewBag.JogosFase2.Remove(item2);
+                                    break;    
+                                }
+                            }
+                                
+                            @if ((item.ordemJogo == 1) || (item.ordemJogo == 5) || (item.ordemJogo == 9) || (item.ordemJogo == 13) || (item.ordemJogo == 17) || (item.ordemJogo == 21) || (item.ordemJogo == 25) || (item.ordemJogo == 29)){
+                                foreach (var item3 in listFase3){
+                                    <td rowspan="4" style="vertical-align:middle">
+                                        <table style='border:1px dashed silver; table-layout: fixed; width: 120px; height:200px'>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item3.desafiado == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item3.desafiado.nome) }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item3.desafiante == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item3.desafiante.nome) }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    listFase3.Remove(item3);
+                                    break;
+                                }
+                            }
+                            @if ((item.ordemJogo == 1) || (item.ordemJogo == 9) || (item.ordemJogo == 17) || (item.ordemJogo == 25)){
+                                foreach (var item4 in listFase4){
+                                    <td rowspan="8" style="vertical-align:middle">
+                                        <table style='border:1px dashed silver; table-layout: fixed; width: 120px; height:440px'>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item4.desafiado == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item4.desafiado.nome) }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item4.desafiante == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item4.desafiante.nome) }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    listFase4.Remove(item4);
+                                    break;
+                                }
+                            }
+                            @if ((item.ordemJogo == 1) || (item.ordemJogo == 17)){
+                                foreach (var item5 in listFase5){
+                                    <td rowspan="16" style="vertical-align:middle">
+                                        <table style='border:1px dashed silver; table-layout: fixed; width: 120px; height:860px'>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item5.desafiado == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item5.desafiado.nome) }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 13px; padding-left: 5px;">
+                                                    @if (item5.desafiante == null)
+                                                    { @Html.Raw("Aguardando") }
+                                                    else
+                                                    { @Html.Raw(item5.desafiante.nome) }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    listFase5.Remove(item5);
+                                    break;
+                                }
+                            }
+                            @if (item.ordemJogo == 1){
+                                foreach (var item6 in listFase6){
+                                    <td rowspan="32" style="vertical-align:middle">
+                                            <table style='border:1px dashed silver; table-layout: fixed; width: 120px; height:1280px'>
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @if (item6.desafiado == null)
+                                                        { @Html.Raw("Aguardando") }
+                                                        else
+                                                        { @Html.Raw(item6.desafiado.nome) }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @if (item6.desafiante == null)
+                                                        { @Html.Raw("Aguardando") }
+                                                        else
+                                                        { @Html.Raw(item6.desafiante.nome) }
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    listFase6.Remove(item6);
+                                    break;
+                                }
+                            }
+                            @if ((item.ordemJogo == 1)){
+                                <td rowspan="64" style="vertical-align:middle">Vencedor</td>
+                            }
+                            </tr>
+                        }
+                    
+                </tbody>
+            </table>
+
+    </div>

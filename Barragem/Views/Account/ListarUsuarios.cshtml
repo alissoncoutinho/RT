@@ -1,0 +1,174 @@
+﻿@model IEnumerable<Barragem.Models.UserProfile>
+
+    @{
+        ViewBag.Title = "Listar Jogadores";
+        int contador = 0;
+        string filtro = ViewBag.filtro;
+        int filtroBarragem = ViewBag.filtroBarragem;
+    }
+
+    <h2>Jogadores</h2>
+    @if ((Roles.IsUserInRole("admin"))||(Roles.IsUserInRole("organizador")))
+    {
+        using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+                <div class="form-group form-inline">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Situação</label>
+                        <div class="col-lg-5">
+                            <select name="filtroSituacao" class="form-control input-sm" onchange="this.form.submit()">
+                                <option value="">ativos - licenc. - susp.</option>
+                                <option value="ativo" @if (filtro=="ativo"){@Html.Raw("selected")}>ativos</option>
+                                <option value="licenciado" @if (filtro == "licenciado"){ @Html.Raw("selected") }>licenciados</option>
+                                <option value="suspenso" @if (filtro == "suspenso"){ @Html.Raw("selected") }>suspensos</option>
+                                <option value="desativado" @if (filtro == "desativado"){ @Html.Raw("selected") }>desativados</option>
+                                <option value="Ativamento solicitado" @if (filtro == "Ativamento solicitado"){ @Html.Raw("selected") }>solicitações de ativamento</option>
+                                <option value="pendente" @if (filtro == "pendente"){ @Html.Raw("selected") }>pendentes</option>
+                                <option value="inativo" @if (filtro == "inativo") { @Html.Raw("selected")  }>inativos</option>
+                                <option value="todos" @if (filtro == "todos") { @Html.Raw("selected") }>todos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @if (Roles.IsUserInRole("admin")) {
+                            <label class="control-label col-sm-5">Barragens</label>
+                            <div class="col-lg-5">
+                                <select name="filtroBarragem" class="form-control input-sm" onchange="this.form.submit()">
+                                    <option value="0">todas</option>
+                                    <option value="1" @if (filtroBarragem == 1) { @Html.Raw("selected")  }>Cerrado</option>
+                                    <option value="2" @if (filtroBarragem == 2) { @Html.Raw("selected")     }>ASBAC</option>
+                                    <option value="3" @if (filtroBarragem == 3) { @Html.Raw("selected")      }>Aguas Claras</option>
+                                    <option value="4" @if (filtroBarragem == 4) { @Html.Raw("selected")      }>Feminina</option>
+                                    <option value="5" @if (filtroBarragem == 5) { @Html.Raw("selected")       }>Umuarama</option>
+                                    <option value="6" @if (filtroBarragem == 6) { @Html.Raw("selected")        }>Extrema</option>
+                                </select>
+                            </div>
+                        } else {
+                            <input type="hidden" name="filtroBarragem" value="0" />
+                        }
+                        
+                    </div>
+                </div>
+             </div>
+         }
+      }  
+                      <div class="box-body table-responsive no-padding">
+                          <table class="table table-striped table-condensed table-bordered">
+                              <tr>
+                                  <th>
+
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.nome)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.situacao)
+                                  </th>
+                                  @if (Roles.IsUserInRole("admin"))
+                                  {
+                                      <th>
+                                          @Html.DisplayNameFor(model => model.barragem)
+                                      </th>
+                                  }
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.telefoneFixo)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.telefoneCelular)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.email)
+                                  </th>
+                                  <th>
+                                      @Html.DisplayNameFor(model => model.bairro)
+                                  </th>
+                                  @if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                  {
+                                      <th>
+                                          Matrícula Clube
+                                      </th>
+                                  }
+                                  <th></th>
+                              </tr>
+
+                              @foreach (var item in Model)
+                              {
+                                  contador++;
+                                  <tr>
+                                      <td>@Html.Raw(contador)</td>
+                                      <td>
+                                          @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
+                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                          {
+                                              <a href="@Url.Action("../Account/Detalhes", new { userId = @item.UserId })" title="Detalhes do jogador">
+                                                  @Html.DisplayFor(modelItem => item.nome)
+                                              </a>
+                                          }
+                                          else
+                                          {
+                                              @Html.DisplayFor(modelItem => item.nome)
+                                          }
+                                      </td>
+                                      <td>
+                                          @if (item.situacao == "Ativamento solicitado")
+                                          {
+                                              @Html.Raw("<font color=red>")
+                                          }
+                                          @Html.DisplayFor(modelItem => item.situacao)
+                                      </td>
+                                      @if (Roles.IsUserInRole("admin"))
+                                      {
+                                          <td>
+                                              @Html.DisplayFor(modelItem => item.barragem.nome)
+                                          </td>
+                                      }
+                                      <td>
+                                          @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
+                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                          {
+                                              @Html.DisplayFor(modelItem => item.telefoneFixo)
+                                          }
+                                      </td>
+                                      <td>
+                                          @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
+                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                          {
+                                              @Html.DisplayFor(modelItem => item.telefoneCelular)
+                                          }
+                                      </td>
+                                      <td>
+                                          @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
+                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                          {
+                                              @Html.DisplayFor(modelItem => item.email)
+                                          }
+                                      </td>
+                                      <td>
+                                          @Html.DisplayFor(modelItem => item.bairro)
+                                      </td>
+                                      @if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                      {
+                                          <td>
+                                              @Html.DisplayFor(modelItem => item.matriculaClube)
+                                          </td>
+                                      }
+                                      <td style="text-align:center;width:90px;">
+                                          <div class="btn-group">
+                                              @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
+                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                              {
+                                                  if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")) || (User.Identity.Name.Equals(item.UserName)))
+                                                  {
+                                                      <a href="@Url.Action("EditaUsuario", new { UserName = item.UserName })" title="Editar" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                                                  }
+                                                  <a href="@Url.Action("Detalhes", new { userId = item.UserId })" title="detalhes do jogador" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-list"></span></a>
+                                              }
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  //}
+                              }
+
+                          </table>
+                          </div>

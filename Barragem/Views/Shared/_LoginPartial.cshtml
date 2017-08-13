@@ -1,0 +1,34 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img id="imgFoto" src="@Url.Action("BuscaFoto", "Account", new { id = 0, userName = User.Identity.Name })" class="profile-image img-circle" style="width:40px;height:40px;">&nbsp;@User.Identity.Name<strong class="caret"></strong></a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Alterar Dados", "../Account/EditaUsuario", new { UserName = User.Identity.Name })</li>
+            <li>@Html.ActionLink("Perfil", "../Account/Detalhes", new { userId = WebSecurity.GetUserId(User.Identity.Name) })</li>
+            <li>@Html.ActionLink("Meus Jogos", "ListarJogosJogador", "Jogo")</li>
+            <li>@Html.ActionLink("Trocar senha", "Manage", "Account")</li>
+            
+            @if ((Roles.IsUserInRole("admin"))||(Roles.IsUserInRole("organizador")))
+            {
+                <li>@Html.ActionLink("Barragens", "Index", "Barragens")</li>
+                <li>@Html.ActionLink("Temporada", "Index", "Temporada")</li>
+                <li>@Html.ActionLink("Torneio", "Index", "Torneio")</li>
+            }
+            
+            
+                <!--li class="divider"></!--li-->
+            <li>
+                <a href="javascript:document.getElementById('logoutForm').submit()">Sair</a>
+            </li>
+        </ul>
+    </li>
+    
+    
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+        @Html.AntiForgeryToken()
+    }
+    
+} else {
+        <li>@Html.ActionLink("Efetuar Login", "Login", "Account")</li>
+}

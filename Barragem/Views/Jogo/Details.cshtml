@@ -1,0 +1,106 @@
+﻿@model Barragem.Models.Jogo
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Jogo</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.rodada.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.rodada.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dataCadastroResultado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dataCadastroResultado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.usuarioInformResultado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.usuarioInformResultado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.desafiante.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.desafiante.UserName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.desafiado.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.desafiado.UserName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames1setDesafiante)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames1setDesafiante)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames2setDesafiante)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames2setDesafiante)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames3setDesafiante)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames3setDesafiante)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames1setDesafiado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames1setDesafiado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames2setDesafiado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames2setDesafiado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qtddGames3setDesafiado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qtddGames3setDesafiado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.idVencedor)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.idVencedor)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.idPerderdor)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.idPerderdor)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

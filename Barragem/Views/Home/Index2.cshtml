@@ -1,0 +1,345 @@
+﻿@model Barragem.Models.Jogo
+@{
+    ViewBag.Title = "Controlar Jogo";
+}
+@if (ViewBag.solicitarAtivacao != ""){
+    <div class="container-dashboard">
+        <a class="btn btn-primary btn-danger" href="/Account/SolicitarAtivacao">
+            Solicitar Ativação no Ranking
+        </a>
+    </div>
+}
+    @if (Model != null)
+    {
+        <div class="container-dashboard">
+            @using (Html.BeginForm("ControlarJogo", "Jogo"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.rodada_id)
+
+                <h4>
+                    @if (Model.rodada.temporadaId != null) { 
+                        @Html.Raw(Model.rodada.temporada.nome + " - Rodada:" + Model.rodada.codigoSeq + "")
+                    }else{
+                        @Html.Raw("Rodada:" + Model.rodada.codigoSeq + "")
+                    }
+                </h4>
+                <div id="placar" class="form-horizontal form-inline">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Situação</label>
+                        <div class="col-sm-5">
+                            @Html.DropDownList("situacao_Id", null, new { @class = "form-control input-sm" })
+                        </div>
+                    </div>
+                    <span id="dadosJogo">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.dataJogo, new { @class = "control-label col-sm-4" })
+                            <div class="col-sm-6">
+                                <div class="input-group date" id="dataJogo" data-date-format="dd/mm/yyyy">
+                                    <input id="dataJogo" name="dataJogo" value="@Html.Raw(Model.dataJogo)" placeholder="dd/mm/yyyy" type="text" class="form-control col-md-5" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Hora</label>
+                            <div class="col-sm-2">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-2">
+                                        <input id="horaJogo" name="horaJogo" value="@Html.Raw(Model.horaJogo)" placeholder="hh:mm" type="text" class="form-control col-sm-2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-md-4">
+                        <img src="/Content/image/tennis-game.png">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="box-body table-responsive no-padding">
+                            <table border="0" cellpadding="10" cellspacing="50" width="100%">
+                                <tr>
+                                    <td align="center">
+                                        @if (Model.desafiado.foto != null)
+                                    {
+                                    <img class="imgFotoJogo" src="@Url.Action("BuscaFoto","Account", new { id = Model.desafiado_id})" style="width: 148px; height: 198px;" />
+                                    }
+                                    else
+                                    {
+                                    <img class="imgFotoJogo" src="/Content/image/sem-foto.jpg" style="width: 148px; height: 198px;" />
+                                    }
+                                    </td>
+                                    <td align="center">X</td>
+                                    <td align="center">
+                                        @if (Model.desafiante.foto != null)
+                                    {
+                                    <img class="imgFotoJogo" src="@Url.Action("BuscaFoto","Account", new { id = Model.desafiante_id})" style="width:148px;height:198px;" />
+                                    }
+                                    else
+                                    {
+                                    <img class="imgFotoJogo" src="/Content/image/sem-foto.jpg" style="width: 148px; height: 198px;" />
+                                    }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <p id='jogo'>
+                                            Desafiado ( @ViewBag.ptDefendidosDesafiado pt. a expirar):<br>
+                                            <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiado_id })" title="Detalhes do jogador">
+                                                @Model.desafiado.nome
+                                            </a>
+                                        </p>
+                                        @Html.HiddenFor(model => model.desafiado_id)
+                                    </td>
+                                    <td></td>
+                                    <td align="center">
+                                        <p id='jogo'>
+                                            Desafiante ( @ViewBag.ptDefendidosDesafiante pt. a expirar):<br>
+                                            <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiante_id })" title="Detalhes do jogador">
+                                                @Model.desafiante.nome
+                                            </a>
+                                        </p>
+                                        @Html.HiddenFor(model => model.desafiante_id)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <div id="set1_2">
+                                            @Html.EditorFor(model => model.qtddGames1setDesafiado, new { placeholder = "1º set" })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames1setDesafiado)
+                                    </td>
+                                    <td><div id="1set"><p id='jogo'>1º set</p></div></td>
+                                    <td align="center">
+                                        <div id="set1">
+                                            @Html.EditorFor(model => model.qtddGames1setDesafiante, new { htmlAttributes = new { placeholder = "1º set" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames1setDesafiante)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <div id="set2_2">
+                                            @Html.EditorFor(model => model.qtddGames2setDesafiado, new { htmlAttributes = new { placeholder = "2º set" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames2setDesafiado)
+                                    </td>
+                                    <td><div id="2set"><p id='jogo'>2º set</p></div></td>
+                                    <td align="center">
+                                        <div id="set2">
+                                            @Html.EditorFor(model => model.qtddGames2setDesafiante, new { htmlAttributes = new { placeholder = "2º set" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames2setDesafiante)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <div id="set3_2">
+                                            @Html.EditorFor(model => model.qtddGames3setDesafiado, new { htmlAttributes = new { placeholder = "3º set" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames3setDesafiado)
+                                    </td>
+                                    <td><div id="3set"><p id='jogo'>3º set</p></div></td>
+                                    <td align="center">
+                                        <div id="set3">
+                                            @Html.EditorFor(model => model.qtddGames3setDesafiante, new { htmlAttributes = new { placeholder = "3º set" } })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.qtddGames3setDesafiante)
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+
+                </div>
+                <p>
+                    @if ((ViewBag.Editar == null) || (ViewBag.Editar))
+                    {
+                        <input type="submit" class="btn btn-primary btn-small" id="submeter" value="Salvar" />
+                    }
+                    else
+                    {
+                        @Html.Raw("<b>Rodada Já Encerrada.</b>")
+                    }
+                </p>
+            }
+        </div>
+
+    }
+
+    <div class="container-dashboard">
+        <legend>
+            @Html.Raw("Jogos Pendentes")
+        </legend>
+
+        <div class="row clearfix">
+            @if (ViewBag.JogosPendentes != null)
+        {
+            List<Barragem.Models.Jogo> jogosP = ViewBag.JogosPendentes;
+            if (jogosP.Count() == 0){
+        <h3>Você não possui nenhum jogo pendente.</h3>
+            }
+            foreach (var item in jogosP)
+            {
+        <a href="@Url.Action("Index2", new { idJogo = @item.Id })" title="informar resultado">
+            <div class="col-md-4 column container">
+                <h4 style="color:forestgreen">Rodada @Html.DisplayFor(modelItem => item.rodada.codigoSeq)</h4>
+                <div class="row">
+                    <div class="col-md-4 column">
+                        <img class="img-responsive" src="/Content/image/JogoPendente.png">
+                    </div>
+                    <div class="col-md-5 column">
+                        <div class="row">@Html.DisplayFor(modelItem => item.desafiado.nome)</div>
+                        <div class="row"><span style="text-align:center">X</span></div>
+                        <div class="row">@Html.DisplayFor(modelItem => item.desafiante.nome)</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+            }
+        }
+        </div>
+
+
+    </div>
+    <div class="container-dashboard">
+        <legend>
+            @Html.Raw("Últimos jogos realizados")
+        </legend>
+        <div class="row clearfix">
+            <div class="col-md-4">
+                <img src="/Content/image/finish.png">
+            </div>
+            <div class="col-md-8">
+                @if (ViewBag.JogosFinalizados != null)
+            {
+                var color = "";
+                var seta = "";
+                List<Barragem.Models.Jogo> jogos = ViewBag.JogosFinalizados;
+                    <div class="box-body table-responsive no-padding">
+                        <table border="0" class="table table-striped">
+                            <tr>
+                                <th>
+                                    Rodada
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Desafiante")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Desafiado")
+                                </th>
+                                <th>
+                                    1º set
+                                </th>
+                                <th>
+                                    2º set
+                                </th>
+                                <th>
+                                    3º set
+                                </th>
+                            </tr>
+
+                            @foreach (var item in jogos)
+                    {
+                        color = "";
+                        seta = "";
+                        var idVencedor = item.idDoVencedor;
+                        if (idVencedor == WebSecurity.GetUserId(User.Identity.Name))
+                        {
+                            color = "green";
+                            seta = "<img src='../Content/image/winner.png' />";
+                        }
+                        else if (idVencedor != 0)
+                        {
+                            color = "red";
+                            seta = "&darr;";
+                        }
+                <tr style='color:@Html.Raw(color)'>
+
+                    <td>
+                        @Html.Raw(seta) @Html.DisplayFor(modelItem => item.rodada.codigoSeq)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.desafiante.nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.desafiado.nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.qtddGames1setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames1setDesafiado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.qtddGames2setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames2setDesafiado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.qtddGames3setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames3setDesafiado)
+                    </td>
+                </tr>
+                    }
+
+                        </table>
+                        </div>
+                        }
+                    </div>
+
+
+        </div>
+    </div>
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryform")
+        <script type="text/javascript">
+            $("#dataJogo").datepicker({
+                language: 'pt-BR',
+                pickTime: false
+            });
+
+            $("select").change(function () {
+                var str = "";
+                str = $("select option:selected").text();
+                if (str != "pendente") {
+                    $("#dadosJogo").show();
+                    $("#submeter").show();
+                } else {
+                    $("#dadosJogo").hide();
+                    $("#submeter").hide();
+                }
+                if (str == "pendente" || str == "marcado" || str == "WO") {
+                    $("#set1").hide();
+                    $("#set1_2").hide();
+                    $("#set2").hide();
+                    $("#set2_2").hide();
+                    $("#set3").hide();
+                    $("#set3_2").hide();
+                    $("#1set").hide();
+                    $("#2set").hide();
+                    $("#3set").hide();
+
+                } else {
+                    $("#set1").show();
+                    $("#set1_2").show();
+                    $("#set2").show();
+                    $("#set2_2").show();
+                    $("#set3").show();
+                    $("#set3_2").show();
+                    $("#1set").show();
+                    $("#2set").show();
+                    $("#3set").show();
+
+
+                }
+            })
+            .change();
+        </script>
+    }

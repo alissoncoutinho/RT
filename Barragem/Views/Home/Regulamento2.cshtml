@@ -1,0 +1,31 @@
+﻿@model Barragem.Models.Barragens
+@{
+    ViewBag.Title = "Regulamento";
+    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+<!-- ******Signup Section****** -->
+<div class="headline-bg">
+</div>
+<section class="features-video section section-on-bg">
+    <div class="container text-center">
+        <h2 class="title">Regulamento</h2>
+    </div><!--//container-->
+</section><!--//feature-video-->
+<section class="signup-section access-section section">
+    <div class="container">
+        <div class="row">
+            <div class="form-box col-md-12 col-sm-12 col-xs-12">
+                <div class="form-box-inner">
+                    <h2 class="title text-center"></h2>
+                    <p class="intro text-center"></p>
+                    <div class="desc text-left">
+                            @Html.Raw(Model.regulamento)
+                    <br><br><br>
+                    </div><!--//desc-->
+                </div><!--//form-box-inner-->
+            </div><!--//form-box-->
+        </div><!--//row-->
+    </div><!--//container-->
+</section><!--//signup-section-->
+<!--/div--><!--//upper-wrapper-->

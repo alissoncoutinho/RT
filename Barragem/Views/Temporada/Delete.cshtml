@@ -1,0 +1,40 @@
+﻿@model Barragem.Models.Rodada
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Rodada</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dataInicio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dataInicio)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dataFim)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dataFim)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -1,0 +1,74 @@
+﻿@model Barragem.Models.Rodada
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <legend>Editar rodada</legend>
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.codigo)
+        @Html.HiddenFor(model => model.sequencial)
+        @Html.HiddenFor(model => model.barragemId)
+        @Html.HiddenFor(model => model.temporadaId)
+        <div class="editor-label">
+            <label>Rodada: @Model.codigoSeq</label>
+        </div>
+
+
+        <div class="col-xs-2">
+            @Html.LabelFor(model => model.dataInicio)
+            <div class="input-group date" id="dataInicio" data-date-format="dd/mm/yyyy">
+                @Html.TextBoxFor(model => model.dataInicio, new { @class = "form-control", @readonly = "readonly" })
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar">
+                    </span>
+                </span>
+            </div>
+
+            @Html.ValidationMessageFor(model => model.dataInicio)
+        </div>
+
+    <div class="row">
+
+        <div class="col-xs-2">
+            @Html.LabelFor(model => model.dataFim)
+            <div class="input-group date" id="dataFim" data-date-format="dd/mm/yyyy">
+                @Html.TextBoxFor(model => model.dataFim, new { @class = "form-control", @readonly = "readonly" })
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar">
+                    </span>
+                </span>
+            </div>
+
+            @Html.ValidationMessageFor(model => model.dataFim)
+        </div>
+    </div>
+    <br/>
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+     <script type="text/javascript">
+        $(function () {
+            $("#dataInicio").datepicker({
+                language: 'pt-BR',
+                pickTime: false
+            });
+            $("#dataFim").datepicker({
+                language: 'pt-BR',
+                pickTime: false
+            });
+        });
+    </script>
+}

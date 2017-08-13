@@ -1,0 +1,211 @@
+﻿@model Barragem.Models.Temporada
+
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#tabCadastro" data-toggle="tab"><b>Temporada</b></a></li>
+        <li><a href="#tabClasses" data-toggle="tab"><b>Organizar Classes</b></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="tabCadastro">
+
+            @using (Html.BeginForm("Edit", "Temporada", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                <div class="box-body">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.nome, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(model => model.nome, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.nome)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.qtddRodadas, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(model => model.qtddRodadas, new { @class = "form-control", @placeholder = "Caso seja temporada" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.qtddRodadas)
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(model => model.isAtivo, new { @checked = "checked" }) Ativo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Roles.IsUserInRole("admin"))
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.barragem, new { @class = "col-sm-2 control-label" })
+                            <div class="col-sm-8">
+                                @Html.DropDownList("barragemId", null, new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.barragemId)
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" name="barragemId" value="@ViewBag.barraId" />
+                    }
+                </div>
+        <!-- /.box-body -->
+                <div class="box-footer">
+                    @Html.ActionLink("Voltar", "Index", new { @class = "btn btn-default" })
+                    <button type="submit" class="btn btn-info pull-right">Gravar</button>
+                </div>
+
+            }
+        </div>
+        <div class="tab-pane fade" id="tabClasses">
+            <br>
+            @if (ViewBag.temRodadaAberta>0){
+                <p>Para alterar classes as rodadas devem estar fechadas.</p>
+            }
+            else
+            {
+                <button type="button" onclick="saveJogadoresAlterados()" class="btn btn-info">Gravar</button>
+            }
+                <div class="box-body">
+            @{var classes = ViewBag.Classes;
+              List<Barragem.Models.RankingView> rankingView = ViewBag.JogadoresClasses;
+            }
+            @foreach (Barragem.Models.Classe c in classes){
+                var ulId = "sortable" + c.nivel;
+                var nivel = c.nivel;
+                var qtddAtleta = "qtddAtleta" + c.nivel; 
+                <div class="col-md-2">
+                    <div class="box box-primary">
+                        <div class="with-border">
+                            <h4 class="sortable-title">@c.nome - Qtdd:<span id="@qtddAtleta">@rankingView.Where(r=>r.nivel==nivel).Count()</span></h4>
+                        </div>
+                        <ul id="@ulId" class="connectedSortable">
+                            @foreach (var item in rankingView){
+                                if (item.nivel == c.nivel) {
+                                    var liClass = "ui-state-classe" + c.nivel; 
+                                    <li class="@liClass" title="@item.nome">
+                                        <input type="hidden" value="@item.userProfile_id" name="userId">
+                                        <input type="hidden" value="@item.nivel" name="classeId">
+                                        @{var nome = item.nome;
+                                          if (nome.Length>14){
+                                              nome = item.nome.Substring(0, 15) + "...";
+                                          }
+                                         }
+                                        @Html.Raw(nome) @Html.DisplayFor(modelItem => item.totalAcumulado)pt-@Html.Raw(item.situacao.Substring(0,1)) 
+                                    </li>
+                                }else if (item.nivel > c.nivel){
+                                    break;
+                                }
+                            }
+                            </ul>
+                    </div>
+                </div>
+            }
+            </div>
+            <div class="box-footer">
+                @if (ViewBag.temRodadaAberta > 0){
+                    <p>Para alterar classes as rodadas devem estar fechadas.</p>
+                }else{
+                    <button type="button" onclick="saveJogadoresAlterados()" class="btn btn-info">Gravar</button>
+                }
+            </div>
+        </div>
+    </div>
+@section Scripts {
+
+<script type="text/javascript">
+    $(function () {
+        $("#sortable1, #sortable2, #sortable3, #sortable4").sortable({
+                connectWith: ".connectedSortable",
+                stop: function (e, ui) {
+                    for (i = 1; i < 6; i++) {
+                        var cont = 0;
+                        var classe = "#sortable" + i + " li";
+                        $.each($(classe), function (key, val) {
+                            cont++                                            
+                        });
+                        var idDiv = "#qtddAtleta"+i
+                        $(idDiv).html(cont);
+                    }
+                }
+        }).disableSelection();
+
+        $("#sortable5").sortable({
+            connectWith: ".connectedSortable",
+            stop: function (e, ui) {
+                for (i = 1; i < 6; i++) {
+                    var cont = 0;
+                    var classe = "#sortable" + i + " li";
+                    $.each($(classe), function (key, val) {
+                        cont++
+                    });
+                    var idDiv = "#qtddAtleta" + i
+                    $(idDiv).html(cont);
+                }
+            }
+        }).disableSelection();
+                    
+    });
+
+    function getJogadoresAlterados(){
+        var newData = new Array();
+        for (i = 1; i < 6; i++) {
+            var classe = "#sortable" + i + " li";
+            $.each($(classe), function (key, val) {
+                var idUser = $(this).find("input[name=userId]").val();
+                var classeId = $(this).find("input[name=classeId]").val();
+                var fileldValues = {};
+                if (classeId != i) {
+                    fileldValues['userProfile_id'] = idUser;
+                    fileldValues['classeId'] = i;
+                    newData.push(fileldValues);
+                }
+            });
+        }
+        return JSON.stringify({ 'rankingView': newData });
+    }
+
+    function atualizarListaClasses() {
+        var newData = new Array();
+        for (i = 1; i < 6; i++) {
+            var classe = "#sortable" + i + " li";
+            $.each($(classe), function (key, val) {
+                var classeId = $(this).find("input[name=classeId]").val();
+                if (classeId != i) {
+                    var toggle = "ui-state-classe" + classeId + " ui-state-classe" + i
+                    $(this).toggleClass(toggle);
+                    $(this).find("input[name=classeId]").val(i);
+                }
+            });
+        }
+        return JSON.stringify({ 'rankingView': newData });
+    }
+
+    function saveJogadoresAlterados(){
+        var rankingView = getJogadoresAlterados();
+        $.ajax({
+            type: "POST",
+            url: "/Temporada/AlterarClassesJogadores",
+            dataType: "json",
+            data: rankingView,
+            contentType : "application/json; charset=utf-8",
+            success: function (response) {
+                if (typeof response == "object") {
+                    if (response.retorno === 0) {
+                        toastr.error(response.erro, "Erro");
+                    } else {
+                        toastr.success("Atualização realizada com sucesso.", "Aviso");
+                        atualizarListaClasses();
+                    }
+                }
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                location.reload(true);
+            }
+        }); 
+    }
+</script>
+}

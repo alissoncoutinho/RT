@@ -1,0 +1,60 @@
+﻿@model Barragem.Models.Rancking
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Ranking</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.rodada_id, "rodada")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("rodada_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.rodada_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.data)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.data)
+            @Html.ValidationMessageFor(model => model.data)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.pontuacao)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.pontuacao)
+            @Html.ValidationMessageFor(model => model.pontuacao)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.userProfile_id, "userProfile")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("userProfile_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.userProfile_id)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

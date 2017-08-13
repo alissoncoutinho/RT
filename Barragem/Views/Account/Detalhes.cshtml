@@ -1,0 +1,271 @@
+﻿@model Barragem.Models.UserProfile
+
+@{
+    ViewBag.Title = "Dados do Usuário";
+}
+
+@if ((ViewBag.MsgErro != "") && (ViewBag.MsgErro != null))
+{
+    <div class="alert alert-danger alert-dismissable">
+        <strong>Erro!</strong> @ViewBag.MsgErro
+    </div>
+}
+
+    <legend>@Model.nome</legend>
+    <div class="row">
+        <div class="col-sm-3">
+            <div id="divFoto" class="img-thumbnail" style="width:158px;height:208px; cursor:pointer;">
+                @if (Model.foto != null)
+                {
+                    <img id="imgFoto" src="@Url.Action("BuscaFoto","Account", new { id = Model.UserId})" style="width:148px;height:198px; cursor:pointer;" />
+                }
+                else
+                {
+                    <img id="imgFoto" src="/Content/image/sem-foto.jpg" style="width: 148px; height: 198px; cursor: pointer;" />
+                }
+            </div>
+        </div>
+    </div>
+    <br>
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#tabPerfil" data-toggle="tab">Perfil</a></li>
+        <li><a href="#tabJogos" data-toggle="tab">Jogos</a></li>
+        <li><a href="#tabRanking" data-toggle="tab">Rankings</a></li>
+        <li><a href="#tabTorneio" data-toggle="tab">Torneios</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="tabPerfil">
+            <div class="row">
+                @Html.LabelFor(m => m.classe, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.classe.nome)
+                </div>
+            </div>
+            <div class="row">
+                @Html.Label("Posição", new { @class = "col-sm-2" })
+                <div class="col-sm-1">
+                    @Html.Raw(ViewBag.posicao)
+                </div>
+            </div>
+            <div class="row">
+                @Html.Label("Pontuação", new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(ViewBag.pontos)
+                </div>
+            </div>
+            <div class="row">
+                @Html.Label("idade", new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(DateTime.Now.Year - Model.dataNascimento.Year)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.naturalidade, new { @class = "col-sm-2" })
+                <div class="col-sm-6">
+                    @Html.Raw(Model.naturalidade)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.altura, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.altura)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.lateralidade, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.lateralidade)
+                </div>
+            </div>
+            <div class="row">
+                @Html.Label("início ranking", new { @class = "col-sm-2" })
+                <div class="col-sm-4">
+                    @Html.Raw(Model.dataInicioRancking.Month+"/"+Model.dataInicioRancking.Year)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.email, new { @class = "col-sm-2" })
+                <div class="col-sm-4">
+                    @Html.Raw(Model.email)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.telefoneFixo, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.telefoneFixo)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.telefoneCelular, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.telefoneCelular)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.telefoneCelular2, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.telefoneCelular2)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.bairro, new { @class = "col-sm-2" })
+                <div class="col-sm-2">
+                    @Html.Raw(Model.bairro)
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(m => m.situacao, new { @class = "col-sm-2" })
+                <div class="col-sm-3">
+                    @Html.Raw(Model.situacao)
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tabJogos">
+            @if (ViewBag.JogosJogador != null){
+                var color = "";
+                var seta = "";
+                List<Barragem.Models.Jogo> jogos = ViewBag.JogosJogador;
+                <br>
+                <table class="table table-striped table-condensed table-bordered">
+                <tr>
+                    <th>
+                        Rodada
+                    </th>
+                    <th>
+                        @Html.DisplayName("Desafiante")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Desafiado")
+                    </th>
+                    <th>
+                        @Html.DisplayName("situação")
+                    </th>
+                    <th>
+                        1º set
+                    </th>
+                    <th>
+                        2º set
+                    </th>
+                    <th>
+                        3º set
+                    </th>
+                </tr>
+                
+                @foreach (var item in jogos){
+                    color = "";
+                    seta="";
+                    if (item.idDoVencedor == Model.UserId){
+                        color = "green";
+                        seta = "&uarr;";
+                    }else if(item.idDoVencedor !=0){
+                        color = "red";
+                        seta = "&darr;";
+                    }
+                        <tr style='color:@Html.Raw(color)'>
+                    
+                        <td>
+                            @Html.DisplayFor(modelItem => item.rodada.codigoSeq) <b>@Html.Raw(seta)</b>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.desafiante.nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.desafiado.nome) 
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.situacao.descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.qtddGames1setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames1setDesafiado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.qtddGames2setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames2setDesafiado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.qtddGames3setDesafiante)/@Html.DisplayFor(modelItem => item.qtddGames3setDesafiado)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            }
+        </div>
+        <div class="tab-pane fade" id="tabRanking">
+            @if (ViewBag.RanckingJogador != null)
+            {
+                List<Barragem.Models.Rancking> ranking = ViewBag.RanckingJogador;
+                <br>
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>
+                            Rodada
+                        </th>
+                        <th>
+                            @Html.DisplayName("Data")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Pontos")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Total")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Posição")
+                        </th>
+                        <th>
+                            
+                        </th>
+                    </tr>
+
+                    @foreach (var item in ranking)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.rodada.codigoSeq)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.rodada.dataFim)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.pontuacao,2)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.totalAcumulado,2)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.posicao)º
+                            </td>
+                            <td>
+                            @if (Roles.IsUserInRole("admin"))
+                            {
+                                <a href="@Url.Action("EditPontuacao", new {id = @item.Id })" title="Alterar Pontuação" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                            }    
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            }
+        </div>
+        <div id="tabTorneio" class="tab-pane fade"></div>
+    </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/load-image")
+    @Scripts.Render("~/bundles/jqueryform")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var mostraFoto = function (img) {
+                if (!(img.src || img instanceof HTMLCanvasElement)) {
+                    alert("Erro na imagem");
+                    return;
+                } else {
+                    $("#divFoto").empty();
+                    $("#divFoto").append(img).show();
+                }
+            }
+        })
+    </script>
+}
+

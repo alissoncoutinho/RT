@@ -1,0 +1,43 @@
+﻿@model Barragem.Models.Rancking
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Ranking</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.rodada.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.rodada.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.data)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.data)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.pontuacao)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.pontuacao)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.userProfile.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.userProfile.UserName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

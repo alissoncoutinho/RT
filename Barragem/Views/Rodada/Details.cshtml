@@ -1,0 +1,36 @@
+﻿@model Barragem.Models.Rodada
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Rodada</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.codigo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.codigo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dataInicio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dataInicio)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.dataFim)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dataFim)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

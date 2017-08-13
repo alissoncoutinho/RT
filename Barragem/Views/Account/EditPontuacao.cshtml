@@ -1,0 +1,35 @@
+﻿@model Barragem.Models.Rancking
+
+@{
+    ViewBag.Title = "EditPontuacao";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <legend>Alterar Pontuação</legend>
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.posicao)
+    @Html.HiddenFor(model => model.rodada_id)
+    @Html.HiddenFor(model => model.userProfile_id)
+    <div class="form-group">
+        @Html.LabelFor(m => m.pontuacao, new { @class = "col-md-2" })
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.pontuacao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.pontuacao)
+        </div>
+    </div>
+    <br />
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+}
+
+
+@section Scripts {
+    
+}

@@ -1,0 +1,228 @@
+﻿@model Barragem.Models.UserProfile
+
+@{
+    ViewBag.Title = "Dados do Usuário";
+}
+
+@using (Html.BeginForm("EditaUsuario", "Account", FormMethod.Post, new { @enctype = "multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "alert-danger" })
+        
+    <div class="form-horizontal">
+    <legend>Dados do Jogador 
+        @if (ViewBag.solicitarAtivacao != ""){
+            @Html.Raw("<font color=red> - Seu cadastro está pendente ou desativado. Para ativar clique no botão abaixo.</font>")
+        } 
+        </legend>
+                @if (ViewBag.solicitarAtivacao != "")
+                {
+                    <a class="btn btn-primary btn-danger" href="/Account/SolicitarAtivacao">Solicitar Ativação</a><br><br>
+        }
+        <div class="form-group">
+            
+            <div class="col-md-3">
+                <div id="divFoto" class="img-thumbnail" title="Clique na foto para alterar" style ="width:155px;height:205px; cursor:pointer;">
+                    @if (Model.foto != null){
+                        <img id="imgFoto" src="@Url.Action("BuscaFoto","Account", new { id = Model.UserId})" style="width:148px;height:198px; cursor:pointer;" />
+                    }else{
+                        <img id="imgFoto" src="/Content/image/sem-foto.jpg" style="width:148px;height:198px; cursor:pointer;" />
+                    }
+                </div>
+             </div>
+             <input type="file" id="inputfoto" name="inputfoto" accept=".jpg,.png" style="display:none">
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.classeId)
+            @Html.HiddenFor(m => m.isRanckingGerado)
+            @Html.HiddenFor(m => m.UserName)
+            @Html.HiddenFor(m => m.barragemId)
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2" })
+            <div class="col-md-5">
+                @Html.Raw(Model.UserName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.situacao, new { @class = "col-md-2" })
+            <div class="col-md-3">
+                @if (!Model.situacao.Equals("pendente") && !Model.situacao.Equals("suspenso") &&
+                    !Model.situacao.Equals("desativado") && !Model.situacao.Equals("Ativamento solicitado"))
+                {
+                    <select id="situacao" name="situacao" class="form-control">
+                        <option value="ativo" @if (Model.situacao.Equals("ativo")) { @Html.Raw("selected")   }>ativo</option>
+                        <option value="desativado" @if (Model.situacao.Equals("desativado")) { @Html.Raw("selected")    }>desativado</option>
+                        <option value="licenciado" @if (Model.situacao.Equals("licenciado")) { @Html.Raw("selected")     }>licenciado</option>
+                        @if ((Roles.IsUserInRole("admin"))||(Roles.IsUserInRole("organizador")))
+                        {
+                            <option value="pendente" @if (Model.situacao.Equals("pendente")) { @Html.Raw("selected")    }>pendente</option>
+                            <option value="suspenso" @if (Model.situacao.Equals("suspenso")) { @Html.Raw("selected")    }>suspenso</option>
+                            <option value="desativado" @if (Model.situacao.Equals("desativado")) { @Html.Raw("selected")    }>desativado</option>
+                            <option value="inativo" @if (Model.situacao.Equals("inativo")) { @Html.Raw("selected")     }>inativo</option>
+                        }
+                    </select>
+                }
+                else
+                {
+                    if ((Roles.IsUserInRole("admin"))||(Roles.IsUserInRole("organizador"))){
+                        <select id="situacao" name="situacao" class="form-control">
+                            <option value="ativo">ativo</option>
+                            <option value="pendente" @if (Model.situacao.Equals("pendente")) { @Html.Raw("selected")     }>pendente</option>
+                            <option value="suspenso" @if (Model.situacao.Equals("suspenso")) { @Html.Raw("selected")     }>suspenso</option>
+                            <option value="desativado" @if (Model.situacao.Equals("desativado")) { @Html.Raw("selected")     }>desativado</option>
+                            <option value="Ativamento solicitado" @if (Model.situacao.Equals("Ativamento solicitado")) { @Html.Raw("selected")      }>Ativamento solicitado</option>
+                        </select>
+                    }else{
+                        @Html.Raw(Model.situacao)
+                        <input type="hidden" name="situacao" value="@Html.Raw(Model.situacao)">
+                    }
+                }
+            </div>
+        </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.nome, new { @class = "col-md-2" })*
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.nome, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.nome, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.dataNascimento, new { @class = "col-md-2" })*
+                <div class="col-md-2">
+                    <div class="input-group date" id="dataNascimento" data-date-format="dd/mm/yyyy">
+                        <input id="dataNascimento" name="dataNascimento" value="@Html.Raw(Model.dataNascimento)" type="text" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+                        @Html.ValidationMessageFor(model => model.dataNascimento, "", new { @class = "alert-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.naturalidade, new { @class = "col-md-2" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.naturalidade, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.altura, new { @class = "col-md-2" })*
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.altura, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.altura, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.lateralidade, new { @class = "col-md-2" })
+                <div class="col-md-2">
+                    <select id="lateralidade" name="lateralidade" class="form-control">
+                        <option value="destro" @if (Model.lateralidade.Equals("destro")) { @Html.Raw("selected")  }>destro</option>
+                        <option value="canhoto" @if (Model.lateralidade.Equals("canhoto")) { @Html.Raw("selected")  }>canhoto</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.email, new { @class = "col-md-2" })*
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.email, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.telefoneFixo, new { @class = "col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.telefoneFixo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.telefoneFixo, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.telefoneCelular, new { @class = "col-md-2" })*
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.telefoneCelular, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.telefoneCelular, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.telefoneCelular2, new { @class = "col-md-2" })
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.telefoneCelular2, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.telefoneCelular2, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.bairro, new { @class = "col-md-2" })*
+                <div class="col-md-2">
+                    @Html.TextBoxFor(m => m.bairro, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.bairro, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            
+    
+    @if (Roles.IsUserInRole("admin")){
+        <div class="form-group">
+            @Html.LabelFor(model => model.barragemId, new { @class = "col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("barragemId",null ,new { @class = "form-control", @readonly="true" })
+                @Html.ValidationMessageFor(model => model.barragemId)
+            </div>
+        </div>
+    }
+        <div class="form-group">
+            @Html.LabelFor(m => m.matriculaClube, new { @class = "col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.matriculaClube, new { @class = "form-control" })
+            </div>
+        </div>    
+    @if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")) || (User.Identity.Name.ToLower().Equals(Model.UserName.ToLower()))){
+        <input type="submit" value="Salvar" />
+        
+        if (Model.situacao == "pendente"){
+            <a class="btn btn-primary btn-danger" href="/Account/Excluir?Id=@Model.UserId">Excluir</a>
+        }
+    } 
+        </div>   
+    
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/load-image")
+    @Scripts.Render("~/bundles/jqueryform")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#dataNascimento").datepicker({
+                language: 'pt-BR',
+                pickTime: false
+            });
+
+            $("#telefoneFixo").mask("(99) 99999-9999");
+            $("#telefoneCelular").mask("(99) 99999-9999/AAAAAA");
+            $("#telefoneCelular2").mask("(99) 99999-9999/AAAAAA");
+            $("#divFoto").click(function () {
+                $("#inputfoto").click();
+            });
+            var currentFile;
+            $("#inputfoto").change(function (e) {
+                var fileName = $(this).val();
+                var input = $(this);
+                currentFile = e.target.files[0];
+                loadImage(currentFile,
+                        mostraFoto,
+                        { maxWidth: 148, maxHeight: 189, }
+                    );
+            });
+
+            var mostraFoto = function (img) {
+                if (!(img.src || img instanceof HTMLCanvasElement)) {
+                    alert("Erro na imagem");
+                    return;
+                } else {
+                    $("#divFoto").empty();
+                    $("#divFoto").append(img).show();
+                }
+            }
+        })
+</script>
+
+
+}
+

@@ -1,0 +1,45 @@
+﻿@model Barragem.Models.Configuracao
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("formConfig")) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Configuracao</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.regulamento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.regulamento)
+            @Html.ValidationMessageFor(model => model.regulamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.contatos)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.contatos)
+            @Html.ValidationMessageFor(model => model.contatos)
+        </div>
+
+        <p>
+            <br><input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+<br>
+
+@Html.ActionLink("Resetar Ranking", "Resetar", "Configuracao", new { @class = "btn btn-small btn-danger", @Id="reiniciar" })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+
+}
