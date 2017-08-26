@@ -175,7 +175,7 @@ namespace Barragem.Controllers
             var usuario = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             if (idJogo == 0) { 
                 try{
-                   jogo = db.Jogo.Where(u => u.torneioId==null && (u.desafiado_id == usuario.UserId || u.desafiante_id == usuario.UserId))
+                   jogo = db.Jogo.Where(u => u.desafiado_id == usuario.UserId || u.desafiante_id == usuario.UserId)
                             .OrderByDescending(u => u.Id).Take(1).Single();
                 } catch (System.InvalidOperationException e){
                         //ViewBag.MsgAlert = "Não foi possível encontrar jogos em aberto:" + e.Message;

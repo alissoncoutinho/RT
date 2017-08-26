@@ -138,11 +138,11 @@ namespace Barragem.Controllers
         }
 
         [Authorize(Roles = "admin,organizador")]
-        public ActionResult EfetuarSorteioFase2(int torneioId)
+        public ActionResult EfetuarSorteioFaseEliminatoria(int torneioId)
         {
             try
             {
-                db.Database.ExecuteSqlCommand("Delete from Jogo where torneioId=" + torneioId + "and faseTorneio=3");
+                db.Database.ExecuteSqlCommand("Delete from Jogo where torneioId=" + torneioId + "and faseTorneio>=1");
                 var torneio = db.Torneio.Find(torneioId);
                 InscricaoTorneio jogador1 = null;
                 InscricaoTorneio jogador2 = null;

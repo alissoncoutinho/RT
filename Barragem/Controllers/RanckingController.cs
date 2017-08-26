@@ -58,7 +58,7 @@ namespace Barragem.Controllers
                 if (rancking[0].rodada.temporadaId != null){
                     var temporadaId = rancking[0].rodada.temporadaId;
                     var rodadaId = rancking[0].rodada.Id;
-                    var qtddRodada = db.Rodada.Where(r => r.temporadaId == temporadaId && r.Id <= rodadaId).Count();
+                    var qtddRodada = db.Rodada.Where(r => r.temporadaId == temporadaId && r.Id <= rodadaId && r.barragemId==barragem).Count();
                     ViewBag.Temporada = rancking[0].rodada.temporada.nome + " - Rodada " + qtddRodada + " de " + 
                         rancking[0].rodada.temporada.qtddRodadas;
                 } else { ViewBag.Temporada = ""; }
