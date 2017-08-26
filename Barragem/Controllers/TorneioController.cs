@@ -172,6 +172,9 @@ namespace Barragem.Controllers
                         }
                         numeroRodada++;
                     }
+
+                    ProcessarJogosComBye(torneioId, i);
+
                 }
                 return RedirectToAction("TabelaJogos", new { torneioId = torneioId, Msg = "OK" });
             }
@@ -181,6 +184,32 @@ namespace Barragem.Controllers
             }
 
 
+        }
+
+        [Authorize(Roles = "admin,organizador")]
+        public ActionResult TesteProcessarJogosComBye()
+        {
+            ProcessarJogosComBye(1, 1);
+            return View();
+        }
+        private void ProcessarJogosComBye(int torneioId, int classeId)
+        {
+            var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio==1 && r.desafiante_id==0 && r.situacao_Id==4).ToList();
+            foreach(Jogo jogo in jogos){
+                int ordemJogo = 0;
+                if (jogo.ordemJogo % 2 != 0) {
+                    int var1 = 1;
+                    int teste = (var1 / 2) + 1;
+                    ordemJogo = (int)(jogo.ordemJogo/2) + 1;
+                    var proximoJogo = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio == 2 && r.ordemJogo == ordemJogo).Single();
+                    proximoJogo.desafiado_id = jogo.desafiado_id;
+                }else{
+                    ordemJogo = (int)jogo.ordemJogo / 2;
+                    var proximoJogo = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio == 2 && r.ordemJogo == ordemJogo).Single();
+                    proximoJogo.desafiante_id = jogo.desafiado_id;
+                }
+                db.SaveChanges();
+            }
         }
 
         private int getQtddJogosPorRodada(int numeroRodada) {
@@ -256,6 +285,25 @@ namespace Barragem.Controllers
             adversario = participantes[randomIndex]; //add it 
             participantes.RemoveAt(randomIndex);
             return adversario;
+        }
+
+        [Authorize(Roles = "admin, organizador")]
+        public ActionResult ListarJogos(int torneioId)
+        {
+            string msg = "";
+            try{
+                var jogo = db.Jogo.Include(j => j.desafiado).Include(j => j.desafiante).
+                    Where(j => j.torneioId == torneioId && j.desafiado_id!=0 && j.desafiante_id!=0).OrderBy(j => j.classeTorneio).ThenBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
+                var torneio = db.Torneio.Find(torneioId);
+                ViewBag.Classes = db.Classe.Where(c => c.barragemId == torneio.barragemId).ToList();
+                return View(jogo);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MsgErro = msg + " - " + ex.Message;
+                return View();
+            }
+
         }
 
         [Authorize(Roles = "admin,organizador")]

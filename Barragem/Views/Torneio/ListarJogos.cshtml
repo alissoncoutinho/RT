@@ -1,0 +1,126 @@
+﻿@{
+    //Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+    ViewBag.Title = "Jogos";
+}
+@model IEnumerable<Barragem.Models.Jogo>
+
+    <h4>
+        Jogos Torneio
+    </h4>
+    <ul class="nav nav-tabs" id="myTab">
+        @{var classes = ViewBag.Classes;}
+        @foreach (Barragem.Models.Classe c in classes)
+        {
+            var tabName = "#tabClasse" + c.nivel;
+            if (c.nivel == 1)
+            {
+                <li class="active"><a href=@tabName data-toggle="tab">@c.nome</a></li>
+            }
+            else
+            {
+                <li><a href=@tabName data-toggle="tab">@c.nome</a></li>
+            }
+        }
+    </ul>
+    @if (Model != null)
+    {
+        <div class="tab-content">
+            @foreach (Barragem.Models.Classe c in classes)
+            {
+                var tabName = "tabClasse" + c.nivel;
+                var tabPane = "tab-pane fade";
+                if (c.nivel == 1) { tabPane = "tab-pane fade in active"; }
+                <div class="@tabPane" id="@tabName">
+                    <br>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th>
+                                    @Html.Raw("Fase")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.desafiado_id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.desafiante_id)
+                                </th>
+                                <th>
+                                    1º set
+                                </th>
+                                <th>
+                                    2º set
+                                </th>
+                                <th>
+                                    3º set
+                                </th>
+                                <th>
+                                    situação
+                                </th>
+                                <th></th>
+                            </tr>
+                            @foreach (var item in Model)
+                            {
+                                if (item.classeTorneio == c.nivel || (item.classeTorneio == null && c.nivel == 1))
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.faseTorneio)ª
+                                        </td>
+                                        <td>
+                                            @if (item.desafiado.foto != null)
+                                            {
+                                                <img id='imgFoto' src="@Url.Action("BuscaFoto", "Account", new { id = @item.desafiado_id })" class="profile-image img-circle" style="width:40px;height:40px;">
+                                            }
+                                            else
+                                            {
+                                                <img id="imgFoto" src="/Content/image/bolatenis.jpg" class="profile-image img-circle" style="width:40px;height:40px;">
+                                            }
+                                            <a href="@Url.Action("../Account/Detalhes", new { userId = @item.desafiado.UserId })" title="Detalhes do jogador">
+                                                @Html.DisplayFor(modelItem => item.desafiado.nome)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if (item.desafiante.foto != null)
+                                            {
+                                                <img id='imgFoto' src="@Url.Action("BuscaFoto", "Account", new { id = @item.desafiante_id })" class="profile-image img-circle" style="width:40px;height:40px;">
+                                            }
+                                            else
+                                            {
+                                                <img id="imgFoto" src="/Content/image/bolatenis.jpg" class="profile-image img-circle" style="width:40px;height:40px;">
+                                            }
+                                            <a href="@Url.Action("../Account/Detalhes", new { userId = @item.desafiante.UserId })" title="Detalhes do jogador">
+                                                @Html.DisplayFor(modelItem => item.desafiante.nome)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.qtddGames1setDesafiado)/@Html.DisplayFor(modelItem => item.qtddGames1setDesafiante)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.qtddGames2setDesafiado)/@Html.DisplayFor(modelItem => item.qtddGames2setDesafiante)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.qtddGames3setDesafiado)/@Html.DisplayFor(modelItem => item.qtddGames3setDesafiante)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.situacao.descricao)
+                                            @if (item.situacao.descricao == "marcado")
+                                            {
+                                                @Html.Raw("<br>" + String.Format("{0:dd/MM/yyyy}", item.dataJogo) + " " + item.horaJogo + "hs")
+                                            }
+                                        </td>
+                                        <td>
+                                            @if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
+                                            {
+                                                <a href="@Url.Action("ControlarJogo","Jogo", new {id = @item.Id })" title="Controlar Jogo" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                else if (item.desafiado.classe.nivel > c.nivel) { break; }
+                            }
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    }

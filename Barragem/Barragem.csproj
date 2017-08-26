@@ -831,6 +831,7 @@
     <Content Include="Views\Torneio\TorneiosDisponiveis.cshtml" />
     <Content Include="Views\Torneio\Detalhes.cshtml" />
     <Content Include="Views\Torneio\TabelaJogos.cshtml" />
+    <Content Include="Views\Torneio\ListarJogos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

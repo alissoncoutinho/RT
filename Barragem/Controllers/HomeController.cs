@@ -158,7 +158,16 @@ namespace Barragem.Controllers
             return View(barragem);
         }
 
-        
+        private Torneio getTorneioAberto(int barragemId){
+            try{
+                DateTime dtNow = DateTime.Now;
+                var torneioAberto = db.Torneio.Where(t => t.barragemId == barragemId && t.dataFimInscricoes > dtNow && t.isAtivo).Single();
+                return torneioAberto;
+            }catch (Exception e) {
+                return null;
+            }
+        }
+
         [Authorize(Roles = "admin, organizador, usuario")]
         public ActionResult Index2(int idJogo=0){
             HttpCookie cookie = Request.Cookies["_barragemId"];
@@ -171,6 +180,9 @@ namespace Barragem.Controllers
             }
             ViewBag.NomeBarragem = barragemName;
             ViewBag.solicitarAtivacao = "";
+
+            ViewBag.Torneio = getTorneioAberto(barragemId);
+
             Jogo jogo = null;
             var usuario = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             if (idJogo == 0) { 

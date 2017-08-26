@@ -8,14 +8,10 @@
 }
 @model IEnumerable<Barragem.Models.Jogo>
     <legend>Tabela de Jogos</legend>
-                      <div class="row">
-                          <div class="pull-right" style="padding-bottom: 6px">
-                              <a href="@Url.Action("EfetuarSorteioFase2", new {torneioId = @ViewBag.torneioId })" title="Voltar" class="btn btn-default">Efetuar Sorteio</a>
-                          </div>
-                      </div>
+                      
     <div class="box-body table-responsive no-padding no-border table-hover">
         
-        <table class="table table-hover" style='margin-right: 30px; table-layout: fixed; width: 978px;'>
+        <table class="table table-hover" style='margin-right: 30px; table-layout: fixed; width: 1100px;'>
                 <thead>
                     <tr>
                         @if (qtddRodadas == 6) { 
@@ -65,6 +61,16 @@
                                         <td style="font-size: 13px; padding-left: 5px;">
                                             @Html.DisplayFor(modelItem => item.desafiado.nome)</td>
                                     </tr>
+                                            @if (item.situacao_Id == 4){
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @Html.Raw(item.qtddGames1setDesafiado +"/"+ item.qtddGames1setDesafiante + " - " + item.qtddGames2setDesafiado +"/"+ item.qtddGames2setDesafiante) 
+                                                        @if((item.qtddGames3setDesafiado!=0)||(item.qtddGames3setDesafiante!=0)){
+                                                           @Html.Raw(" - " + item.qtddGames3setDesafiado + "/" + item.qtddGames3setDesafiante)
+                                                        }  
+                                                    </td>
+                                                </tr>
+                                            }
                                     <tr>
                                         <td style ="font-size: 13px; padding-left: 5px;">
                                             @if (item.desafiante == null)
@@ -85,6 +91,16 @@
                                                     else{ @Html.Raw(item2.desafiado.nome) }
                                                 </td>
                                             </tr>
+                                            @if (item2.situacao_Id == 4){
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @Html.Raw(item2.qtddGames1setDesafiado +"/"+ item2.qtddGames1setDesafiante + " - " + item2.qtddGames2setDesafiado +"/"+ item2.qtddGames2setDesafiante) 
+                                                        @if((item2.qtddGames3setDesafiado!=0)||(item2.qtddGames3setDesafiante!=0)){
+                                                           @Html.Raw(" - " + item2.qtddGames3setDesafiado + "/" + item2.qtddGames3setDesafiante)
+                                                        }  
+                                                    </td>
+                                                </tr>
+                                            }
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
                                                     @if (item2.desafiante == null){ @Html.Raw("Aguardando") }
@@ -110,6 +126,17 @@
                                                     { @Html.Raw(item3.desafiado.nome) }
                                                 </td>
                                             </tr>
+                                            @if (item3.situacao_Id == 4){
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @Html.Raw(item3.qtddGames1setDesafiado +"/"+ item3.qtddGames1setDesafiante + " - " + item3.qtddGames2setDesafiado +"/"+ item3.qtddGames2setDesafiante) 
+                                                        @if((item3.qtddGames3setDesafiado!=0)||(item3.qtddGames3setDesafiante!=0)){
+                                                           @Html.Raw(" - " + item3.qtddGames3setDesafiado + "/" + item3.qtddGames3setDesafiante)
+                                                        }  
+                                                    </td>
+                                                </tr>
+                                            }
+
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
                                                     @if (item3.desafiante == null)
@@ -136,6 +163,19 @@
                                                     { @Html.Raw(item4.desafiado.nome) }
                                                 </td>
                                             </tr>
+                                            @if (item4.situacao_Id == 4)
+                                            {
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @Html.Raw(item4.qtddGames1setDesafiado + "/" + item4.qtddGames1setDesafiante + " - " + item4.qtddGames2setDesafiado + "/" + item4.qtddGames2setDesafiante)
+                                                        @if ((item4.qtddGames3setDesafiado != 0) || (item4.qtddGames3setDesafiante != 0))
+                                                        {
+                                                            @Html.Raw(" - " + item4.qtddGames3setDesafiado + "/" + item4.qtddGames3setDesafiante)
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
                                                     @if (item4.desafiante == null)
@@ -162,6 +202,19 @@
                                                     { @Html.Raw(item5.desafiado.nome) }
                                                 </td>
                                             </tr>
+                                            @if (item5.situacao_Id == 4)
+                                            {
+                                                <tr>
+                                                    <td style="font-size: 13px; padding-left: 5px;">
+                                                        @Html.Raw(item5.qtddGames1setDesafiado + "/" + item5.qtddGames1setDesafiante + " - " + item5.qtddGames2setDesafiado + "/" + item5.qtddGames2setDesafiante)
+                                                        @if ((item5.qtddGames3setDesafiado != 0) || (item5.qtddGames3setDesafiante != 0))
+                                                        {
+                                                            @Html.Raw(" - " + item5.qtddGames3setDesafiado + "/" + item5.qtddGames3setDesafiante)
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
                                                     @if (item5.desafiante == null)
@@ -188,6 +241,19 @@
                                                         { @Html.Raw(item6.desafiado.nome) }
                                                     </td>
                                                 </tr>
+                                                @if (item6.situacao_Id == 4)
+                                                {
+                                                    <tr>
+                                                        <td style="font-size: 13px; padding-left: 5px;">
+                                                            @Html.Raw(item6.qtddGames1setDesafiado + "/" + item6.qtddGames1setDesafiante + " - " + item6.qtddGames2setDesafiado + "/" + item6.qtddGames2setDesafiante)
+                                                            @if ((item6.qtddGames3setDesafiado != 0) || (item6.qtddGames3setDesafiante != 0))
+                                                            {
+                                                                @Html.Raw(" - " + item6.qtddGames3setDesafiado + "/" + item6.qtddGames3setDesafiante)
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+
                                                 <tr>
                                                     <td style="font-size: 13px; padding-left: 5px;">
                                                         @if (item6.desafiante == null)
@@ -211,4 +277,12 @@
                 </tbody>
             </table>
 
+    @if ((Roles.IsUserInRole("admin"))||(Roles.IsUserInRole("organizador"))){
+        <div class="row">
+            <div class="pull-left" style="padding-bottom: 6px">
+                <a href="@Url.Action("EfetuarSorteioFase2", new {torneioId = @ViewBag.torneioId })" title="Voltar" class="btn btn-primary">Efetuar Sorteio</a>
+            </div>
+        </div>
+    }
+    
     </div>

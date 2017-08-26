@@ -237,18 +237,42 @@ namespace Barragem.Controllers
             jogo = db.Jogo.Include(j => j.rodada).Include(j => j.desafiado).Include(j => j.desafiante).Where(j => j.Id == jogo.Id).Single();
             
             ViewBag.situacao_Id = new SelectList(db.SituacaoJogo, "Id", "descricao", jogo.situacao_Id);
-            
+
+            MontarProximoJogoTorneio(jogo);
+
             ProcessarJogoAtrasado(jogo);
 
             return RedirectToAction("Index2", "Home");
             
         }
 
+        private void MontarProximoJogoTorneio(Jogo jogo){
+            var ordemJogo = 0;
+            if (jogo.torneioId != null) { 
+                if (jogo.ordemJogo % 2 != 0) {
+                    ordemJogo = (int)(jogo.ordemJogo / 2) + 1;
+                } else {
+                    ordemJogo = (int)(jogo.ordemJogo / 2);
+                }
+                if (db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && 
+                    r.faseTorneio == jogo.faseTorneio+1 && r.ordemJogo == ordemJogo).Count() > 0){
+                    var proximoJogo = db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && 
+                        r.faseTorneio == jogo.faseTorneio+1 && r.ordemJogo == ordemJogo).Single();
+                    if (jogo.ordemJogo % 2 != 0) {
+                        proximoJogo.desafiado_id = jogo.idDoVencedor;
+                    }else{
+                        proximoJogo.desafiante_id = jogo.idDoVencedor;
+                    }
+                    db.SaveChanges();
+                }
+            }
+        }
+
         private void ProcessarJogoAtrasado(Jogo jogo){
             string msg = "";
             //situação: 4: finalizado -- 5: wo
             //List<Jogo> jogos = db.Jogo.Where(r => r.rodada_id == id && r.dataCadastroResultado > r.rodada.dataFim && (r.situacao_Id == 4 || r.situacao_Id == 5)).ToList();
-            if (jogo.dataCadastroResultado > jogo.rodada.dataFim && (jogo.situacao_Id == 4 || jogo.situacao_Id == 5))
+            if (jogo.torneioId==null && jogo.dataCadastroResultado > jogo.rodada.dataFim && (jogo.situacao_Id == 4 || jogo.situacao_Id == 5))
             {
                 var pontosDesafiante = 0.0;
                 var pontosDesafiado = 0.0;

@@ -22,6 +22,8 @@ namespace Barragem.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}", ConvertEmptyStringToNull = true)]
         public DateTime? dataCadastroResultado { get; set; }
 
+        public DateTime? dataLimiteJogo { get; set; }
+
         [Display(Name = "Data do jogo")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}", ConvertEmptyStringToNull = true)]
         public DateTime? dataJogo { get; set; }

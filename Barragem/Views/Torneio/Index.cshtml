@@ -41,6 +41,9 @@
                                 <a href="@Url.Action("TabelaJogos", new {torneioId = @item.Id })" title="Jogos" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-play"></span>
                                 </a>
+                                <a href="@Url.Action("ListarJogos", new {torneioId = @item.Id })" title="Jogos" class="btn btn-default btn-xs">
+                                    <span class="glyphicon glyphicon-play"></span>
+                                </a>
                             </td>
                         </tr>
                     }

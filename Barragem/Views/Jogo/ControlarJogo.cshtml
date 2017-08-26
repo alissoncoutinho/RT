@@ -9,9 +9,16 @@
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.rodada_id)
-    
+        @Html.HiddenFor(model => model.dataLimiteJogo)
+        @Html.HiddenFor(model => model.faseTorneio)
+        @Html.HiddenFor(model => model.classeTorneio)
+        @Html.HiddenFor(model => model.ordemJogo)
+        @Html.HiddenFor(model => model.torneioId)
+
     <legend>
-        @Html.Raw("Jogo Atual da Rodada:" + Model.rodada.codigoSeq + "")
+        @if (Model.rodada != null) { 
+            @Html.Raw("Jogo Atual da Rodada:" + Model.rodada.codigoSeq + "")
+        }
     </legend>
     <div class="form-horizontal form-inline">
         <div class="form-group">

@@ -9,6 +9,15 @@
         </a>
     </div>
 }
+    @if (ViewBag.Torneio != null){
+        Barragem.Models.Torneio torneio = ViewBag.Torneio;
+        <div class="container-dashboard">
+            <p>Inscrições abertas para @torneio.nome</p>
+            <a class="btn btn-primary" href="/Torneio/Detalhes/@torneio.Id">
+                Saiba mais
+            </a>
+        </div>
+    }
     @if (Model != null)
     {
         <div class="container-dashboard">
@@ -18,6 +27,12 @@
                 @Html.ValidationSummary(true)
                 @Html.HiddenFor(model => model.Id)
                 @Html.HiddenFor(model => model.rodada_id)
+                
+                @Html.HiddenFor(model => model.dataLimiteJogo)
+                @Html.HiddenFor(model => model.faseTorneio)
+                @Html.HiddenFor(model => model.classeTorneio)
+                @Html.HiddenFor(model => model.ordemJogo)
+                @Html.HiddenFor(model => model.torneioId)
 
                 <h4>
                     @if (Model.rodada != null) {
@@ -95,9 +110,13 @@
                                     <td align="center">
                                         <p id='jogo'>
                                             Desafiado ( @ViewBag.ptDefendidosDesafiado pt. a expirar):<br>
-                                            <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiado_id })" title="Detalhes do jogador">
-                                                @Model.desafiado.nome
-                                            </a>
+                                            @if (Model.desafiado_id == 0){
+                                                @Html.Raw("Aguardando Adversário");
+                                            }else{
+                                                <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiado_id })" title="Detalhes do jogador">
+                                                    @Model.desafiado.nome
+                                                </a>
+                                            }
                                         </p>
                                         @Html.HiddenFor(model => model.desafiado_id)
                                     </td>
@@ -105,13 +124,17 @@
                                     <td align="center">
                                         <p id='jogo'>
                                             Desafiante ( @ViewBag.ptDefendidosDesafiante pt. a expirar):<br>
-                                            <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiante_id })" title="Detalhes do jogador">
-                                                @if (Model.desafiante_id == 0) { 
+                                            @if (Model.desafiante_id == 0) {
+                                                if (Model.faseTorneio ==1) { 
                                                     @Html.Raw("Bye");
                                                 } else {
-                                                    @Model.desafiante.nome
+                                                    @Html.Raw("Aguardando Adversário");
                                                 }
-                                            </a>
+                                            } else {
+                                                <a href="@Url.Action("../Account/Detalhes", new { userId = Model.desafiante_id })" title="Detalhes do jogador">
+                                                    @Model.desafiante.nome
+                                                </a>
+                                            }
                                         </p>
                                         @Html.HiddenFor(model => model.desafiante_id)
                                     </td>
@@ -166,7 +189,7 @@
                         </div>
 
                 </div>
-                <p>@if (Model.desafiante_id != 0) { 
+                <p>@if ((Model.desafiante_id != 0)&&(Model.desafiado_id != 0)) { 
                         if ((ViewBag.Editar == null) || (ViewBag.Editar)){
                             <input type="submit" class="btn btn-primary btn-small" id="submeter" value="Salvar" />
                         }else{
