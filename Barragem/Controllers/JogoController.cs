@@ -254,7 +254,11 @@ namespace Barragem.Controllers
                 } else {
                     ordemJogo = (int)(jogo.ordemJogo / 2);
                 }
-                if (db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && 
+                if ((jogo.faseTorneio == 100)||(jogo.faseTorneio == 101)) // 1 fase eliminatoria
+                {
+                    cadastrarColocacaoPerdedorTorneio(jogo);
+                    
+                }else if (db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && 
                     r.faseTorneio == jogo.faseTorneio+1 && r.ordemJogo == ordemJogo).Count() > 0){
                     var proximoJogo = db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && 
                         r.faseTorneio == jogo.faseTorneio+1 && r.ordemJogo == ordemJogo).Single();
@@ -263,8 +267,38 @@ namespace Barragem.Controllers
                     }else{
                         proximoJogo.desafiante_id = jogo.idDoVencedor;
                     }
+                    // codigo caso for ativar automaticamente o jogador no ranking
+                    //var user = db.UserProfiles.Find(jogo.idDoPerdedor);
+                    //user.situacao = Tipos.Situacao.ativo.ToString();
+                    cadastrarColocacaoPerdedorTorneio(jogo);                    
                     db.SaveChanges();
-                }
+               } else {
+                    // indicar o vencedor do torneio
+                    var inscricao = db.InscricaoTorneio.Where(i => i.userId == jogo.idDoVencedor && i.torneioId == jogo.torneioId).ToList();
+                    if (inscricao.Count() > 0){
+                        inscricao[0].colocacao = 0; // vencedor
+                        db.SaveChanges();
+                    }
+               }
+            }
+        }
+
+        private void cadastrarColocacaoPerdedorTorneio(Jogo jogo)
+        {
+            // cadastrar a colocação do perdedor no torneio 
+            var qtddFases = db.Jogo.Where(r => r.torneioId == jogo.torneioId && r.classeTorneio == jogo.classeTorneio && r.faseTorneio<100).Max(r => r.faseTorneio);
+            var colocacao = qtddFases - (jogo.faseTorneio - 1);
+            if (jogo.faseTorneio == 100){ // fase 1
+                colocacao = 101;
+            }else if(jogo.faseTorneio == 101){ // repescagem
+                colocacao = 100;
+            }else if (colocacao > 4){
+                colocacao = jogo.faseTorneio + 500;
+            }
+            var inscricao = db.InscricaoTorneio.Where(i => i.userId == jogo.idDoPerdedor && i.torneioId == jogo.torneioId).ToList();
+            if (inscricao.Count() > 0){
+                inscricao[0].colocacao = colocacao;
+                db.SaveChanges();
             }
         }
 

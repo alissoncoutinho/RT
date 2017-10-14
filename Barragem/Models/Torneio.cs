@@ -46,7 +46,7 @@ namespace Barragem.Models
         public int qtddClasses { get; set; }
 
         [Display(Name = "Valor da Inscrição")]
-        public int? valor { get; set; }
+        public double? valor { get; set; }
 
         [Display(Name = "Tem Repescagem")]
         public bool temRepescagem { get; set; }

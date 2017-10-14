@@ -79,14 +79,15 @@ namespace Barragem.Controllers
         // GET: /Account/Register
 
         [AllowAnonymous]
-        public ActionResult Register(int barragemId=0)
+        public ActionResult Register(int barragemId = 0)
         {
             HttpCookie cookie = Request.Cookies["_barragemId"];
-            if ((barragemId == 0)&&(cookie != null)){
+            if ((barragemId == 0) && (cookie != null))
+            {
                 barragemId = Convert.ToInt32(cookie.Value.ToString());
             }
             ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", barragemId);
-            ViewBag.classeId = new SelectList(db.Classe.Where(c=>c.barragemId==barragemId).ToList(), "Id", "nome");
+            ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == barragemId).ToList(), "Id", "nome");
             return View();
         }
 
@@ -101,91 +102,131 @@ namespace Barragem.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                try{
-                    if (!WebSecurity.UserExists(model.UserName)){
-                        if (!Funcoes.IsValidEmail(model.email)){
+                try
+                {
+                    if (!WebSecurity.UserExists(model.UserName))
+                    {
+                        if (!Funcoes.IsValidEmail(model.email))
+                        {
                             ViewBag.MsgErro = string.Format("E-mail inválido. '{0}'", model.email);
                             ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", model.barragemId);
                             ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == model.barragemId).ToList(), "Id", "nome");
                             return View(model);
                         }
-                        if (inputfoto != null){
+                        if (inputfoto != null)
+                        {
                             int length = inputfoto.ContentLength;
                             byte[] buffer = new byte[length];
                             inputfoto.InputStream.Read(buffer, 0, length);
                             model.foto = buffer;
 
-                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new{
-                                nome = model.nome, dataNascimento = model.dataNascimento, altura = model.altura, 
-                                telefoneFixo = model.telefoneFixo, telefoneCelular = model.telefoneCelular, telefoneCelular2 = model.telefoneCelular2,
-                                email = model.email, situacao = Tipos.Situacao.pendente.ToString(),
-                                bairro = model.bairro, dataInicioRancking = DateTime.Now,
-                                naturalidade = model.naturalidade, lateralidade = model.lateralidade, nivelDeJogo = model.nivelDeJogo, barragemId=model.barragemId, classeId=model.classeId,
+                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new
+                            {
+                                nome = model.nome,
+                                dataNascimento = model.dataNascimento,
+                                altura = model.altura,
+                                telefoneFixo = model.telefoneFixo,
+                                telefoneCelular = model.telefoneCelular,
+                                telefoneCelular2 = model.telefoneCelular2,
+                                email = model.email,
+                                situacao = Tipos.Situacao.pendente.ToString(),
+                                bairro = model.bairro,
+                                dataInicioRancking = DateTime.Now,
+                                naturalidade = model.naturalidade,
+                                lateralidade = model.lateralidade,
+                                nivelDeJogo = model.nivelDeJogo,
+                                barragemId = model.barragemId,
+                                classeId = model.classeId,
                                 foto = model.foto
                             });
-                        } else {
-                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new{
-                                nome = model.nome, dataNascimento = model.dataNascimento, altura = model.altura, 
-                                telefoneFixo = model.telefoneFixo, telefoneCelular = model.telefoneCelular, telefoneCelular2 = model.telefoneCelular2,
-                                email = model.email, situacao = Tipos.Situacao.pendente.ToString(),
-                                bairro = model.bairro, dataInicioRancking = DateTime.Now,
-                                naturalidade = model.naturalidade, lateralidade = model.lateralidade, nivelDeJogo = model.nivelDeJogo, barragemId=model.barragemId, classeId=model.classeId
+                        }
+                        else
+                        {
+                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new
+                            {
+                                nome = model.nome,
+                                dataNascimento = model.dataNascimento,
+                                altura = model.altura,
+                                telefoneFixo = model.telefoneFixo,
+                                telefoneCelular = model.telefoneCelular,
+                                telefoneCelular2 = model.telefoneCelular2,
+                                email = model.email,
+                                situacao = Tipos.Situacao.pendente.ToString(),
+                                bairro = model.bairro,
+                                dataInicioRancking = DateTime.Now,
+                                naturalidade = model.naturalidade,
+                                lateralidade = model.lateralidade,
+                                nivelDeJogo = model.nivelDeJogo,
+                                barragemId = model.barragemId,
+                                classeId = model.classeId
                             });
                         }
 
                         Roles.AddUserToRole(model.UserName, "usuario");
                         WebSecurity.Login(model.UserName, model.Password);
-                        try{
+                        try
+                        {
                             notificarJogador(model.nome, model.email);
-                            notificarOrganizadorCadastro(model.nome, model.barragemId);
-                        } catch (Exception ex) { } // não tratar o erro pois caso não seja possível notificar o administrador não prejudicará o cadastro do usuário
-                        
+                            notificarOrganizadorCadastro(model.nome, model.barragemId, model.telefoneCelular);
+                        }
+                        catch (Exception ex) { } // não tratar o erro pois caso não seja possível notificar o administrador não prejudicará o cadastro do usuário
+
                         return RedirectToAction("Index", "Home");
-                    }else{
+                    }
+                    else
+                    {
                         ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", model.barragemId);
                         ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == model.barragemId).ToList(), "Id", "nome");
                         ViewBag.MsgErro = string.Format("Login já existente. Favor escolha outro nome. '{0}'", model.UserName);
                     }
-                    
-                }catch (MembershipCreateUserException e){
+
+                }
+                catch (MembershipCreateUserException e)
+                {
                     ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
                 }
 
             }
-            ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");    
+            ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        private void notificarOrganizadorCadastro(string nome, int idBarragem)
+        private void notificarOrganizadorCadastro(string nome, int idBarragem, string telefoneCelular)
         {
             Mail mail = new Mail();
             mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
             var barragem = db.Barragens.Find(idBarragem);
-            if (barragem.email.Equals("")){
+            if (barragem.email.Equals(""))
+            {
                 mail.para = "toptenisranking@gmail.com";
-            }else{
+            }
+            else
+            {
                 mail.para = barragem.email;
             }
             mail.assunto = "Um Novo cadastro foi realizado";
             //mail.conteudo = nome + " fez uma soliticação de adesão à barragem do cerrado.<br><br>Entre no sistema e modifique o status de "+ nome + " de pendente para ativo.";
-            mail.conteudo = nome + " acabou de se cadastrar no site.<br>";
+            mail.conteudo = nome + " acabou de se cadastrar no site.<br> Contato: " + telefoneCelular + "<br>";
             mail.formato = Tipos.FormatoEmail.Html;
             mail.EnviarMail();
         }
 
-        private void notificarOrganizadorSolicitacaoAtivar(string nome, int idBarragem)
+        private void notificarOrganizadorSolicitacaoAtivar(string nome, int idBarragem, string telefoneCelular)
         {
             Mail mail = new Mail();
             mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
             var barragem = db.Barragens.Find(idBarragem);
-            if (barragem.email.Equals("")){
+            if (barragem.email.Equals(""))
+            {
                 mail.para = "toptenisranking@gmail.com";
-            }else{
+            }
+            else
+            {
                 mail.para = barragem.email;
             }
             mail.assunto = "Solicitação de ativação";
-            mail.conteudo = nome + " fez uma soliticação de ativação à barragem do cerrado.<br><br>Entre no sistema e modifique o status de "+ nome + " de ativamento solicitado para ativo.";
+            mail.conteudo = nome + " fez uma soliticação de ativação à barragem do cerrado.<br><br>Entre no sistema e modifique o status de " + nome + " de ativamento solicitado para ativo. Contato: " + telefoneCelular;
             mail.formato = Tipos.FormatoEmail.Html;
             mail.EnviarMail();
         }
@@ -215,13 +256,15 @@ namespace Barragem.Controllers
                 user = db.UserProfiles.Where(u => u.UserName.ToLower() == userName.ToLower()).FirstOrDefault();
                 if (user != null)
                 {
-                    
+
                     user.situacao = "Ativamento solicitado";
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
-                    notificarOrganizadorSolicitacaoAtivar(user.nome, user.barragemId);
+                    notificarOrganizadorSolicitacaoAtivar(user.nome, user.barragemId, user.telefoneCelular);
                     return View("SolicitarAtivacao");
-                }else{
+                }
+                else
+                {
                     ViewBag.MsgErro = "Este usuário não existe.";
                     return View();
                 }
@@ -241,30 +284,36 @@ namespace Barragem.Controllers
             }
             //return View();
         }
-        
+
         [Authorize(Roles = "admin,organizador,usuario")]
-        public ActionResult Detalhes(int userId) {
+        public ActionResult Detalhes(int userId)
+        {
             UserProfile jogador = db.UserProfiles.Find(userId);
             UserProfile usu = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             string perfil = Roles.GetRolesForUser(User.Identity.Name)[0];
-            if (!perfil.Equals("admin")){
-                if (usu.barragemId != jogador.barragemId){
+            if (!perfil.Equals("admin"))
+            {
+                if (usu.barragemId != jogador.barragemId)
+                {
                     userId = usu.UserId;
                     jogador = usu;
                 }
             }
-            List<Rancking> ranckingJogador = db.Rancking.Where(r=>r.userProfile_id==userId).OrderByDescending(r=>r.rodada_id).ToList();
+            List<Rancking> ranckingJogador = db.Rancking.Where(r => r.userProfile_id == userId).OrderByDescending(r => r.rodada_id).ToList();
             ViewBag.RanckingJogador = ranckingJogador;
-            List<Jogo> jogosJogador = db.Jogo.Where(r => r.desafiante_id == userId || r.desafiado_id==userId)
+            List<Jogo> jogosJogador = db.Jogo.Where(r => r.desafiante_id == userId || r.desafiado_id == userId)
                 .OrderByDescending(r => r.rodada_id).ToList();
             ViewBag.jogosJogador = jogosJogador;
-            
-            if (ranckingJogador.Count > 0)            {
-                ViewBag.posicao = ranckingJogador[0].posicao+"º";
-                ViewBag.pontos = Math.Round(ranckingJogador[0].totalAcumulado,2);
-            }else {
+
+            if (ranckingJogador.Count > 0)
+            {
+                ViewBag.posicao = ranckingJogador[0].posicao + "º";
+                ViewBag.pontos = Math.Round(ranckingJogador[0].totalAcumulado, 2);
+            }
+            else
+            {
                 ViewBag.pontos = 0;
-                ViewBag.posicao = "sem rancking"; 
+                ViewBag.posicao = "sem rancking";
             }
 
             return View(jogador);
@@ -282,7 +331,7 @@ namespace Barragem.Controllers
         [Authorize(Roles = "admin,organizador")]
         public ActionResult EditPontuacao(Rancking r)
         {
-            double pontuacaoTotal = db.Rancking.Where(ran => ran.rodada.isAberta == false && ran.userProfile_id == r.userProfile_id 
+            double pontuacaoTotal = db.Rancking.Where(ran => ran.rodada.isAberta == false && ran.userProfile_id == r.userProfile_id
                 && ran.rodada_id < r.rodada_id).OrderByDescending(ran => ran.Id).Take(9).Sum(ran => ran.pontuacao);
             r.totalAcumulado = r.pontuacao + pontuacaoTotal;
             db.Entry(r).State = EntityState.Modified;
@@ -345,7 +394,7 @@ namespace Barragem.Controllers
             bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.HasLocalPassword = hasLocalAccount;
             ViewBag.ReturnUrl = Url.Action("Manage");
-            
+
             if (hasLocalAccount)
             {
                 if (ModelState.IsValid)
@@ -533,7 +582,8 @@ namespace Barragem.Controllers
         public ActionResult Excluir(int Id)
         {
             string perfil = Roles.GetRolesForUser(User.Identity.Name)[0];
-            if ((perfil.Equals("admin")) || (perfil.Equals("organizador")) || (WebSecurity.GetUserId(User.Identity.Name) == Id)){
+            if ((perfil.Equals("admin")) || (perfil.Equals("organizador")) || (WebSecurity.GetUserId(User.Identity.Name) == Id))
+            {
                 var usuario = db.UserProfiles.Find(Id);
                 if (usuario.situacao == "pendente")
                 {
@@ -544,10 +594,11 @@ namespace Barragem.Controllers
                         db.Database.ExecuteSqlCommand("Delete from webpages_UsersInRoles where UserId=" + Id);
                         db.Database.ExecuteSqlCommand("Delete from UserProfile where UserId=" + Id);
                     }
-                    else {
+                    else
+                    {
                         ViewBag.MsgErro = "Não foi possível excluir o usuário pois ele já possui jogo(s) realizado(s).";
                     }
-                 }
+                }
             }
             return RedirectToAction("ListarUsuarios");
         }
@@ -559,7 +610,9 @@ namespace Barragem.Controllers
             var usuario = db.UserProfiles.Find(WebSecurity.GetUserId(UserName));
             ViewBag.solicitarAtivacao = "";
             ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", usuario.barragemId);
-            if ((usuario.situacao == "desativado") || (usuario.situacao == "pendente")){
+            ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == usuario.barragemId).ToList(), "Id", "nome", usuario.classeId);
+            if ((usuario.situacao == "desativado") || (usuario.situacao == "pendente"))
+            {
                 ViewBag.solicitarAtivacao = "sim";
             }
             return View(usuario);
@@ -570,11 +623,13 @@ namespace Barragem.Controllers
         {
             List<Rancking> ranking = db.Rancking.ToList();
             int qtdd = 0;
-            foreach (var item in ranking){
+            foreach (var item in ranking)
+            {
                 int existe = db.Rancking.Where(r => r.rodada_id == item.rodada_id && r.userProfile_id == item.userProfile_id).Count();
-                if (existe > 1){
-                        db.Database.ExecuteSqlCommand("delete from rancking where id=" + item.Id);
-                        qtdd = qtdd + 1;
+                if (existe > 1)
+                {
+                    db.Database.ExecuteSqlCommand("delete from rancking where id=" + item.Id);
+                    qtdd = qtdd + 1;
                 }
             }
             ViewBag.Retorno = qtdd;
@@ -594,45 +649,58 @@ namespace Barragem.Controllers
             {
                 ViewBag.MsgErro = string.Format("Você não tem permissão para alterar este usuário '{0}'", model.nome);
                 ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
+                ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == model.barragemId).ToList(), "Id", "nome");
                 return View(model);
             }
-            if (ModelState.IsValid){
+            if (ModelState.IsValid)
+            {
                 //UserProfile usuario = null;
-                try{
+                try
+                {
                     //usuario = db.UserProfiles.Where(u => u.email.Equals(model.email) && !u.UserName.Equals(model.UserName)).FirstOrDefault();
                     //if (usuario != null){
                     //    ViewBag.MsgErro = string.Format("Já existe um usuário com este e-mail '{0}'", model.email);
                     //    ViewBag.barragemId = new SelectList(db.Barragens, "Id", "nome");
                     //    return View(model);
                     //}else{
-                        if (!Funcoes.IsValidEmail(model.email)){
-                            ViewBag.MsgErro = string.Format("E-mail inválido. '{0}'", model.email);
-                            ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
-                            return View(model);
-                        }
+                    if (!Funcoes.IsValidEmail(model.email))
+                    {
+                        ViewBag.MsgErro = string.Format("E-mail inválido. '{0}'", model.email);
+                        ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
+                        ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == model.barragemId).ToList(), "Id", "nome");
+                        return View(model);
+                    }
                     //}
-                    if (inputfoto != null){
+                    if (inputfoto != null)
+                    {
                         int length = inputfoto.ContentLength;
                         byte[] buffer = new byte[length];
                         inputfoto.InputStream.Read(buffer, 0, length);
                         model.foto = buffer;
-                    } else {
+                    }
+                    else
+                    {
                         model.foto = (from up in db.UserProfiles where up.UserId == model.UserId select up.foto).Single();
                     }
-                    model.dataInicioRancking = (from up in db.UserProfiles where up.UserId == model.UserId select up.dataInicioRancking).Single(); 
+                    model.dataInicioRancking = (from up in db.UserProfiles where up.UserId == model.UserId select up.dataInicioRancking).Single();
                     db.Entry(model).State = EntityState.Modified;
                     db.SaveChanges();
                     if ((model.situacao == "desativado") || (model.situacao == "pendente"))
                     {
                         ViewBag.solicitarAtivacao = Class.MD5Crypt.Criptografar(model.UserName);
                     }
-                }catch (MembershipCreateUserException ex){
+                }
+                catch (MembershipCreateUserException ex)
+                {
                     ViewBag.MsgErro = ex.Message;
                 }
-                try{
+                try
+                {
                     gerarRankingInicial(model, perfil);
                     ViewBag.Ok = "ok";
-                }catch(Exception e){
+                }
+                catch (Exception e)
+                {
                     ViewBag.MsgErro = "";
                     if (e.InnerException == null)
                     {
@@ -644,13 +712,13 @@ namespace Barragem.Controllers
                         ViewBag.MsgErro = "Erro ao gerar a pontuação inicial do usuário: " + e.Message + ", " + e.InnerException.Message;
                         ViewBag.DetalheErro = e.InnerException.StackTrace;
                     }
-                    
+
                 }
-                
+
             }
 
             ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
-
+            ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == model.barragemId).ToList(), "Id", "nome");
             return View(model);
 
         }
@@ -660,7 +728,8 @@ namespace Barragem.Controllers
             int qtddJogadores = 0;
             int posicao = 0;
             var rodadaId = 0;
-            if (rodada!=null){
+            if (rodada != null)
+            {
                 rodadaId = rodada.Id;
             }
             try
@@ -683,14 +752,16 @@ namespace Barragem.Controllers
                     totalAcumulado = 20;
                     posicao = qtddJogadores - (qtddJogadores / 3);
                 }
-                if (posicao == 0){
+                if (posicao == 0)
+                {
                     return totalAcumulado;
                 }
                 var rankingPosicao = ranking.Where(p => p.posicao == posicao).FirstOrDefault();
                 totalAcumulado = Convert.ToInt32(rankingPosicao.totalAcumulado);
                 return totalAcumulado;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw new Exception(e.Message + ": qtddJogadores:" + qtddJogadores + ", posicao:" + posicao + ", rodada: " + rodada.Id);
             }
         }
@@ -701,14 +772,16 @@ namespace Barragem.Controllers
             int posicao = 0;
             var rodadaId = 0;
             int totalAcumulado = 50;
-            if (rodada != null){
+            if (rodada != null)
+            {
                 rodadaId = rodada.Id;
             }
             try
             {
-                var ranking = db.Rancking.Where(r => r.rodada_id == rodadaId && r.posicao != 0 && r.classeId==classeId).OrderByDescending(r=>r.totalAcumulado).ToList();
+                var ranking = db.Rancking.Where(r => r.rodada_id == rodadaId && r.posicao != 0 && r.classeId == classeId).OrderByDescending(r => r.totalAcumulado).ToList();
                 qtddJogadores = ranking.Count();
-                if (qtddJogadores > 1){
+                if (qtddJogadores > 1)
+                {
                     posicao = (qtddJogadores / 2);
                     var rankingPosicao = ranking[posicao];// .ToArray()[posicao];
                     totalAcumulado = Convert.ToInt32(rankingPosicao.totalAcumulado);
@@ -721,19 +794,24 @@ namespace Barragem.Controllers
             }
         }
 
-        private void gerarRankingInicial(UserProfile model, string perfil){
-            if (((perfil.Equals("admin")) || (perfil.Equals("organizador"))) && (!model.isRanckingGerado)){
-                List<Rodada> rodadas = db.Rodada.Where(r => r.isAberta == false && r.barragemId==model.barragemId).OrderByDescending(r => r.Id).Take(10).ToList();
+        private void gerarRankingInicial(UserProfile model, string perfil)
+        {
+            if (((perfil.Equals("admin")) || (perfil.Equals("organizador"))) && (!model.isRanckingGerado))
+            {
+                List<Rodada> rodadas = db.Rodada.Where(r => r.isAberta == false && r.barragemId == model.barragemId).OrderByDescending(r => r.Id).Take(10).ToList();
                 Rancking ranking = null;
                 Rodada rodada = null;
-                if (rodadas.Count() != 0){
+                if (rodadas.Count() != 0)
+                {
                     rodada = rodadas[0];
                 }
                 int totalAcumulado = getPontuacaoPorClasse(rodada, model.classeId);
-                double pontuacao = (double) totalAcumulado / 10;
-                foreach (var item in rodadas){
+                double pontuacao = (double)totalAcumulado / 10;
+                foreach (var item in rodadas)
+                {
                     int existe = db.Rancking.Where(r => r.rodada_id == item.Id && r.userProfile_id == model.UserId).Count();
-                    if (existe == 0){
+                    if (existe == 0)
+                    {
                         ranking = new Rancking();
                         ranking.rodada_id = item.Id;
                         ranking.pontuacao = pontuacao;
@@ -793,18 +871,22 @@ namespace Barragem.Controllers
         {
             UserProfile usuario = null;
             usuario = db.UserProfiles.Where(u => u.UserName.Equals(userName)).Single();
-            if (usuario.foto != null){
+            if (usuario.foto != null)
+            {
                 return "true";
             }
             return "false";
 
         }
-        public FileContentResult BuscaFoto(int id=0, string userName="")
+        public FileContentResult BuscaFoto(int id = 0, string userName = "")
         {
             UserProfile usuario = null;
-            if (id == 0){
-                usuario = db.UserProfiles.Where(u=>u.UserName.Equals(userName)).Single();
-            }else{
+            if (id == 0)
+            {
+                usuario = db.UserProfiles.Where(u => u.UserName.Equals(userName)).Single();
+            }
+            else
+            {
                 usuario = db.UserProfiles.Find(id);
             }
             if (usuario.foto != null)
@@ -814,7 +896,7 @@ namespace Barragem.Controllers
             return null;
         }
 
-        public ActionResult ListarUsuarios(String filtroSituacao="", int filtroBarragem=0)
+        public ActionResult ListarUsuarios(String filtroSituacao = "", int filtroBarragem = 0)
         {
             UserProfile usu = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.situacao = usu.situacao;
@@ -822,23 +904,32 @@ namespace Barragem.Controllers
             ViewBag.filtroBarragem = filtroBarragem;
             List<UserProfile> usuarios;
             IQueryable<UserProfile> consulta = null;
-            if (filtroSituacao == ""){
+            if (filtroSituacao == "")
+            {
                 consulta = db.UserProfiles.Where(u => u.situacao.Equals("ativo") || u.situacao.Equals("licenciado") || u.situacao.Equals("suspenso"));
-            } else if(filtroSituacao=="todos") {
-                consulta = db.UserProfiles.Where(u => !u.situacao.Equals("curinga"));
-            } else {
-                consulta = db.UserProfiles.Where(u => u.situacao.Equals(filtroSituacao));    
             }
-            if (filtroBarragem != 0){
+            else if (filtroSituacao == "todos")
+            {
+                consulta = db.UserProfiles.Where(u => !u.situacao.Equals("curinga"));
+            }
+            else
+            {
+                consulta = db.UserProfiles.Where(u => u.situacao.Equals(filtroSituacao));
+            }
+            if (filtroBarragem != 0)
+            {
                 consulta = consulta.Where(u => u.barragemId == filtroBarragem);
             }
             string perfil = Roles.GetRolesForUser(User.Identity.Name)[0];
-            if (!perfil.Equals("admin")){
+            if (!perfil.Equals("admin"))
+            {
                 usuarios = consulta.Where(u => u.barragemId == usu.barragemId).OrderBy(u => u.nome).ToList();
-            } else {
+            }
+            else
+            {
                 usuarios = consulta.OrderBy(u => u.nome).ToList();
             }
-                return View(usuarios);
+            return View(usuarios);
         }
 
         [AllowAnonymous]
@@ -865,16 +956,22 @@ namespace Barragem.Controllers
                     {
                         ViewBag.MsgErro = "Este usuário não possui e-mail cadastrado. Por favor, entre em contato com o administrador";
                         return View();
-                    }else{
+                    }
+                    else
+                    {
                         string confirmationToken = WebSecurity.GeneratePasswordResetToken(user.UserName);
                         EnviarMailSenha(confirmationToken, user.nome, user.email);
                         return View("ConfirmaEnvio");
                     }
-                }else{
+                }
+                else
+                {
                     ViewBag.MsgErro = "Este usuário não existe.";
                     return View();
                 }
-            }catch (Exception ex){
+            }
+            catch (Exception ex)
+            {
                 var routeData = new RouteData();
                 routeData.Values["controller"] = "Erros";
                 routeData.Values["exception"] = ex;

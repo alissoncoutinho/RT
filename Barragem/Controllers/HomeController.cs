@@ -161,8 +161,11 @@ namespace Barragem.Controllers
         private Torneio getTorneioAberto(int barragemId){
             try{
                 DateTime dtNow = DateTime.Now;
-                var torneioAberto = db.Torneio.Where(t => t.barragemId == barragemId && t.dataFimInscricoes > dtNow && t.isAtivo).Single();
-                return torneioAberto;
+                var torneioAberto = db.Torneio.Where(t => t.barragemId == barragemId && t.dataFimInscricoes > dtNow && t.isAtivo).OrderByDescending(t=>t.dataInicio).ToList();
+                if (torneioAberto.Count()>0){
+                    return torneioAberto[0];
+                }
+                return null;
             }catch (Exception e) {
                 return null;
             }

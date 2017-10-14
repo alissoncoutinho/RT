@@ -63,20 +63,23 @@ namespace Barragem.Controllers
         // GET: /Rodada/Create
 
         [Authorize(Roles = "admin, organizador")]
-        public ActionResult Create(int barragemId=0)
+        public ActionResult Create(int barragemId = 0)
         {
             try
             {
-                if (barragemId == 0){
+                if (barragemId == 0)
+                {
                     var userId = WebSecurity.GetUserId(User.Identity.Name);
                     barragemId = (from up in db.UserProfiles where up.UserId == userId select up.barragemId).Single();
                 }
                 ViewBag.barraId = barragemId;
                 ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome");
 
-                ViewBag.temporadaId = new SelectList(db.Temporada.Where(c => c.isAtivo == true && c.barragemId == barragemId), "Id", "nome");
+                ViewBag.temporadaId = new SelectList(db.Temporada.Where(c => c.isAtivo == true && c.barragemId == barragemId).OrderByDescending(c => c.Id), "Id", "nome");
 
-            }catch (InvalidOperationException) {
+            }
+            catch (InvalidOperationException)
+            {
                 ViewBag.sequencial = 1;
                 ViewBag.codigo = "A";
             }

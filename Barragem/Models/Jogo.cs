@@ -180,5 +180,22 @@ namespace Barragem.Models
             }
 
         }
+
+        public virtual int idDoPerdedor
+        {
+            get
+            {
+                if (qtddSetsGanhosDesafiado > qtddSetsGanhosDesafiante)
+                {
+                    return desafiante_id;
+                }
+                if (qtddSetsGanhosDesafiado < qtddSetsGanhosDesafiante)
+                {
+                    return desafiado_id;
+                }
+                return 0;
+            }
+
+        }
     }
 }
