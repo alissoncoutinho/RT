@@ -341,7 +341,7 @@ namespace Barragem.Controllers
 
         }
 
-        [Authorize(Roles = "admin,organizador")]
+        [Authorize(Roles = "admin,organizador,usuario")]
         public ActionResult TabelaJogos(int torneioId, int classe = 1, string Msg="")
         {
             var torneio = db.Torneio.Find(torneioId);
@@ -425,12 +425,14 @@ namespace Barragem.Controllers
             Torneio torneio = db.Torneio.Find(id);
             var userId = WebSecurity.GetUserId(User.Identity.Name);
             ViewBag.isInscrito = false;
-            var inscricao = db.InscricaoTorneio.Where(i => i.torneioId == id && i.userId == userId).Count();
-            if (inscricao>0){
+            var inscricao = db.InscricaoTorneio.Where(i => i.torneioId == id && i.userId == userId).ToList();
+            ViewBag.ClasseInscricao = 0;
+            if (inscricao.Count>0){
                 ViewBag.isInscrito = true;
+                ViewBag.ClasseInscricao = inscricao[0].classe;
             }
             var jogador = db.UserProfiles.Find(userId);
-            ViewBag.ClasseInscricao = 0;
+            
             ViewBag.valor = torneio.valor+"";
             if (jogador.barragemId == torneio.barragemId){
                 var ranking = db.Rancking.Where(r => r.userProfile_id == userId).Count();
@@ -448,7 +450,7 @@ namespace Barragem.Controllers
 
         [Authorize(Roles = "admin,usuario,organizador")]
         [HttpPost]
-        public ActionResult Inscricao(int torneioId, int classeInscricao, int vrInscricao)
+        public ActionResult Inscricao(int torneioId, int classeInscricao, int vrInscricao, string operacao="")
         {
             try
             {
@@ -456,7 +458,11 @@ namespace Barragem.Controllers
                 var isInscricao = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Count();
                 if (isInscricao>0){
                     InscricaoTorneio it = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Single();
-                    db.InscricaoTorneio.Remove(it);
+                    if (operacao == "cancelar"){
+                        db.InscricaoTorneio.Remove(it);
+                    } else {
+                        it.classe = classeInscricao;
+                    }
                 }else{
                     InscricaoTorneio inscricao = new InscricaoTorneio();
                     inscricao.classe = classeInscricao;

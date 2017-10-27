@@ -115,53 +115,64 @@ namespace Barragem.Class
 
         public void gravarPontuacaoNaRodada(int idRodada, UserProfile jogador, double pontosConquistados, bool isReprocessamento = false)
         {
-            if (jogador.situacao.Equals("curinga") || jogador.situacao.Equals("pendente"))
+            try
             {
-                return;
-            }
-            Rancking ran = null;
-            double pontuacaoTotal = db.Rancking.Where(r => r.rodada.isAberta == false && r.userProfile_id == jogador.UserId && r.rodada_id < idRodada).OrderByDescending(r => r.Id).Take(9).Sum(r => r.pontuacao);
+                if (jogador.situacao.Equals("curinga") || jogador.situacao.Equals("pendente"))
+                {
+                    return;
+                }
+                Rancking ran = null;
+                double pontuacaoTotal = db.Rancking.Where(r => r.rodada.isAberta == false && r.userProfile_id == jogador.UserId && r.rodada_id < idRodada).OrderByDescending(r => r.Id).Take(9).Sum(r => r.pontuacao);
 
-            if (isReprocessamento)
-            {
-                ran = db.Rancking.Where(r => r.rodada_id == idRodada && r.userProfile_id == jogador.UserId).Single();
-                ran.pontuacao = Math.Round(pontosConquistados, 2);
-                //ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
-                db.SaveChanges();
-            }
-            else
-            {
-                ran = new Rancking();
-                ran.rodada_id = idRodada;
-                ran.pontuacao = Math.Round(pontosConquistados, 2);
-                ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
-                ran.posicao = 0;
-                ran.userProfile_id = jogador.UserId;
-                ran.classeId = jogador.classeId;
-                db.Rancking.Add(ran);
-                db.SaveChanges();
+                if (isReprocessamento)
+                {
+                    ran = db.Rancking.Where(r => r.rodada_id == idRodada && r.userProfile_id == jogador.UserId).Single();
+                    ran.pontuacao = Math.Round(pontosConquistados, 2);
+                    //ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ran = new Rancking();
+                    ran.rodada_id = idRodada;
+                    ran.pontuacao = Math.Round(pontosConquistados, 2);
+                    ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
+                    ran.posicao = 0;
+                    ran.userProfile_id = jogador.UserId;
+                    ran.classeId = jogador.classeId;
+                    db.Rancking.Add(ran);
+                    db.SaveChanges();
+                }
+            }catch (Exception e) {
+                System.ArgumentException argEx = new System.ArgumentException("Jogador:" + jogador.UserId, "Jogador:" + jogador.UserId, e);
+                throw argEx;
             }
 
         }
 
         public void gerarPontuacaoDosJogadoresForaDaRodada(int idRodada, int barragemId = 1)
         {
-            string suspenso = Tipos.Situacao.suspenso.ToString();
-            List<UserProfile> jogadores = db.UserProfiles.Where(j => j.barragemId == barragemId).ToList();
-            foreach (UserProfile user in jogadores)
+            try
             {
-                int estaNaRodadaAtual = db.Jogo.Where(j => j.rodada_id == idRodada && (j.desafiante_id == user.UserId || j.desafiado_id == user.UserId)).Count();
-                if (estaNaRodadaAtual == 0)
+                string suspenso = Tipos.Situacao.suspenso.ToString();
+                List<UserProfile> jogadores = db.UserProfiles.Where(j => j.barragemId == barragemId).ToList();
+                foreach (UserProfile user in jogadores)
                 {
-                    if (user.situacao == suspenso)
+                    int estaNaRodadaAtual = db.Jogo.Where(j => j.rodada_id == idRodada && (j.desafiante_id == user.UserId || j.desafiado_id == user.UserId)).Count();
+                    if (estaNaRodadaAtual == 0)
                     {
-                        gravarPontuacaoNaRodada(idRodada, user, 0.0);
-                    }
-                    else if ((user.situacao == "ativo") || (user.situacao == "licenciado") || (user.situacao == "desativado") || (user.situacao == "inativo"))
-                    {
-                        gravarPontuacaoNaRodada(idRodada, user, 3.0);
+                        if (user.situacao == suspenso)
+                        {
+                            gravarPontuacaoNaRodada(idRodada, user, 0.0);
+                        }
+                        else if ((user.situacao == "ativo") || (user.situacao == "licenciado") || (user.situacao == "inativo"))
+                        {
+                            gravarPontuacaoNaRodada(idRodada, user, 3.0);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                throw e;
             }
         }
 

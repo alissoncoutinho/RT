@@ -295,8 +295,10 @@ namespace Barragem.Controllers
             bool isDesafiante;
             int qtddTentativas = 0;
             Random r = new Random();
+            int range = 0;
             while (qtddTentativas<30){
-                int randomIndex = r.Next(1, listaJogadores.Count); //Choose a random object in the list
+                if (listaJogadores.Count >= 3) { range = 3; } else { range = listaJogadores.Count; }
+                int randomIndex = r.Next(1, range); //Choose a random object in the list
                 isDesafiante = true;
                 for (int j = 0; j < ultimosJogos.Count() - reduzVerificacao; j++){
                     if ((ultimosJogos[j].desafiado_id == listaJogadores[randomIndex].userProfile_id) || (ultimosJogos[j].desafiante_id == listaJogadores[randomIndex].userProfile_id)){

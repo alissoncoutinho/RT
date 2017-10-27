@@ -48,7 +48,9 @@
                         <table style='border:1px dashed silver; padding:5px; table-layout: fixed; width: 200px; margin:5px'>
                             <tr>
                                 <td style="font-size: 13px; padding-left: 5px;">
-                                    @Html.Raw(item.desafiado.nome)
+                                    <a href="@Url.Action("../Account/Detalhes", new { userId = @item.desafiado.UserId })" title="Detalhes do jogador">
+                                        @Html.Raw(item.desafiado.nome)
+                                    </a>
                                 </td>
                             </tr>
                             @if (item.situacao_Id == 4)

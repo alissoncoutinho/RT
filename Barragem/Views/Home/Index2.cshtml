@@ -42,6 +42,9 @@
                             @Html.Raw("Rodada:" + Model.rodada.codigoSeq + "")
                         }
                     }
+                    @if (ViewBag.NomeTorneio != null) {
+                        @Html.Raw(ViewBag.NomeTorneio)
+                    }
                 </h4>
                 <div id="placar" class="form-horizontal form-inline">
                     <div class="form-group">
@@ -208,31 +211,57 @@
         </legend>
 
         <div class="row clearfix">
-            @if (ViewBag.JogosPendentes != null)
-        {
-            List<Barragem.Models.Jogo> jogosP = ViewBag.JogosPendentes;
-            if (jogosP.Count() == 0){
-        <h3>Você não possui nenhum jogo pendente.</h3>
+            @if ((ViewBag.JogosPendentes != null)||(ViewBag.jogosPendentesTorneio != null)){
+                if(ViewBag.JogosPendentesTorneio != null){
+                    List<Barragem.Models.Jogo> jogosPT = ViewBag.JogosPendentesTorneio;
+                    foreach (var item in jogosPT)
+                    {
+                        <a href="@Url.Action("Index2", new { idJogo = @item.Id })" title="informar resultado">
+                            <div class="col-md-4 column container">
+                                <h4 style="color:forestgreen">Torneio</h4>
+                                <div class="row">
+                                    <div class="col-md-4 column">
+                                        <img class="img-responsive" src="/Content/image/JogoPendente.png">
+                                    </div>
+                                    <div class="col-md-5 column">
+                                        @if (item.desafiado_id == 0){
+                                            @Html.Raw("Aguardando Adversário");
+                                        }else{
+                                            <div class="row">@Html.DisplayFor(modelItem => item.desafiado.nome)</div>
+                                        }
+                                        <div class="row"><span style="text-align:center">X</span></div>
+                                        @if (item.desafiante_id == 0){
+                                            @Html.Raw("Aguardando Adversário");
+                                        }else{
+                                            <div class="row">@Html.DisplayFor(modelItem => item.desafiante.nome)</div>
+                                        }
+                                        </div>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+                if(ViewBag.JogosPendentes != null){
+                    List<Barragem.Models.Jogo> jogosP = ViewBag.JogosPendentes;
+                    foreach (var item in jogosP){
+                        <a href="@Url.Action("Index2", new { idJogo = @item.Id })" title="informar resultado">
+                        <div class="col-md-4 column container">
+                            <h4 style="color:forestgreen">Rodada @Html.DisplayFor(modelItem => item.rodada.codigoSeq)</h4>
+                            <div class="row">
+                                <div class="col-md-4 column">
+                                    <img class="img-responsive" src="/Content/image/JogoPendente.png">
+                                </div>
+                                <div class="col-md-5 column">
+                                    <div class="row">@Html.DisplayFor(modelItem => item.desafiado.nome)</div>
+                                    <div class="row"><span style="text-align:center">X</span></div>
+                                    <div class="row">@Html.DisplayFor(modelItem => item.desafiante.nome)</div>
+                                </div>
+                            </div>
+                        </div>
+                        </a>
+                    }
+                }
             }
-            foreach (var item in jogosP)
-            {
-        <a href="@Url.Action("Index2", new { idJogo = @item.Id })" title="informar resultado">
-            <div class="col-md-4 column container">
-                <h4 style="color:forestgreen">Rodada @Html.DisplayFor(modelItem => item.rodada.codigoSeq)</h4>
-                <div class="row">
-                    <div class="col-md-4 column">
-                        <img class="img-responsive" src="/Content/image/JogoPendente.png">
-                    </div>
-                    <div class="col-md-5 column">
-                        <div class="row">@Html.DisplayFor(modelItem => item.desafiado.nome)</div>
-                        <div class="row"><span style="text-align:center">X</span></div>
-                        <div class="row">@Html.DisplayFor(modelItem => item.desafiante.nome)</div>
-                    </div>
-                </div>
-            </div>
-        </a>
-            }
-        }
         </div>
 
 

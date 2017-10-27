@@ -295,8 +295,8 @@ namespace Barragem.Controllers
             {
                 if (usu.barragemId != jogador.barragemId)
                 {
-                    userId = usu.UserId;
-                    jogador = usu;
+                    //userId = usu.UserId;
+                    //jogador = usu;
                 }
             }
             List<Rancking> ranckingJogador = db.Rancking.Where(r => r.userProfile_id == userId).OrderByDescending(r => r.rodada_id).ToList();

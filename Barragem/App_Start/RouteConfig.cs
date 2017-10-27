@@ -13,11 +13,11 @@ namespace Barragem
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Asbac",
-                url: "ranking-{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            //routes.MapRoute(
+              //  name: "Asbac",
+              //  url: "ranking-{id}",
+              //  defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
             
             routes.MapRoute(
                 name: "Default",
