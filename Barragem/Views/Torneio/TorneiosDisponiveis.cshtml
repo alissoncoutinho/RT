@@ -31,6 +31,7 @@
                     </td>
                     <td align="center">
                         <a href="@Url.Action("Detalhes", new { id = @item.Id })" class="btn btn-sm btn-default" data-id="@item.Id" title="Detalhar">Detalhar</a>
+                        <a href="@Url.Action("InscricoesTorneio2", new {torneioId = @item.Id })" class="btn btn-sm btn-default" data-id="@item.Id" title="Inscritos">Inscritos</a>
                         <a href="@Url.Action("TabelaJogos", new {torneioId = @item.Id })" class="btn btn-sm btn-default" data-id="@item.Id" title="Detalhar">Tabela</a>
                     </td>
                 </tr>

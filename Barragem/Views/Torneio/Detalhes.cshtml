@@ -60,9 +60,7 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-                    <a href="@Url.Action("TorneiosDisponiveis")" title="Voltar" class="btn btn-default">Voltar</a>
-                </div>
+                
             </div>
             <!-- /.box -->
         </div>
@@ -124,7 +122,7 @@
                         }else{
                             @Html.Raw("Inscrições Encerradas.")
                         }
-                        
+                        <a href="@Url.Action("InscricoesTorneio2", new { torneioId = @Model.Id })" class="btn btn-default" data-id="@Model.Id" title="Inscritos">Inscritos</a>        
                     </div>
                     <!-- /.box-footer -->
                 }

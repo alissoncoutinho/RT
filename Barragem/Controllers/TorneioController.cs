@@ -86,7 +86,7 @@ namespace Barragem.Controllers
                 for (int i = 1; i <= torneio.qtddClasses; i++)
                 {
                     inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId && r.classe == i && r.isAtivo).ToList();
-                    colocarJogadoresEmLicencaNoRanking(inscricoes);
+                    //colocarJogadoresEmLicencaNoRanking(inscricoes);
                     int j = 1;
                     while(inscricoes.Count>0){
                         jogador1 = selecionarAdversario(inscricoes);
@@ -390,6 +390,16 @@ namespace Barragem.Controllers
 
             mensagem(Msg);
             
+            return View(inscricoes);
+        }
+
+        [Authorize(Roles = "admin,organizador,usuario")]
+        public ActionResult InscricoesTorneio2(int torneioId, string Msg = "")
+        {
+            var inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId).OrderBy(r => r.classe).ThenBy(r => r.participante.nome).ToList();
+
+            mensagem(Msg);
+
             return View(inscricoes);
         }
 
