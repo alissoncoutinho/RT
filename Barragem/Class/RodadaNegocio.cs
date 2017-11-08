@@ -133,15 +133,18 @@ namespace Barragem.Class
                 }
                 else
                 {
-                    ran = new Rancking();
-                    ran.rodada_id = idRodada;
-                    ran.pontuacao = Math.Round(pontosConquistados, 2);
-                    ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
-                    ran.posicao = 0;
-                    ran.userProfile_id = jogador.UserId;
-                    ran.classeId = jogador.classeId;
-                    db.Rancking.Add(ran);
-                    db.SaveChanges();
+                    var naoExisteRanking = db.Rancking.Where(r => r.rodada_id == idRodada && r.userProfile_id == jogador.UserId).Count();
+                    if (naoExisteRanking == 0) {
+                        ran = new Rancking();
+                        ran.rodada_id = idRodada;
+                        ran.pontuacao = Math.Round(pontosConquistados, 2);
+                        ran.totalAcumulado = Math.Round(pontuacaoTotal + pontosConquistados, 2);
+                        ran.posicao = 0;
+                        ran.userProfile_id = jogador.UserId;
+                        ran.classeId = jogador.classeId;
+                        db.Rancking.Add(ran);
+                        db.SaveChanges();
+                    }
                 }
             }catch (Exception e) {
                 System.ArgumentException argEx = new System.ArgumentException("Jogador:" + jogador.UserId, "Jogador:" + jogador.UserId, e);

@@ -138,56 +138,79 @@ namespace Barragem.Controllers
                     EfetuarSorteio(id, barragemId, classes[i].Id);
                 }
             }catch (Exception e){
-                mensagem = mensagem + " - " + e.Message;
+                mensagem = e.Message;
             }
             return RedirectToAction("Index", new { msg=mensagem});
         }
 
         private List<RankingView> selecionarJogadorParaFicarFora(List<RankingView> jogadores, int rodadaAnterior, int rodadaAtual, int classeId){
-            
-            List<Jogo> jogo = db.Jogo.Where(j => j.rodada_id == rodadaAnterior && j.situacao_Id != 4 && j.situacao_Id != 5 && j.desafiado.classeId==classeId).ToList();
-            UserProfile jogador = null;
-            RankingView rv = null;
-            for (int i = 0; i<jogo.Count(); i++){
-                if ((rodadaAnterior % 2 == 0) && (jogo[i].desafiante.situacao.Equals("ativo"))){
-                    jogador = jogo[i].desafiante;
-                }else if ((jogo[i].desafiado.situacao.Equals("ativo"))){
-                    jogador = jogo[i].desafiado;
+            try
+            {
+                // busca jogos que ainda não foram realizados na rodada anterior
+                List<Jogo> jogo = db.Jogo.Where(j => j.rodada_id == rodadaAnterior && j.situacao_Id != 4 && j.situacao_Id != 5 && j.desafiado.classeId == classeId).ToList();
+                UserProfile jogador = null;
+                RankingView rv = null;
+                for (int i = 0; i < jogo.Count(); i++)
+                {
+                    if ((rodadaAnterior % 2 == 0) && (jogo[i].desafiante.situacao.Equals("ativo"))
+                        && jogadores.SingleOrDefault(r => r.userProfile_id == jogo[i].desafiante.UserId) != null)
+                    {
+                        jogador = jogo[i].desafiante;
+                    }
+                    else if ((jogo[i].desafiado.situacao.Equals("ativo"))
+                       && jogadores.SingleOrDefault(r => r.userProfile_id == jogo[i].desafiado.UserId) != null)
+                    {
+                        jogador = jogo[i].desafiado;
+                    }
                 }
-            }
-            UserProfile curinga = db.UserProfiles.Where(u => u.situacao.Equals("curinga")).Single();
-            if (jogador != null){
-                criarJogo(jogador.UserId,curinga.UserId, rodadaAtual,true);
-                var itemToRemove = jogadores.SingleOrDefault(r => r.userProfile_id == jogador.UserId);
-                if (itemToRemove != null)
+                UserProfile curinga = db.UserProfiles.Where(u => u.situacao.Equals("curinga")).Single();
+                if (jogador != null)
+                {
+                    criarJogo(jogador.UserId, curinga.UserId, rodadaAtual, true);
+                    var itemToRemove = jogadores.SingleOrDefault(r => r.userProfile_id == jogador.UserId);
                     jogadores.Remove(itemToRemove);
-            } else {
-                criarJogo(jogadores[0].userProfile_id, curinga.UserId, rodadaAtual, true);
-                rv = jogadores[0];
-                jogadores.Remove(rv);
+                }
+                else
+                {
+                    criarJogo(jogadores[0].userProfile_id, curinga.UserId, rodadaAtual, true);
+                    rv = jogadores[0];
+                    jogadores.Remove(rv);
+                }
+
+                return jogadores;
+            } catch (Exception e) {
+                System.ArgumentException argEx = new System.ArgumentException("Selecionar jogador para ficar fora da rodada da classe " + classeId + ": "+ e.Message, e);
+                throw argEx;
             }
-            
-            return jogadores;
         }
 
         private void EfetuarSorteio(int idRodada, int barragemId, int classeId){
-            // excluir os jogos já sorteados para o caso de estar sorteando novamente
-            db.Database.ExecuteSqlCommand("DELETE j fROM jogo j INNER JOIN UserProfile u ON j.desafiado_id=u.UserId WHERE u.classeId = " + classeId + " AND j.rodada_id =" + idRodada);
-            // monta a lista ordenada pelo último rancking consolidado
-            int Id_rodadaAnterior = db.Rancking.Where(r=>r.rodada.isAberta==false && r.rodada_id<idRodada && r.rodada.barragemId==barragemId).Max(r => r.rodada_id);
-            List<RankingView> jogadores = db.RankingView.Where(r => r.barragemId == barragemId && r.classeId == classeId && r.situacao.Equals("ativo")).OrderByDescending(r=>r.totalAcumulado).ToList();
+            try
+            {
+                // excluir os jogos já sorteados para o caso de estar sorteando novamente
+                db.Database.ExecuteSqlCommand("DELETE j fROM jogo j INNER JOIN UserProfile u ON j.desafiado_id=u.UserId WHERE u.classeId = " + classeId + " AND j.rodada_id =" + idRodada);
+                // monta a lista ordenada pelo último rancking consolidado
+                int Id_rodadaAnterior = db.Rancking.Where(r => r.rodada.isAberta == false && r.rodada_id < idRodada && r.rodada.barragemId == barragemId).Max(r => r.rodada_id);
+                List<RankingView> jogadores = db.RankingView.Where(r => r.barragemId == barragemId && r.classeId == classeId && r.situacao.Equals("ativo")).OrderByDescending(r => r.totalAcumulado).ToList();
 
-            // se a quantidade de participantes ativos for impar o sistema escolherá, 
-            // de acordo com a regra estabelecida, um jogador para ficar de fora
-            if (jogadores.Count % 2 != 0){
-                jogadores = selecionarJogadorParaFicarFora(jogadores, Id_rodadaAnterior, idRodada, classeId);
-            }
-            // o mais bem posicionado no ranking será desafiado por alguém pior posicionado
-            RankingView desafiante = null;
-            while (jogadores.Count > 0){
-                RankingView desafiado = jogadores[0];
-                desafiante = selecionarAdversario(jogadores, desafiado, Id_rodadaAnterior);
-                criarJogo(desafiado.userProfile_id,desafiante.userProfile_id, idRodada);
+                // se a quantidade de participantes ativos for impar o sistema escolherá, 
+                // de acordo com a regra estabelecida, um jogador para ficar de fora
+                if (jogadores.Count % 2 != 0)
+                {
+                    jogadores = selecionarJogadorParaFicarFora(jogadores, Id_rodadaAnterior, idRodada, classeId);
+                }
+                // o mais bem posicionado no ranking será desafiado por alguém pior posicionado
+                RankingView desafiante = null;
+                while (jogadores.Count > 0)
+                {
+                    RankingView desafiado = jogadores[0];
+                    desafiante = selecionarAdversario(jogadores, desafiado, Id_rodadaAnterior);
+                    criarJogo(desafiado.userProfile_id, desafiante.userProfile_id, idRodada);
+                }
+            } catch (Exception e) {
+                System.ArgumentException argEx = new System.ArgumentException("Sorteio classe " + classeId + ": " + e.Message, e);
+                throw argEx;
+                
             }
         }
 
@@ -217,33 +240,50 @@ namespace Barragem.Controllers
 
         private RankingView selecionarAdversario(List<RankingView> listaJogadores, RankingView desafiado, int rodadaAnteriorId)
         {
-            RankingView desafiante = null;
-            if (listaJogadores.Count() == 2){
-                desafiante = listaJogadores[1];
-                listaJogadores.RemoveAt(1);
-                listaJogadores.RemoveAt(0);
-                return desafiante;
-            }
-            // O jogador não deve repetir o mesmo jogo das 3 últimas rodadas
-
-            // busca os 3 últimos jogos do desafiado
-            List<Jogo> jogosAnteriores = db.Jogo.Where(j => (j.rodada_id <= rodadaAnteriorId &&
-                    (j.desafiado_id == desafiado.userProfile_id || j.desafiante_id == desafiado.userProfile_id))).
-                    Take(3).OrderByDescending(j => j.Id).ToList();
-            for (int i = 0; i <= 2; i++){
-                // busca um oponente mais próximo que não tenha jogado nos últimos 3 jogos ou nos últimos 2 jogos ou no último jogo
-                desafiante = buscarOponentesNaoRepetidos(listaJogadores, jogosAnteriores,i);
-                if (desafiante != null){
+            try
+            {
+                RankingView desafiante = null;
+                if (listaJogadores.Count() == 1)
+                {
+                    UserProfile curinga = db.UserProfiles.Where(u => u.situacao.Equals("curinga")).Single();
+                    listaJogadores.RemoveAt(0);
+                    desafiante = new RankingView();
+                    desafiante.userProfile_id = curinga.UserId;
                     return desafiante;
                 }
+                if (listaJogadores.Count() == 2)
+                {
+                    desafiante = listaJogadores[1];
+                    listaJogadores.RemoveAt(1);
+                    listaJogadores.RemoveAt(0);
+                    return desafiante;
+                }
+                // O jogador não deve repetir o mesmo jogo das 3 últimas rodadas
+
+                // busca os 3 últimos jogos do desafiado
+                List<Jogo> jogosAnteriores = db.Jogo.Where(j => (j.rodada_id <= rodadaAnteriorId &&
+                        (j.desafiado_id == desafiado.userProfile_id || j.desafiante_id == desafiado.userProfile_id))).
+                        Take(3).OrderByDescending(j => j.Id).ToList();
+                for (int i = 0; i <= 2; i++)
+                {
+                    // busca um oponente mais próximo que não tenha jogado nos últimos 3 jogos ou nos últimos 2 jogos ou no último jogo
+                    desafiante = buscarOponentesNaoRepetidos(listaJogadores, jogosAnteriores, i);
+                    if (desafiante != null)
+                    {
+                        return desafiante;
+                    }
+                }
+                // caso não encontre em nenhuma situação acima, realiza um sorteio
+                Random r = new Random();
+                int randomIndex = r.Next(1, listaJogadores.Count); //Choose a random object in the list
+                desafiante = listaJogadores[randomIndex]; //add it 
+                listaJogadores.RemoveAt(randomIndex);
+                listaJogadores.RemoveAt(0);
+                return desafiante;
+            }catch(Exception e){
+                System.ArgumentException argEx = new System.ArgumentException("Selecionar adversário para o desafiado: " + desafiado.userProfile_id + ":" + e.Message, e);
+                throw argEx;
             }
-            // caso não encontre em nenhuma situação acima, realiza um sorteio
-            Random r = new Random();
-            int randomIndex = r.Next(1, listaJogadores.Count); //Choose a random object in the list
-            desafiante = listaJogadores[randomIndex]; //add it 
-            listaJogadores.RemoveAt(randomIndex);
-            listaJogadores.RemoveAt(0);
-            return desafiante;
         }
 
         private UserProfile selecionarDesafiante(List<Rancking> listaJogadores, UserProfile desafiado, int rodadaAnteriorId)
@@ -292,47 +332,66 @@ namespace Barragem.Controllers
         }
 
         private RankingView buscarOponentesNaoRepetidos(List<RankingView> listaJogadores, List<Jogo> ultimosJogos, int reduzVerificacao=0) {
-            bool isDesafiante;
-            int qtddTentativas = 0;
-            Random r = new Random();
-            int range = 0;
-            while (qtddTentativas<30){
-                if (listaJogadores.Count >= 3) { range = 3; } else { range = listaJogadores.Count; }
-                int randomIndex = r.Next(1, range); //Choose a random object in the list
-                isDesafiante = true;
-                for (int j = 0; j < ultimosJogos.Count() - reduzVerificacao; j++){
-                    if ((ultimosJogos[j].desafiado_id == listaJogadores[randomIndex].userProfile_id) || (ultimosJogos[j].desafiante_id == listaJogadores[randomIndex].userProfile_id)){
-                        isDesafiante = false;
-                        break;
+            try
+            {
+                bool isDesafiante;
+                int qtddTentativas = 0;
+                Random r = new Random();
+                int range = 0;
+                while (qtddTentativas < 30)
+                {
+                    if (listaJogadores.Count >= 3) { range = 3; } else { range = listaJogadores.Count; }
+                    int randomIndex = r.Next(1, range); //Choose a random object in the list
+                    isDesafiante = true;
+                    for (int j = 0; j < ultimosJogos.Count() - reduzVerificacao; j++)
+                    {
+                        if ((ultimosJogos[j].desafiado_id == listaJogadores[randomIndex].userProfile_id) || (ultimosJogos[j].desafiante_id == listaJogadores[randomIndex].userProfile_id))
+                        {
+                            isDesafiante = false;
+                            break;
+                        }
                     }
+                    if (isDesafiante)
+                    {
+                        RankingView desafiante = listaJogadores[randomIndex];
+                        listaJogadores.RemoveAt(randomIndex);
+                        listaJogadores.RemoveAt(0);
+                        return desafiante;
+                    }
+                    qtddTentativas++;
                 }
-                if (isDesafiante){
-                    RankingView desafiante = listaJogadores[randomIndex];
-                    listaJogadores.RemoveAt(randomIndex);
-                    listaJogadores.RemoveAt(0);
-                    return desafiante;
-                }
-                qtddTentativas++;
+                return null;
+            }catch(Exception e){
+                System.ArgumentException argEx = new System.ArgumentException("Oponente não repetido:" + e.Message, e);
+                throw argEx;
             }
-            return null;
         }
 
         private void criarJogo(int desafiadoId, int desafianteId, int idRodada, bool isCuringa=false){
-            Jogo jogo = new Jogo();
-            jogo.desafiado_id = desafiadoId;
-            jogo.desafiante_id = desafianteId;
-            jogo.rodada_id = idRodada;
-            jogo.situacao_Id = 1;
-            if (isCuringa){
-                jogo.situacao_Id =4;
-                jogo.qtddGames1setDesafiado=6;
-                jogo.qtddGames2setDesafiado = 6;
-                jogo.qtddGames1setDesafiante = 0;
-                jogo.qtddGames2setDesafiante = 0;
+            try
+            {
+                Jogo jogo = new Jogo();
+                jogo.desafiado_id = desafiadoId;
+                jogo.desafiante_id = desafianteId;
+                jogo.rodada_id = idRodada;
+                jogo.situacao_Id = 1;
+                if (isCuringa)
+                {
+                    jogo.situacao_Id = 4;
+                    jogo.qtddGames1setDesafiado = 6;
+                    jogo.qtddGames2setDesafiado = 6;
+                    jogo.qtddGames1setDesafiante = 0;
+                    jogo.qtddGames2setDesafiante = 0;
 
+                }
+                db.Jogo.Add(jogo);
+                db.SaveChanges();
             }
-            db.Jogo.Add(jogo);
-            db.SaveChanges();
+            catch (Exception e)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("Criar Jogo - Id do desafiado: " + desafiadoId + ", Id do desafiante: " + desafianteId + ":" + e.Message, e);
+                throw argEx;
+            }
         }
         //
         // GET: /Rodada/Edit/5
