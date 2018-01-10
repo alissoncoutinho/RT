@@ -250,7 +250,14 @@ namespace Barragem.Controllers
         {
             //string userName = MD5Crypt.Descriptografar(token);
             var userName = User.Identity.Name;
+            ViewBag.linkPagSeguro = "";
             UserProfile user = null;
+            HttpCookie cookie = Request.Cookies["_barragemId"];
+            if (cookie != null){
+                var barragemId = Convert.ToInt32(cookie.Value.ToString());
+                BarragemView barragem = db.BarragemView.Find(barragemId);
+                ViewBag.linkPagSeguro = barragem.linkPagSeguro;
+            }
             try
             {
                 user = db.UserProfiles.Where(u => u.UserName.ToLower() == userName.ToLower()).FirstOrDefault();

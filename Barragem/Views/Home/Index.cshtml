@@ -13,126 +13,73 @@
     </div><!--//bg-slider-wrapper-->
 
     <section class="promo section section-on-bg">
-        <div class="container text-center">
-            <h2 class="title">Jogue tênis como um profissional<br />e divirta-se como um amador!</h2>
-            <p class="intro">Ranking de Tênis é uma plataforma criada para oferecer uma melhor experiência para clubes, condomínios, academias e todos os amantes deste esporte.</p>
-            <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("FaleConosco", "Home")">Entre Em Contato</a></p>
-            <!--button type="button" class="play-trigger btn-link " data-toggle="modal" data-target="#modal-video"><i class="fa fa-youtube-play"></i> Assista o vídeo</!--button-->
-        </div><!--//container-->
-    </section><!--//promo-->
+    <div class="container text-center">
+        <h2 class="title">Gerencie seu ranking e seus torneios como um profissional.</h2>
+        <p class="intro" id="formulario">Ranking de Tênis é uma plataforma criada para oferecer uma melhor experiência para clubes, condomínios, academias e a todos os amantes deste esporte.</p>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <video class="img-responsive" width="500" height="240" controls>
+                    <source src="/Content/image/VID-20171202-WA0008.mp4" type="video/mp4">
+                </video>
+                <!--button type="button" class="play-trigger btn-link " data-toggle="modal" data-target="#modal-video"><i class="fa fa-youtube-play"></i> Assista o vídeo</button-->
+            </div>
+            <div class="step text-center col-xs-12 col-sm-6">
+                <form class="form-horizontal" name="formul" id="formul" style="width: 350px; margin: 0 auto;" method="post" action="enviarEmail">
+                    <fieldset>
+                        <legend class="intro">Cadastre seu email e ganhe 6 meses grátis</legend>
+                        <div class="form-group col-xs-12">
+                            <input type="text" class="form-control" id="nome" placeholder="* nome">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <input type="email" class="form-control" placeholder="* email" id="email">
+                        </div>
+                        <button type="submit" class="btn btn-cta btn-cta-primary">Cadastrar</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <!--p><a class="btn btn-cta btn-cta-primary" href="Url.Action("FaleConosco", "Home")">Entre Em Contato</a></p-->
+        <!--button type="button" class="play-trigger btn-link " data-toggle="modal" data-target="#modal-video"><i class="fa fa-youtube-play"></i> Assista o vídeo</!--button-->
+
+    </div><!--//container-->
+</section><!--//promo-->
 
     <div class="sections-wrapper">
-
-        <!-- ******Why Section****** -->
-        <section id="why" class="section why">
+        <section class="steps section">
             <div class="container">
-                <h2 class="title text-center">Quer potencializar a experiência da sua comunidade no tênis?</h2>
-                <p class="intro text-center">Ajudamos a explorar todos os benefícios que o tênis pode oferecer para você.</p>
-                <div class="row item">
-                    <div class="content col-md-4 col-sm-12 col-xs-12">
-                        <h3 class="title">Aperfeiçoe constantemente o seu jogo</h3>
-                        <div class="desc">
-                            <p>Nós acreditamos que a melhor maneira de explorar todos os benefícios que este esporte pode oferecer é jogando com o maior número de pessoas posssíveis.</p>
-                            <p>Independente do seu nível de jogo, quando mais cedo você começar a realizar jogos, mais rápido você entenderá a dinâmica deste maravilhoso esporte.</p>
-                        </div>
-                        <!--div class="quote">
-                            <div class="quote-profile">
-                                <img class="img-responsive img-circle" src="~/Images/people/profile-s-1.png" alt="" />
-                            </div>
-                            <div class="quote-content">
-                                <blockquote><p><a href="https://twitter.com/3rdwave_themes" target="_blank">lia</a> De mais! Tenho apenas dois anos no tênis e depois que passei a utilizar a plataforma meu jogo melhorou bastante. :)</p></blockquote>
-                                <p class="source">Lia, Taguatinga</p>
-                            </div>
-                        </div-->
-                    </div>
-                    <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-offset-1 col-sm-offset-0 col-xs-offset-0">
-                        <img class="img-responsive" src="~/Content/image/grafico.png" alt="" />
-                    </figure>
-                </div><!--//item-->
-
-                <div class="row item">
-                    <div class="content col-md-4 col-sm-12 col-xs-12 col-md-push-8 col-sm-push-0 col-xs-push-0">
-                        <h3 class="title">Sistema inspirado no ranking da ATP</h3>
-                        <div class="desc">
-                            <p>Acompanhe a sua evolução com dados estatísticos, descubra o nível do seu jogo, crie novas metas, faça um treino direcionado e muito mais.</p>
-                        </div>
-
-                        <!--div class="quote">
-                            <div class="quote-profile">
-                                <img class="img-responsive img-circle" src="~/Images/people/profile-s-2.png" alt="" />
-                            </div>
-                            <div class="quote-content">
-                                <blockquote><p>Os treinamentos direcionados e em equipe foram fundamentais para eu soltar mais o meu jogo.</p></blockquote>
-                                <p class="source">Chico, Águas Claras</p>
-                            </div>
-                        </div-->
-                    </div><!--//content-->
-                    <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-pull-4 col-sm-pull-0 col-xs-pull-0">
-                        <img class="img-responsive" src="~/Content/image/quadra.png" alt="" />
-                        <!--div class="control text-center"-->
-                            <!--button type="button" class="play-trigger" data-toggle="modal" data-target="#modal-video"><i class="fa fa-play"></i></button-->
-                        <!--/div --><!--//control-->
-                    </figure>
-                </div><!--//item-->
-
-                <div class="row item ">
-                    <div class="content col-md-4 col-sm-12 col-xs-12">
-                        <h3 class="title">Jogos toda semana</h3>
-                        <div class="desc">
-                            <p>A vida é feita de desafios. Desafie e seja desafiado toda semana. Celebre com a vitória, aprenda com as derrotas.</p>
-                            <p>Conheça pessoas novas, lugares diferentes, superfícies variadas.</p>
-                        </div>
-                        <!--div class="quote">
-                            <div class="quote-profile">
-                                <img class="img-responsive img-circle" src="~/Images/people/profile-s-3.png" alt="" />
-                            </div>
-                            <div class="quote-content">
-                                <blockquote>
-                                    <p>
-                                        Adoro esta adrenalida antes das partidas, a dopamina durante os jogos e o relaxamento pós-jogo. Ser desafiado nos mantem mais estimulados.
-                                    </p>
-                                </blockquote>
-                                <p class="source"><a href="#">Andreia</a>, Asa sul</p>
-                            </div>
-                        </div-->
-                    </div><!--//content-->
-                    <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-offset-1 col-sm-offset-0 col-xs-offset-0">
-                        <img class="img-responsive" src="~/Content/image/desafio.png" alt="" />
-
-                    </figure>
-                </div><!--//item-->
-
-                <div class="row item last-item">
-                    <div class="content col-md-4 col-sm-12 col-xs-12 col-md-push-8 col-sm-push-0 col-xs-push-0">
-                        <h3 class="title">Faça amigos</h3>
-                        <div class="desc">
-                            <p>Conheça pessoas novas, faça novos amigos. Descubra o "fair play" que há no tênis. Participe de torneios, eventos, workshops e muito mais.</p>
-                            <p>Conecte-se a pessoas com a mesma paixão pelo tênis que você.</p>
-
-                        </div>
-
-                        <!--div class="quote">
-                            <div class="quote-profile">
-                                <img class="img-responsive img-circle" src="~/Images/people/profile-s-4.png" alt="" />
-                            </div>
-                            <div class="quote-content">
-                                <blockquote><p>Pessoas incríveis, eventos maravilhosos, lugares inesquecíveis.</p></blockquote>
-                                <p class="source">Renato, Sobradinho</p>
-                            </div>
-                        </div-->
-                    </div>
-                    <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-pull-4 col-sm-pull-0 col-xs-pull-0">
-                        <img class="img-responsive" src="~/Content/image/amigos.png" alt="" />
-                    </figure>
-                </div><!--//item-->
-
-
-                <!--div class="feature-lead text-center">
-                    <h4 class="title">Quer descobrir todos os benefícios da barragem do cerrado?</h4>
-                    <p><a class="btn btn-cta btn-cta-secondary" href="features.html">Faça um tour</a></p>
-                </div-->
+                <h2 class="title text-center">Porque utilizar o rankingdetenis.com</h2>
+                <div class="row">
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">1</span><br><span class="text">Site exclusivo</span></h3>
+                        <p>Tenha um site exclusivo com a logo do seu clube, academia, condomínio e etc...</p>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">2</span><br><span class="text">Inspirado no ranking da ATP</span></h3>
+                        <p>Sistema de defesa de pontos, estimulando o tenista a estar sempre jogando para defender seus pontos.</p>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">3</span><br><span class="text">Sistema com divisão por classe</span></h3>
+                        <p>Jogue com pessoas do seu nível e suba de classe progressivamente.</p>
+                    </div><!--//step-->
+                </div><!--//row-->
+                <div class="row">
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">4</span><br><span class="text">Gerenciamento de torneios</span></h3>
+                        <p>Promova torneios divididos por classes, com opção de repescagem.</p>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">5</span><br><span class="text">Opção de licenciamento</span></h3>
+                        <p>Flexibilidade para o tenista se licenciar quando for necessário.</p>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><span class="number">6</span><br><span class="text">Gerenciamento de pagamentos</span></h3>
+                        <p>Gerencie o pagamento dos rankiados e dos torneios.</p>
+                    </div><!--//step-->
+                </div><!--//row-->
+                <div class="text-center"><a class="btn btn-cta btn-cta-primary scrollSuave" href="#formulario">Ganhe 6 meses grátis</a></div>
             </div><!--//container-->
-        </section><!--//why-->
+        </section>
+
         <!-- ******Testimonials Section****** -->
         <section class="section testimonials">
             <div class="container">
@@ -145,13 +92,13 @@
                     </ol><!--//carousel-indicators-->
                     <div class="carousel-inner">
                         <div class="item active">
-                            <figure class="profile"><img src="~/Images/people/profile-m-1.png" alt="" /></figure>
+                            <figure class="profile"><img src="/Images/people/profile-m-1.png" alt="" /></figure>
                             <div class="content">
                                 <blockquote>
                                     <i class="fa fa-quote-left"></i>
-                                    <p>We used Velocity as a front-end design template for our product site. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum elit tortor, consectetur vitae varius at, interdum eget libero. Morbi.</p>
+                                    <p>Estou impressionado como meu jogo evoluiu depois que entrei para o Ranking de Tênis. Jogando regurlamente com vários tenistas diferente conseguimos melhorar muito o nosso jogo.</p>
                                 </blockquote>
-                                <p class="source">Kevin Knight<br /><span class="title">Co-Founder, Startup Hub</span></p>
+                                <p class="source">Cleverson Estrada<br /><span class="title">Analista de Sistemas</span></p>
                             </div><!--//content-->
                         </div><!--//item-->
                         <div class="item">
@@ -159,9 +106,9 @@
                             <div class="content">
                                 <blockquote>
                                     <i class="fa fa-quote-left"></i>
-                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint.</p>
+                                    <p>Agora ficou muito mais divertido jogar tênis no meu clube. Fiz novas amizades e conheci novos parceiros de treino.</p>
                                 </blockquote>
-                                <p class="source">Diana	Luna<br /><span class="title">Entrepreneur, Maecenas</span></p>
+                                <p class="source">Marcelo Rodrigues<br /><span class="title">Empresário</span></p>
                             </div><!--//content-->
                         </div><!--//item-->
                         <div class="item">
@@ -169,9 +116,9 @@
                             <div class="content">
                                 <blockquote>
                                     <i class="fa fa-quote-left"></i>
-                                    <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere.</p>
+                                    <p>O Ranking de tênis é muito organizado, melhor sistema de pontuação que já vi, te estimula a estar sempre jogando. Flexibilidade para entrar de licença quando necessário. O sistema organiza torneios também. Excelente!!!</p>
                                 </blockquote>
-                                <p class="source">Tony Lee<br /><span class="title">CTO, Lorem Ipsum</span></p>
+                                <p class="source">Ana Beatriz<br /><span class="title">Advogada.</span></p>
                             </div><!--//content-->
                         </div><!--//item-->
                     </div><!--//carousel-inner-->
@@ -179,40 +126,42 @@
                 </div><!--//carousel-->
             </div><!--//container-->
         </section><!--//testimonials-->
-        <!-- ******Press Section****** -->
-        <section class="section press">
-            <div class="container text-center">
-                <h2 class="title">Nossos Parceiros</h2>
-                <ul class="press-list list-inline row">
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#">CLUBE ASBAC<!--img class="img-responsive" src="~/Images/press/press-1.png" alt="" /--></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#">BOLA DE TENIS DELIVERY<!--img class="img-responsive" src="~/Images/press/press-2.png" alt="" /--></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4 xs-break"><a href="#">CLUBE DA SAÚDE<!--img class="img-responsive" src="~/Images/press/press-3.png" alt="" /--></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#">BARRAGEM FEMININA<!--img class="img-responsive" src="~/Images/press/press-4.png" alt="" /--></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#">BARRAGEM GOIÂNIA<!--img class="img-responsive" src="~/Images/press/press-5.png" alt="" /--></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#">BARRAGEM AGUAS CLARAS<!--img class="img-responsive" src="~/Images/press/press-6.png" alt="" /--></a></li>
-                </ul><!--//press-list-->
-                <!--ul class="press-list list-inline row last">
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#"><img class="img-responsive" src="~/Images/press/press-7.png" alt="" /></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#"><img class="img-responsive" src="~/Images/press/press-8.png" alt="" /></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4 xs-break"><a href="#"><img class="img-responsive" src="~/Images/press/press-9.png" alt="" /></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#"><img class="img-responsive" src="~/Images/press/press-10.png" alt="" /></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#"><img class="img-responsive" src="~/Images/press/press-11.png" alt="" /></a></li>
-                    <li class="col-md-2 col-sm-2 col-xs-4"><a href="#"><img class="img-responsive" src="~/Images/press/press-12.png" alt="" /></a></li>
-                </ul--><!--//press-list-->
-                <!--div class="press-lead text-center">
-                     <h3 class="title">Have press inquires?</h3>
-                     <p class="press-links"><a href="#">Download our press kit</a> or <a href="contact.html">Get in touch</a></p>
-                </div-->
-
+        
+        <section class="steps section">
+            <div class="container">
+                <h2 class="title text-center">Alguns de Nossos Clientes</h2>
+                <div class="row">
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="126" height="100" src="/Content/image/logoasbac.png"><br><br><span class="text">Clube Asbac</span></h3>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="100" height="100" src="/Content/image/logo0.png"><br><br><span class="text">Barragem do Cerrado</span></h3>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="100" height="100" src="/Content/image/logo4.png"><br><br><span class="text">Barragem Feminina</span></h3>
+                    </div><!--//step-->
+                </div><!--//row-->
+                <div class="row">
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="100" height="100" src="/Content/image/logo3.png"><br><br><span class="text">Barragem Águas Claras</span></h3>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="100" height="100" src="/Content/image/logo5.png"><br><br><span class="text">Clube Umuarama</span></h3>
+                    </div><!--//step-->
+                    <div class="step text-center col-xs-12 col-sm-4">
+                        <h3 class="title"><img width="100" height="100" src="/Content/image/logo0.png"><br><br><span class="text">Barragem Brazlândia</span></h3>
+                    </div><!--//step-->
+                </div><!--//row-->
             </div><!--//container-->
-        </section><!--//press-->
+        </section>
         <!-- ******CTA Section****** -->
         <section id="cta-section" class="section cta-section text-center home-cta-section">
             <div class="container">
                 <h2 class="title">Não fique sozinho. Venha promover este esporte conosco.</h2>
-                <p class="intro">Mais de <span class="counting">500</span> participantes e é só o começo.</p>
-                <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("FaleConosco", "Home")">entre em contato</a></p>
+                <p class="intro">Mais de <span class="counting">5000</span> jogos já realizados.</p>
+                <div class="text-center"><a class="btn btn-cta btn-cta-primary scrollSuave" href="#formulario">Ganhe 6 meses grátis</a></div>
             </div><!--//container-->
         </section><!--//cta-section-->
 
     </div><!--//section-wrapper-->
+    

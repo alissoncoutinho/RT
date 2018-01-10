@@ -29,7 +29,15 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.LabelFor(model => model.linkPagSeguro)
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.linkPagSeguro, new { @class = "form-control", @placeholder = "exemplo: https://linkDoPagSeguro.com.br" })
+            </div>
+            @Html.ValidationMessageFor(model => model.linkPagSeguro)
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-2">
             <label>

@@ -183,7 +183,7 @@ namespace Barragem.Controllers
                     if (inscricoes.Count()==0){
                         continue;
                     }
-                    colocarJogadoresEmLicencaNoRanking(inscricoes);
+                    //colocarJogadoresEmLicencaNoRanking(inscricoes);
                     int quantidadeJogos = informarQtddJogos(inscricoes.Count());
                     int qtddJogadoresFake = getQtddJogadoresFake(inscricoes.Count(), quantidadeJogos);
                     int ordemJogos = quantidadeJogos;
@@ -347,7 +347,7 @@ namespace Barragem.Controllers
             var torneio = db.Torneio.Find(torneioId);
             ViewBag.temRepescagem = torneio.temRepescagem;
             var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio==classe).OrderBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
-            var rodada = jogos.Where(r => r.torneioId == torneioId && r.classeTorneio==classe).Max(r => r.faseTorneio);
+            var rodada = jogos.Where(r => r.torneioId == torneioId && r.classeTorneio==classe && r.faseTorneio<100).Max(r => r.faseTorneio);
             ViewBag.JogosFaseClassificatoria = jogos.Where(r => r.faseTorneio == 100).ToList();
             ViewBag.JogosFaseRepescagem = jogos.Where(r => r.faseTorneio == 101).ToList();
             var JogosFase2 = jogos.Where(r => r.faseTorneio == 2).ToList();
@@ -546,7 +546,6 @@ namespace Barragem.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 db.Torneio.Add(torneio);
                 db.SaveChanges();
                 return RedirectToAction("Index");

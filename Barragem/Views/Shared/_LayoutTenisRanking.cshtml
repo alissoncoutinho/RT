@@ -92,7 +92,16 @@
     @Scripts.Render("~/js")
     @Scripts.Render("~/bundles/load-image")
     @RenderSection("scripts", required: false)
-    <!-- Vimeo video API -->
+    <script>
+        var $doc = $('html, body');
+        $('.scrollSuave').click(function () {
+            $doc.animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 500);
+            return false;
+        });
+    </script>
+    <!-- Vimeo video API x-->
     <!--script-- src="http://a.vimeocdn.com/js/froogaloop2.min.js"></!--script-->
 </body>
 </html>

@@ -2,7 +2,22 @@
     ViewBag.Title = "SolicitarAtivacao";
 }
 
-    <div class="alert alert-info">
-        Solicitação enviada com sucesso. Em breve o administrador do Ranking ativará seu cadastro.<br> 
-        Qualquer dúvida entrar em contato através do link: "Contato" no menu do site.
-    </div>
+    @if (String.IsNullOrEmpty(ViewBag.linkPagSeguro + ""))
+    {
+        <div class="alert alert-info">
+            Solicitação enviada com sucesso. Em breve o administrador do Ranking ativará seu cadastro.<br>
+            Qualquer dúvida entrar em contato através do link: "Contato" no menu do site.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Solicitação enviada com sucesso. Após a confirmação de pagamento seu perfil será ativado.<br>
+            Clique no botão abaixo para efetuar o pagamento.<br>
+            <a class="btn btn-primary btn-danger" href="@ViewBag.linkPagSeguro" target="_blank">
+                Efetuar Pagamento
+            </a>
+        </div>
+        
+    }
+        

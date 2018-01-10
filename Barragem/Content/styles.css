@@ -438,7 +438,7 @@ select {
   position: relative;
   color: #fff;
   margin-bottom: 80px;
-  height: 620px;
+  height: 650px;
   z-index: 10;
 }
 .promo .title {
@@ -451,7 +451,14 @@ select {
 .promo.section .intro {
   max-width: 600px;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+}
+.promo.section .legenda {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 18px;
 }
 .promo .btn-cta {
   font-size: 18px;
@@ -503,6 +510,8 @@ select {
   -webkit-opacity: 0.8;
   -moz-opacity: 0.8;
   opacity: 0.8;
+  text-shadow: black 0.1em 0.1em 0.2em;
+  padding-top: 10px;
 }
 /* ======= Why ======= */
 .why {
@@ -668,7 +677,7 @@ select {
 }
 /* ======= Testimonials ======= */
 .testimonials {
-  background: url('../images/background/bg-header-1.jpg') no-repeat 50% top;
+  background: url('../images/background/bg-header-6.jpg') no-repeat 50% top;
   padding-top: 60px;
   padding-bottom: 120px;
 }
@@ -709,7 +718,7 @@ select {
   border-left: 0;
   padding: 0;
   position: relative;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 1px black;
   color: #fff
 }
 .testimonials .item blockquote .fa {
@@ -720,6 +729,8 @@ select {
 }
 .testimonials .item .source {
   color: #ec6952;
+  text-shadow: black 0.1em 0.1em 0.2em
+
 }
 .testimonials .item .source .title {
   font-size: 16px;
@@ -781,6 +792,7 @@ select {
   font-weight: 300;
   margin-top: 0;
   margin-bottom: 60px;
+  text-shadow: black 0.1em 0.1em 0.2em;
 }
 .cta-section .btn-cta {
   font-size: 20px;
@@ -788,6 +800,7 @@ select {
 .cta-section .intro {
   margin-bottom: 15px;
   color: #fff;
+  text-shadow: black 0.1em 0.1em 0.2em;
 }
 .cta-section .counting {
   color: #ec6952;
@@ -795,6 +808,7 @@ select {
   -webkit-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
+  text-shadow: black 0.1em 0.1em 0.2em;
 }
 /* ======= Features video ======= */
 .features-video {
@@ -2978,7 +2992,7 @@ select {
     font-size: 16px;
   }
   .promo {
-    height: 420px;
+    
   }
   .why .item .content {
     margin-bottom: 60px;
@@ -3198,7 +3212,7 @@ select {
     margin: inherit;
   }
   .promo {
-    height: 420px;
+    
     padding-top: 80px;
   }
   .promo.section .intro {
@@ -3319,10 +3333,10 @@ select {
   }
   .promo {
     height: 620px;
-    padding-top: 200px;
+    padding-top: 120px;
   }
   .promo.section .intro {
-    margin-bottom: 45px;
+    margin-bottom: 10px;
   }
   .promo .btn-link {
     margin-top: 15px;

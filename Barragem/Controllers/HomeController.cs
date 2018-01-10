@@ -160,7 +160,7 @@ namespace Barragem.Controllers
 
         private Torneio getTorneioAberto(int barragemId){
             try{
-                DateTime dtNow = DateTime.Now;
+                DateTime dtNow = DateTime.Now.AddDays(-1);
                 var torneioAberto = db.Torneio.Where(t => t.barragemId == barragemId && t.dataFimInscricoes > dtNow && t.isAtivo).OrderByDescending(t=>t.dataInicio).ToList();
                 if (torneioAberto.Count()>0){
                     return torneioAberto[0];
@@ -180,6 +180,7 @@ namespace Barragem.Controllers
                 barragemId = Convert.ToInt32(cookie.Value.ToString());
                 BarragemView barragem = db.BarragemView.Find(barragemId);
                 barragemName = barragem.nome;
+                ViewBag.linkPagSeguro = barragem.linkPagSeguro;
             }
             ViewBag.NomeBarragem = barragemName;
             ViewBag.solicitarAtivacao = "";
@@ -216,9 +217,11 @@ namespace Barragem.Controllers
                 ViewBag.ptDefendidosDesafiante = getPontosDefendidos(jogo.desafiante_id, jogo.rodada_id);
 
             }
-            //if ((usuario.situacao == "desativado") || (usuario.situacao == "pendente")){
-            //    ViewBag.solicitarAtivacao = Class.MD5Crypt.Criptografar(usuario.UserName);
-            //}
+            if ((usuario.situacao == "desativado") || (usuario.situacao == "pendente")){
+                ViewBag.solicitarAtivacao = "solicitar ativacao";
+            }else if (usuario.situacao == "Ativamento solicitado"){
+                ViewBag.solicitarAtivacao = "Ativamento solicitado";
+            }
 
             // jogos pendentes
             var dataLimite = DateTime.Now.AddMonths(-10);

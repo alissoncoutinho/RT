@@ -53,7 +53,7 @@
                                     </a>
                                 </td>
                             </tr>
-                            @if (item.situacao_Id == 4)
+                            @if ((item.situacao_Id == 4)||(item.situacao_Id == 5))
                                 {
                             <tr>
                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -70,8 +70,11 @@
                                     @if (item.desafiante == null)
                                         { @Html.Raw("bye") }
                                         else
-                                        { @Html.Raw(item.desafiante.nome) }
-                                </td>
+                                        {   <a href="@Url.Action("../Account/Detalhes", new { userId = @item.desafiante.UserId })" title="Detalhes do jogador">
+                                                @Html.Raw(item.desafiante.nome) 
+                                            </a>
+                                        }
+</td>
                             </tr>
                         </table>
 
@@ -91,7 +94,7 @@
                                     @Html.Raw(item.desafiado.nome)
                                 </td>
                             </tr>
-                            @if (item.situacao_Id == 4)
+                            @if ((item.situacao_Id == 4)||(item.situacao_Id == 5))
                                 {
                             <tr>
                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -174,7 +177,7 @@
                                             @Html.DisplayFor(modelItem => item.desafiado.nome)
                                         </td>
                                     </tr>
-                                    @if (item.situacao_Id == 4)
+                                    @if ((item.situacao_Id == 4)||(item.situacao_Id == 5))
                                             {
                                         <tr>
                                             <td style="font-size: 13px; padding-left: 5px;">
@@ -210,7 +213,7 @@
                                                             { @Html.Raw(item2.desafiado.nome) }
                                             </td>
                                         </tr>
-                                        @if (item2.situacao_Id == 4)
+                                        @if ((item2.situacao_Id == 4)||(item2.situacao_Id == 5))
                                                     {
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -251,7 +254,7 @@
                                                             { @Html.Raw(item3.desafiado.nome) }
                                             </td>
                                         </tr>
-                                        @if (item3.situacao_Id == 4)
+                                        @if ((item3.situacao_Id == 4)||(item3.situacao_Id == 5))
                                                     {
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -292,7 +295,7 @@
                                                             { @Html.Raw(item4.desafiado.nome) }
                                             </td>
                                         </tr>
-                                        @if (item4.situacao_Id == 4)
+                                        @if ((item4.situacao_Id == 4)||(item4.situacao_Id == 5))
                                                     {
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -333,7 +336,7 @@
                                                             { @Html.Raw(item5.desafiado.nome) }
                                             </td>
                                         </tr>
-                                        @if (item5.situacao_Id == 4)
+                                        @if ((item5.situacao_Id == 4)||(item5.situacao_Id == 5))
                                                     {
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">
@@ -374,7 +377,7 @@
                                                             { @Html.Raw(item6.desafiado.nome) }
                                             </td>
                                         </tr>
-                                        @if (item6.situacao_Id == 4)
+                                        @if ((item6.situacao_Id == 4)||(item6.situacao_Id == 5))
                                                     {
                                             <tr>
                                                 <td style="font-size: 13px; padding-left: 5px;">

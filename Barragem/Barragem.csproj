@@ -193,6 +193,7 @@
     <Compile Include="Controllers\AsbacController.cs" />
     <Compile Include="Controllers\AtpBarreirasController.cs" />
     <Compile Include="Controllers\AtpLemController.cs" />
+    <Compile Include="Controllers\BrazlandiaController.cs" />
     <Compile Include="Controllers\CambuiController.cs" />
     <Compile Include="Controllers\ExtremaController.cs" />
     <Compile Include="Controllers\MarioMerchController.cs" />
@@ -501,6 +502,7 @@
     <Content Include="Scripts\load-image.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.pt-BR.js" />
     <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\modal-video.js" />
     <Content Include="Scripts\rrssb\css\demo.css" />
     <Content Include="Scripts\rrssb\css\normalize.min.css" />
     <Content Include="Scripts\rrssb\css\rrssb.css" />

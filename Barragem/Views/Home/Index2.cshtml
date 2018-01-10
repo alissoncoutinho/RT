@@ -2,13 +2,23 @@
 @{
     ViewBag.Title = "Controlar Jogo";
 }
-@if (ViewBag.solicitarAtivacao != ""){
+@if (ViewBag.solicitarAtivacao == "solicitar ativacao")
+{
     <div class="container-dashboard">
         <a class="btn btn-primary btn-danger" href="/Account/SolicitarAtivacao">
             Solicitar Ativação no Ranking
         </a>
     </div>
 }
+@if ((ViewBag.solicitarAtivacao == "Ativamento solicitado") && (!String.IsNullOrEmpty(ViewBag.linkPagSeguro + "")))
+{
+    <div class="container-dashboard">
+        <a class="btn btn-primary btn-danger" href="@ViewBag.linkPagSeguro" target="_blank">
+            Efetuar Pagamento
+        </a>
+    </div>
+}
+
     @if (ViewBag.Torneio != null){
         Barragem.Models.Torneio torneio = ViewBag.Torneio;
         <div class="container-dashboard">
@@ -88,7 +98,7 @@
                             <table border="0" cellpadding="10" cellspacing="50" width="100%">
                                 <tr>
                                     <td align="center">
-                                        @if (Model.desafiado.foto != null)
+                                        @if ((Model.desafiado_id!=0)&&(Model.desafiado.foto != null))
                                     {
                                     <img class="imgFotoJogo" src="@Url.Action("BuscaFoto","Account", new { id = Model.desafiado_id})" style="width: 148px; height: 198px;" />
                                     }

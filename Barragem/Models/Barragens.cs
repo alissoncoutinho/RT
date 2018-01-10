@@ -34,6 +34,8 @@ namespace Barragem.Models
         [UIHint("tinymce_full_compressed"), AllowHtml]
         [Display(Name = "contato")]
         public string contato { get; set; }
+        [Display(Name = "link pagseguro")]
+        public string linkPagSeguro { get; set; }
 
     }
 
@@ -45,6 +47,9 @@ namespace Barragem.Models
 
         [Display(Name = "nome")]
         public string nome { get; set; }
+
+        [Display(Name = "link pagSeguro")]
+        public string linkPagSeguro { get; set; }
 
         [Display(Name = "situação")]
         public bool isAtiva { get; set; }
