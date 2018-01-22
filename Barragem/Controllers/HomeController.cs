@@ -1,4 +1,5 @@
-﻿using Barragem.Context;
+﻿using Barragem.Class;
+using Barragem.Context;
 using Barragem.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Barragem.Controllers
     public class HomeController : Controller
     {
         private BarragemDbContext db = new BarragemDbContext();
-        public ActionResult Index()
+        public ActionResult Index(String msg="")
         {
             if (User.Identity.IsAuthenticated){
                 return RedirectToAction("Index2", "Home");
@@ -24,14 +25,40 @@ namespace Barragem.Controllers
             if ((url.Equals("barragemdocerrado.com.br")) && (path.Equals("/"))){
                 return RedirectToAction("Index", "Masculina");
             }
-
-            //else {
-            //    return RedirectToAction("Index", "Masculina");
-            //}
+            ViewBag.Msg = msg;
+            
             
             return View();
             
             
+        }
+
+        [HttpPost]
+        public ActionResult EnviarEmail(String nome, String fone)
+        {
+            var mensagem="";
+            if (String.IsNullOrEmpty(nome)){
+                mensagem = "Favor informar seu nome.";
+            }else if (String.IsNullOrEmpty(fone)){
+                mensagem = "Favor informar um telefone de contato.";
+            }else{
+                mensagem = "Parabéns!!! Seu cadastro foi realizado com sucesso. Entraremos em contato em breve.";
+                try
+                {
+                    Mail e = new Mail();
+                    e.assunto = "Solicitação de contato Ranking de tenis";
+                    e.conteudo = "Nome do contato: " + nome + "<br>telefone de contato: " + fone;
+                    e.formato = Class.Tipos.FormatoEmail.Html;
+                    e.de = "admin@barragemdocerrado.com.br";
+                    e.para = "esmartins@gmail.com";
+                    e.bcc = new List<String>() {"coutinho.alisson@gmail.com","barragemdocerrago@gmail.com"};
+                    e.EnviarMail();
+                } catch (Exception e) {
+                    return RedirectToAction("Index", "Home", new { msg = "Desculpe. Casdastro temporariamente indisponível." + e.InnerException + " - " + e.Message });
+                }
+            }
+            return RedirectToAction("Index", "Home", new {msg=mensagem});
+
         }
 
         public ActionResult IndexBarragens()

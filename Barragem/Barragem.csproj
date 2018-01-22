@@ -189,7 +189,8 @@
     <Compile Include="Context\BarragemDbContext.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AguasClarasController.cs" />
-    <Compile Include="Controllers\AlfaBarraController.cs" />
+    <Compile Include="Controllers\LuzianiaController.cs" />
+    <Compile Include="Controllers\MeuRankingController.cs" />
     <Compile Include="Controllers\AsbacController.cs" />
     <Compile Include="Controllers\AtpBarreirasController.cs" />
     <Compile Include="Controllers\AtpLemController.cs" />

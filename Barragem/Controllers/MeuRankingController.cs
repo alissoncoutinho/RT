@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Barragem.Controllers
 {
-    public class AlfaBarraController : Controller
+    public class MeuRankingController : Controller
     {
         //
         // GET: /Extrema/
