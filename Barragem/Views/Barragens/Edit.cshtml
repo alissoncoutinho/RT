@@ -8,6 +8,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.dominio)
 
     <legend>Editar Barragem</legend>
 
@@ -30,9 +31,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-xs-6">
             @Html.LabelFor(model => model.linkPagSeguro)
-            <div class="input-group">
+            <div class="input-group col-xs-6">
                 @Html.TextBoxFor(model => model.linkPagSeguro, new { @class = "form-control", @placeholder = "exemplo: https://linkDoPagSeguro.com.br" })
             </div>
             @Html.ValidationMessageFor(model => model.linkPagSeguro)
@@ -41,7 +42,14 @@
     <div class="row">
         <div class="col-xs-2">
             <label>
-                @Html.CheckBoxFor(model => model.isAtiva, new { @checked = "checked" }) Ativa
+                @Html.CheckBoxFor(model => model.isClasseUnica) Classe Única
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <label>
+                @Html.CheckBoxFor(model => model.isAtiva) Ativa
             </label>
         </div>
     </div>

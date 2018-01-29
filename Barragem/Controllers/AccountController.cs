@@ -908,7 +908,8 @@ namespace Barragem.Controllers
             UserProfile usu = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.situacao = usu.situacao;
             ViewBag.filtro = filtroSituacao;
-            ViewBag.filtroBarragem = filtroBarragem;
+            //ViewBag.filtroBarragem = filtroBarragem;
+            ViewBag.filtroBarragem = new SelectList(db.BarragemView, "Id", "nome", filtroBarragem);
             List<UserProfile> usuarios;
             IQueryable<UserProfile> consulta = null;
             if (filtroSituacao == "")

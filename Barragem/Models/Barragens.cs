@@ -36,6 +36,10 @@ namespace Barragem.Models
         public string contato { get; set; }
         [Display(Name = "link pagseguro")]
         public string linkPagSeguro { get; set; }
+        [Display(Name = "Classe única")]
+        public bool isClasseUnica { get; set; }
+        [Display(Name = "Domínio")]
+        public string dominio { get; set; }
 
     }
 
@@ -53,6 +57,10 @@ namespace Barragem.Models
 
         [Display(Name = "situação")]
         public bool isAtiva { get; set; }
-        
+
+        [Display(Name = "Classe única")]
+        public bool isClasseUnica { get; set; }
+        [Display(Name = "Domínio")]
+        public string dominio { get; set; }
     }
 }

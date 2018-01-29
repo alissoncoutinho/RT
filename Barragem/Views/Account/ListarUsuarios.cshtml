@@ -4,7 +4,6 @@
         ViewBag.Title = "Listar Jogadores";
         int contador = 0;
         string filtro = ViewBag.filtro;
-        int filtroBarragem = ViewBag.filtroBarragem;
     }
 
     <h2>Jogadores</h2>
@@ -34,15 +33,7 @@
                         @if (Roles.IsUserInRole("admin")) {
                             <label class="control-label col-sm-5">Barragens</label>
                             <div class="col-lg-5">
-                                <select name="filtroBarragem" class="form-control input-sm" onchange="this.form.submit()">
-                                    <option value="0">todas</option>
-                                    <option value="1" @if (filtroBarragem == 1) { @Html.Raw("selected")  }>Cerrado</option>
-                                    <option value="2" @if (filtroBarragem == 2) { @Html.Raw("selected")     }>ASBAC</option>
-                                    <option value="3" @if (filtroBarragem == 3) { @Html.Raw("selected")      }>Aguas Claras</option>
-                                    <option value="4" @if (filtroBarragem == 4) { @Html.Raw("selected")      }>Feminina</option>
-                                    <option value="5" @if (filtroBarragem == 5) { @Html.Raw("selected")       }>Umuarama</option>
-                                    <option value="6" @if (filtroBarragem == 6) { @Html.Raw("selected")        }>Extrema</option>
-                                </select>
+                                @Html.DropDownList("filtroBarragem", (SelectList)ViewBag.filtroBarragem,"Todos", new { @class = "form-control input-sm", @onchange = "form.submit();" })
                             </div>
                         } else {
                             <input type="hidden" name="filtroBarragem" value="0" />
@@ -71,9 +62,6 @@
                                           @Html.DisplayNameFor(model => model.barragem)
                                       </th>
                                   }
-                                  <th>
-                                      @Html.DisplayNameFor(model => model.telefoneFixo)
-                                  </th>
                                   <th>
                                       @Html.DisplayNameFor(model => model.telefoneCelular)
                                   </th>
@@ -123,13 +111,6 @@
                                               @Html.DisplayFor(modelItem => item.barragem.nome)
                                           </td>
                                       }
-                                      <td>
-                                          @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
-                            || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
-                                          {
-                                              @Html.DisplayFor(modelItem => item.telefoneFixo)
-                                          }
-                                      </td>
                                       <td>
                                           @if ((ViewBag.situacao == "ativo") || (ViewBag.situacao == "licenciado")
                             || (ViewBag.situacao == "suspenso") || (Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))

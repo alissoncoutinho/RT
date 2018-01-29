@@ -25,13 +25,28 @@
     </div>
     <div class="row">
         <div class="col-xs-2">
+            @Html.LabelFor(model => model.dominio)
+            <div class="input-group">
+                @Html.TextBoxFor(model => model.dominio, new { @class = "form-control" })
+            </div>
+            @Html.ValidationMessageFor(model => model.dominio)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
             @Html.LabelFor(model => model.email)
             <div class="input-group">
                 @Html.TextBoxFor(model => model.email, new { @class = "form-control" })
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-xs-2">
+            <label>
+                @Html.CheckBoxFor(model => model.isClasseUnica) Classe Única
+            </label>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-2">
             <label>

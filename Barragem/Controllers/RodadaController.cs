@@ -20,6 +20,7 @@ namespace Barragem.Controllers
     [InitializeSimpleMembership]
     public class RodadaController : Controller
     {
+        private bool isClasseUnica;
         private BarragemDbContext db = new BarragemDbContext();
         private RodadaNegocio rn = new RodadaNegocio();
         string erroSorteio = "";
@@ -128,12 +129,23 @@ namespace Barragem.Controllers
             return View(rodada);
         }
 
+        private void setClasseUnica(int barragemId){
+            var barragem = db.BarragemView.Find(barragemId);
+            this.isClasseUnica = barragem.isClasseUnica;
+        }
+
+        private bool getClasseUnica()
+        {
+            return isClasseUnica;
+        }
+
         [Authorize(Roles = "admin, organizador")]
         public ActionResult SortearJogos(int id, int barragemId)
         {
             string mensagem = "ok";
             try{
                 List<Classe> classes = db.Classe.Where(c=>c.barragemId==barragemId).ToList();
+                setClasseUnica(barragemId);
                 for (int i = 0; i < classes.Count(); i++){
                     EfetuarSorteio(id, barragemId, classes[i].Id);
                 }
@@ -259,7 +271,6 @@ namespace Barragem.Controllers
                     return desafiante;
                 }
                 // O jogador não deve repetir o mesmo jogo das 3 últimas rodadas
-
                 // busca os 3 últimos jogos do desafiado
                 List<Jogo> jogosAnteriores = db.Jogo.Where(j => (j.rodada_id <= rodadaAnteriorId &&
                         (j.desafiado_id == desafiado.userProfile_id || j.desafiante_id == desafiado.userProfile_id))).
@@ -335,29 +346,36 @@ namespace Barragem.Controllers
             try
             {
                 bool isDesafiante;
+                bool decrementa = true;
                 int qtddTentativas = 0;
                 Random r = new Random();
-                int range = 0;
-                while (qtddTentativas < 30)
-                {
-                    if (listaJogadores.Count >= 3) { range = 3; } else { range = listaJogadores.Count; }
-                    int randomIndex = r.Next(1, range); //Choose a random object in the list
+                int range = listaJogadores.Count;
+                // quando a barragem tiver uma única classe o sistema sorteará o oponente entre as pessoas com ranking proximo.
+                if (getClasseUnica()) {
+                    if (listaJogadores.Count >= 5) { range = 5; } else { range = listaJogadores.Count; }
+                }
+                int index = r.Next(1, range); //Choose a random object in the list
+                while (qtddTentativas < 30){
                     isDesafiante = true;
-                    for (int j = 0; j < ultimosJogos.Count() - reduzVerificacao; j++)
-                    {
-                        if ((ultimosJogos[j].desafiado_id == listaJogadores[randomIndex].userProfile_id) || (ultimosJogos[j].desafiante_id == listaJogadores[randomIndex].userProfile_id))
-                        {
+                    for (int j = 0; j < ultimosJogos.Count() - reduzVerificacao; j++){
+                        if ((ultimosJogos[j].desafiado_id == listaJogadores[index].userProfile_id) || (ultimosJogos[j].desafiante_id == listaJogadores[index].userProfile_id)){
                             isDesafiante = false;
                             break;
                         }
                     }
-                    if (isDesafiante)
-                    {
-                        RankingView desafiante = listaJogadores[randomIndex];
-                        listaJogadores.RemoveAt(randomIndex);
+                    if (isDesafiante){
+                        RankingView desafiante = listaJogadores[index];
+                        listaJogadores.RemoveAt(index);
                         listaJogadores.RemoveAt(0);
                         return desafiante;
                     }
+                    // percorre a lista de logadores primeiro decrescendo e depois crescendo.
+                    if (index == 1) {
+                        decrementa=false;
+                    }else if(index==range){
+                        decrementa = true;
+                    }
+                    if (decrementa) { index--; } else { index++; }
                     qtddTentativas++;
                 }
                 return null;

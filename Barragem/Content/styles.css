@@ -449,7 +449,7 @@ select {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 .promo.section .intro {
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
   margin-bottom: 10px;
 }
@@ -518,9 +518,8 @@ select {
   -webkit-opacity: 0.8;
   -moz-opacity: 0.8;
   opacity: 0.8;
-  font-size: 17px;
-  text-shadow: white 0.0em 0.1em 0.2em;
-  padding-top: 20px;
+  text-shadow: 0 1px 1px white;
+  padding-top: 10px;
   font-weight: bold;
 }
 /* ======= Why ======= */

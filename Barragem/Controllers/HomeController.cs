@@ -33,6 +33,33 @@ namespace Barragem.Controllers
             
         }
 
+        public ActionResult IndexBarragem(string id)
+        {
+            var barragem = db.BarragemView.Where(b => b.dominio.ToLower().Equals(id.ToLower())).ToList<BarragemView>();
+            if (barragem.Count() > 0) {
+                DateTime dtNow = DateTime.Now;
+                TimeSpan tsMinute = new TimeSpan(0, 0, 59, 0);
+
+                //Cria a estancia do obj HttpCookie passando o nome do mesmo
+                HttpCookie cookie = new HttpCookie("_barragemId");
+                cookie.Value = barragem[0].Id + "";
+                cookie.Expires = dtNow + tsMinute;
+                Response.Cookies.Add(cookie);
+
+                HttpCookie cookieNome = new HttpCookie("_barragemNome");
+                cookieNome.Value = barragem[0].nome;
+                cookieNome.Expires = dtNow + tsMinute;
+                Response.Cookies.Add(cookieNome);
+
+                return RedirectToAction("IndexBarragens", "Home");
+            } else {
+                return RedirectToAction("Index", "Home", new { msg = "Desculpe mas não encontramos um ranking com esse nome. Favor verificar se o nome do ranking foi digitado corretamente." });
+            }
+
+
+            
+        }
+
         [HttpPost]
         public ActionResult EnviarEmail(String nome, String fone)
         {
