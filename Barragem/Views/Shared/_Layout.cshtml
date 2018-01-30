@@ -10,7 +10,7 @@
     }
     if (cookieNome != null)
     {
-        barraNome = cookieNome.Value.ToString();
+        barraNome = Server.UrlDecode(cookieNome.Value);
     }
     var scrLogo = "/Content/image/logo" + barraId + ".png";
 }
@@ -63,8 +63,8 @@
         <header class="header header-blog">
             <div class="container">
                 <h1 class="logo">
-                    <a href="/Home/IndexBarragens">@if ((barraId != 0) && (barraId < 999))
-                    {<img width="50" height="50" src="@scrLogo">}&nbsp;@barraNome </a>
+                    <a href="/Home/IndexBarragens">@if ((barraId != 0) && (barraId < 9999))
+                    {<img width="50" height="50" src="@scrLogo">}&nbsp;@Html.Raw(barraNome) </a>
                 </h1><!--//logo-->
                 <nav class="main-nav navbar-right" role="navigation">
                     <div class="navbar-header">

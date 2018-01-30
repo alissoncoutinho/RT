@@ -52,7 +52,7 @@ namespace Barragem.Controllers
                 cookie.Expires = dtNow + tsMinute;
                 Response.Cookies.Add(cookie);
                 HttpCookie cookieNome = new HttpCookie("_barragemNome");
-                cookieNome.Value = usuario.barragem.nome;
+                cookieNome.Value = Server.UrlEncode(usuario.barragem.nome);
                 cookieNome.Expires = dtNow + tsMinute;
                 Response.Cookies.Add(cookieNome);
                 return RedirectToLocal(returnUrl);
@@ -161,8 +161,11 @@ namespace Barragem.Controllers
                                 classeId = model.classeId
                             });
                         }
-
-                        Roles.AddUserToRole(model.UserName, "usuario");
+                        if (model.organizador) {
+                            Roles.AddUserToRole(model.UserName, "organizador");
+                        }else{
+                            Roles.AddUserToRole(model.UserName, "usuario");
+                        }
                         WebSecurity.Login(model.UserName, model.Password);
                         try
                         {

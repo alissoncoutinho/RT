@@ -4,6 +4,7 @@ using Barragem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -42,12 +43,13 @@ namespace Barragem.Controllers
 
                 //Cria a estancia do obj HttpCookie passando o nome do mesmo
                 HttpCookie cookie = new HttpCookie("_barragemId");
+                
                 cookie.Value = barragem[0].Id + "";
                 cookie.Expires = dtNow + tsMinute;
                 Response.Cookies.Add(cookie);
 
                 HttpCookie cookieNome = new HttpCookie("_barragemNome");
-                cookieNome.Value = barragem[0].nome;
+                cookieNome.Value = Server.UrlEncode(barragem[0].nome);
                 cookieNome.Expires = dtNow + tsMinute;
                 Response.Cookies.Add(cookieNome);
 

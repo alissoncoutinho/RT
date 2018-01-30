@@ -3,12 +3,12 @@
     HttpCookie cookie = Request.Cookies["_barragemId"];
     HttpCookie cookieNome = Request.Cookies["_barragemNome"];
     var barraId = 0;
-    var barraNome = "Ranking de Tênis";
+    var barraNome = "Ranking de Tênis"; 
     if (cookie != null){
         barraId = Convert.ToInt32(cookie.Value.ToString());
     }
     if (cookieNome != null){
-        barraNome = cookieNome.Value.ToString();
+        barraNome = Server.UrlDecode(cookieNome.Value);
     }
         var scrLogo = "/Content/image/logo" + barraId + ".png";
  }
@@ -47,8 +47,8 @@
     <header id="header" class="header navbar-fixed-top">
         <div class="container">
             <h1 class="logo">
-                <a href="~/Home/IndexBarragens"><span class="text">@if ((barraId != 0) && (barraId < 999)) 
-                {<img width="50" height="50" src="@scrLogo">}&nbsp;@barraNome</span></a>
+                <a href="~/Home/IndexBarragens"><span class="text">@if ((barraId != 0) && (barraId < 9999)) 
+                {<img width="50" height="50" src="@scrLogo">}&nbsp;@Html.Raw(barraNome)</span></a>
             </h1><!--//logo-->
             <nav class="main-nav navbar-right" role="navigation">
                 <div class="navbar-header">

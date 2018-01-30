@@ -26,7 +26,7 @@ namespace Barragem.Controllers
 
             BarragemView barragem = db.BarragemView.Find(1013);
             HttpCookie cookieNome = new HttpCookie("_barragemNome");
-            cookieNome.Value = barragem.nome;
+            cookieNome.Value = Server.UrlEncode(barragem.nome);
             cookieNome.Expires = dtNow + tsMinute;
             Response.Cookies.Add(cookieNome);
 

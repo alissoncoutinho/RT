@@ -206,6 +206,8 @@ namespace Barragem.Models
         [Display(Name = "Classe")]
         [ForeignKey("classeId")]
         public virtual Classe classe { get; set; }
+
+        public bool organizador { get; set; }
         
     }
 

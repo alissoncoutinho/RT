@@ -138,6 +138,15 @@
             @Html.TextBoxFor(m => m.matriculaClube, new { @class = "form-control" })
         </div>
     </div>
+    @if (Roles.IsUserInRole("admin")){
+        <div class="form-group">
+            <div class="col-md-4">
+                <label>
+                    @Html.CheckBoxFor(m => m.organizador) Organizador
+                </label>
+            </div>
+        </div>
+    }
 
     <div class="form-group">
         <input type="submit" value="Cadastrar" />
