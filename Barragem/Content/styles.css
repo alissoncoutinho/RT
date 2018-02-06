@@ -2307,7 +2307,7 @@ select {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  padding: 20px;
+  padding: 10px;
 }
 .access-section .form-box .title {
   font-weight: 300;
@@ -2922,6 +2922,9 @@ select {
 }
 /* Extra small devices (phones, less than 768px) */
 @media (max-width: 767px) {
+    #set{
+        float: none !important;
+    }
   .config-wrapper {
     display: none;
   }
@@ -3585,8 +3588,13 @@ select {
 /*Barragem cerrado - dashboard*/
 
 .container-dashboard {
-  padding: 20px;
-  margin:10px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-right: 5px;
+  margin:5px;
+  margin-bottom:10px;
+  margin-top:10px;
   position: relative;
   border: 1px solid #eeeeee;
   -webkit-border-radius: 4px;
@@ -3619,6 +3627,14 @@ p#versus {
 
 p#jogo {
     font-size: 13px;
+    padding-top:5px;
+}
+
+p#set {
+    font-size: 12px;
+    padding:0px;
+    margin:0px;
+    float: right;
 }
 
 #divClasse {

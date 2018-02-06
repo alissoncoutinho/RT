@@ -62,5 +62,7 @@ namespace Barragem.Models
         public bool isClasseUnica { get; set; }
         [Display(Name = "Domínio")]
         public string dominio { get; set; }
+
+        public string email { get; set; }
     }
 }

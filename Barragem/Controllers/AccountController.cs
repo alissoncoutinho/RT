@@ -169,7 +169,7 @@ namespace Barragem.Controllers
                         WebSecurity.Login(model.UserName, model.Password);
                         try
                         {
-                            notificarJogador(model.nome, model.email);
+                            notificarJogador(model.nome, model.email, model.barragemId);
                             notificarOrganizadorCadastro(model.nome, model.barragemId, model.telefoneCelular);
                         }
                         catch (Exception ex) { } // não tratar o erro pois caso não seja possível notificar o administrador não prejudicará o cadastro do usuário
@@ -199,10 +199,10 @@ namespace Barragem.Controllers
         {
             Mail mail = new Mail();
             mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
-            var barragem = db.Barragens.Find(idBarragem);
+            var barragem = db.BarragemView.Find(idBarragem);
             if (barragem.email.Equals(""))
             {
-                mail.para = "toptenisranking@gmail.com";
+                mail.para = "barragemdocerrado@gmail.com";
             }
             else
             {
@@ -219,31 +219,32 @@ namespace Barragem.Controllers
         {
             Mail mail = new Mail();
             mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
-            var barragem = db.Barragens.Find(idBarragem);
+            var barragem = db.BarragemView.Find(idBarragem);
             if (barragem.email.Equals(""))
             {
-                mail.para = "toptenisranking@gmail.com";
+                mail.para = "barragemdocerrado@gmail.com";
             }
             else
             {
                 mail.para = barragem.email;
             }
             mail.assunto = "Solicitação de ativação";
-            mail.conteudo = nome + " fez uma soliticação de ativação à barragem do cerrado.<br><br>Entre no sistema e modifique o status de " + nome + " de ativamento solicitado para ativo. Contato: " + telefoneCelular;
+            mail.conteudo = nome + " fez uma soliticação de ativação à " + barragem.nome + ".<br><br>Entre no sistema e modifique o status de " + nome + " de ativamento solicitado para ativo. Contato: " + telefoneCelular;
             mail.formato = Tipos.FormatoEmail.Html;
             mail.EnviarMail();
         }
 
-        private void notificarJogador(string nome, string email)
+        private void notificarJogador(string nome, string email, int barragemId)
         {
+            var barragem = db.BarragemView.Find(barragemId);
             Mail mail = new Mail();
             mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
             mail.para = email;
             mail.assunto = "Cadastro realizado com sucesso.";
-            mail.conteudo = "Olá " + nome + ",<br> Parabéns você acabou de se cadastrar no top tênis ranking.<br><br>" +
+            mail.conteudo = "Olá " + nome + ",<br> Parabéns você acabou de se cadastrar no " + barragem.nome + ".<br><br>" +
             "Para participar das próximas rodadas você deve solicitar a ativação do seu cadastro clicando no botão localizado em sua página principal no site." +
             "após a ativação do seu cadastro você será notificado por email e já estará apto a participar dos jogos do ranking. <br><br>" +
-            "Atenciosamente, Top Tênis Ranking.<br>";
+            "Atenciosamente,"+ barragem.nome + ".<br>";
             mail.formato = Tipos.FormatoEmail.Html;
             mail.EnviarMail();
         }

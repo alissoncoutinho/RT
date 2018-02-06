@@ -70,6 +70,8 @@ namespace Barragem.Controllers
                 mensagem = "Favor informar seu nome.";
             }else if (String.IsNullOrEmpty(fone)){
                 mensagem = "Favor informar um telefone de contato.";
+            }else if (fone.Length < 15){
+                mensagem = "Número de celular incompleto. Verifique se foi preenchido o DDD + número de celular.";
             }else{
                 mensagem = "Parabéns!!! Seu cadastro foi realizado com sucesso. Entraremos em contato em breve.";
                 try
@@ -78,7 +80,7 @@ namespace Barragem.Controllers
                     e.assunto = "Solicitação de contato Ranking de tenis";
                     e.conteudo = "Nome do contato: " + nome + "<br>telefone de contato: " + fone;
                     e.formato = Class.Tipos.FormatoEmail.Html;
-                    e.de = "admin@barragemdocerrado.com.br";
+                    e.de = "postmaster@rankingdetenis.com";
                     e.para = "esmartins@gmail.com";
                     e.bcc = new List<String>() {"coutinho.alisson@gmail.com","barragemdocerrago@gmail.com"};
                     e.EnviarMail();

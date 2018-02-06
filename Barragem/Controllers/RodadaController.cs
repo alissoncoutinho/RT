@@ -235,7 +235,7 @@ namespace Barragem.Controllers
                 Mail mail = new Mail();
                 mail.de = System.Configuration.ConfigurationManager.AppSettings.Get("UsuarioMail");
                 mail.para = "barragemdocerrado@gmail.com";
-                mail.assunto = "BDC - Nova Rodada - " + rodada.codigoSeq;
+                mail.assunto = "RDT - Nova Rodada - " + rodada.codigoSeq;
                 mail.conteudo = "Olá Pessoal,<br><br>A nova rodada " + rodada.codigoSeq +" já está disponível no site e vai até o dia:" + rodada.dataFim + ".<br><br>Bons jogos a todos.";
                 mail.formato = Tipos.FormatoEmail.Html;
                 List<UserProfile> users = db.UserProfiles.Where(u => u.situacao == "ativo"  && u.barragemId==rodada.barragemId).ToList();
