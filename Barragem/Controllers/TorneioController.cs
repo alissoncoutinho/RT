@@ -444,15 +444,12 @@ namespace Barragem.Controllers
             var jogador = db.UserProfiles.Find(userId);
             
             ViewBag.valor = torneio.valor+"";
-            if (jogador.barragemId == torneio.barragemId){
-                var ranking = db.Rancking.Where(r => r.userProfile_id == userId).Count();
-                if (ranking > 10) {
-                    ViewBag.valor = "gratuito";
-                }
-                //if (jogador.classe.nivel <= torneio.qtddClasses){
-                //    ViewBag.ClasseInscricao = jogador.classe.nivel;
-                //}
-            }
+            //if (jogador.barragemId == torneio.barragemId){
+            //    var ranking = db.Rancking.Where(r => r.userProfile_id == userId).Count();
+            //    if (ranking > 10) {
+            //        ViewBag.valor = "gratuito";
+            //    }
+            //}
             mensagem(Msg);
             
             return View(torneio);
@@ -516,12 +513,22 @@ namespace Barragem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Torneio torneio)
         {
+            var userId = WebSecurity.GetUserId(User.Identity.Name);
+            string perfil = Roles.GetRolesForUser(User.Identity.Name)[0];
             if (ModelState.IsValid)
             {
                 db.Entry(torneio).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            var barragemId = 0;
+            if (perfil.Equals("admin")){
+                barragemId = torneio.barragemId;
+            }else{
+                barragemId = (from up in db.UserProfiles where up.UserId == userId select up.barragemId).Single();
+            }
+            ViewBag.barraId = barragemId;
+            ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", barragemId);
             return View(torneio);
         }
 

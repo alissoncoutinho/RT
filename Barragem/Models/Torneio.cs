@@ -18,6 +18,9 @@ namespace Barragem.Models
 
         public string nome { get; set; }
 
+        [Display(Name = "Observação")]
+        public string observacao { get; set; }
+
         [Display(Name = "Data Fim da Inscrição")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
@@ -48,6 +51,9 @@ namespace Barragem.Models
         [Display(Name = "Valor da Inscrição")]
         public double? valor { get; set; }
 
+        [Display(Name = "Valor para +1 classe")]
+        public double? valorMaisClasses { get; set; }
+
         [Display(Name = "Tem Repescagem")]
         public bool temRepescagem { get; set; }
 
@@ -56,6 +62,9 @@ namespace Barragem.Models
 
         [Display(Name = "Torneio Aberto")]
         public bool isOpen { get; set; }
+
+        [Display(Name = "Inscrição +1 classe")]
+        public bool? isMaisUmaClasse { get; set; }
 
         public int barragemId { get; set; }
 

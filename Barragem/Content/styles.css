@@ -3717,3 +3717,14 @@ p#set {
     border-left: 5px solid #a74818;
     font-size: 7px;
 }
+
+.boxPadrao {
+    position: relative;
+    border-radius: 3px;
+    background: #fff;
+    border: 1px solid #d2d6de;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    padding: 10px;
+}

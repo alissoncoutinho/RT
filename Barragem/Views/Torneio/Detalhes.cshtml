@@ -90,6 +90,14 @@
                                 
                             </div>
                         </div>
+                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse)){
+                            <div class="row">
+                                @Html.Label("Valor +1 classe", new { @class = "col-sm-4" })
+                                <div class="col-sm-8 info-box-text">
+                                    @Html.Raw("R$ " + Model.valorMaisClasses + ",00")
+                                </div>
+                            </div>
+                        }
                         <div class="row">
                             @Html.Label("Inscrições até", new { @class = "col-sm-4" })
                             <div class="col-sm-8 info-box-text">
@@ -97,7 +105,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            @Html.Label("Nível", new { @class = "col-sm-4" })
+                            @Html.Label("Categoria", new { @class = "col-sm-4" })
                             <div class="col-sm-8 info-box-text">
                                 <select name="classeInscricao" class="form-control">
                                         @for (int i = 1; i <= Model.qtddClasses; i++)
@@ -107,6 +115,40 @@
                                     </select>
                             </div>
                         </div>
+                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse)){
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="true" name="isMaisDeUmaClasse" /> @Html.Raw("Jogar em +1 Categoria")
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @Html.Label("2ª Categoria", new { @class = "col-sm-4" })
+                                <div class="col-sm-8 info-box-text">
+                                    <select name="classeInscricao2" class="form-control">
+                                        @for (int i = 1; i <= Model.qtddClasses; i++)
+                                        {
+                                            <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")  }>@i ª Classe</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.observacao)){
+                            <br>
+                            <div class="boxPadrao">
+                                <div class="row">
+                                    <div class="col-sm-12">@Html.Raw(Model.observacao)</div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-12"><input type="text" placeholder="Responda aqui..." name="observacao" class="form-control"></div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

@@ -221,6 +221,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Barragens.cs" />
     <Compile Include="Models\Classe.cs" />
+    <Compile Include="Models\ClasseTorneio.cs" />
     <Compile Include="Models\Configuracao.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\InscricaoTorneio.cs" />

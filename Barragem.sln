@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barragem", "Barragem\Barragem.csproj", "{6B6513DD-4D61-4F7D-A3F8-F189503DA5DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BABC5658-6AFD-4F8E-81F1-434553663D99} = {BABC5658-6AFD-4F8E-81F1-434553663D99}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uol.PagSeguro", "..\pagseguro-sdk-dotnet-master\source\Uol.PagSeguro\Uol.PagSeguro.csproj", "{BABC5658-6AFD-4F8E-81F1-434553663D99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{6B6513DD-4D61-4F7D-A3F8-F189503DA5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B6513DD-4D61-4F7D-A3F8-F189503DA5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B6513DD-4D61-4F7D-A3F8-F189503DA5DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BABC5658-6AFD-4F8E-81F1-434553663D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BABC5658-6AFD-4F8E-81F1-434553663D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BABC5658-6AFD-4F8E-81F1-434553663D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BABC5658-6AFD-4F8E-81F1-434553663D99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
