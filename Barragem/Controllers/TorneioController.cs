@@ -13,6 +13,11 @@ using System.Transactions;
 using Barragem.Class;
 using System.Web.Security;
 using WebMatrix.WebData;
+using Uol.PagSeguro.Constants;
+using Uol.PagSeguro.Domain;
+using Uol.PagSeguro.Service;
+using Uol.PagSeguro.Resources;
+using Uol.PagSeguro.Exception;
 
 namespace Barragem.Controllers
 {
@@ -403,6 +408,71 @@ namespace Barragem.Controllers
             return View(inscricoes);
         }
 
+        [Authorize(Roles = "admin,organizador,usuario")]
+        public ActionResult EfetuarPagamento(int inscricaoId)
+        {
+            var inscricao = db.InscricaoTorneio.Find(inscricaoId);
+
+            try {
+                Register(inscricao);
+            } catch (Exception e) {
+                ViewBag.MsgErro = e.Message;
+            }
+            
+            return View(inscricao);
+        }
+
+
+        private void Register(InscricaoTorneio inscricao)
+        {
+            //Use global configuration
+            //PagSeguroConfiguration.UrlXmlConfiguration = "../../../../../PagSeguroConfig.xml";
+
+            bool isSandbox = false;
+            EnvironmentConfiguration.ChangeEnvironment(isSandbox);
+
+            // Instantiate a new payment request
+            PaymentRequest payment = new PaymentRequest();
+
+            // Sets the currency
+            payment.Currency = Currency.Brl;
+
+            // Add an item for this payment request
+            payment.Items.Add(new Item(inscricao.torneioId+"", inscricao.torneio.nome, 1, (decimal)inscricao.valor));
+
+            // Sets a reference code for this payment request, it is useful to identify this payment in future notifications.
+            payment.Reference = inscricao.Id+"";
+
+            // Sets your customer information.
+            payment.Sender = new Sender(inscricao.participante.nome,inscricao.participante.email,new Phone("61", "99999999"));
+
+            //SenderDocument document = new SenderDocument(Documents.GetDocumentByType("CPF"), "12345678909");
+            //payment.Sender.Documents.Add(document);
+
+            // Sets the url used by PagSeguro for redirect user after ends checkout process
+            payment.RedirectUri = new Uri("http://www.rankingdetenis.com.br/ConfirmacaoPagamento");
+
+            try{
+                /// Create new account credentials
+                /// This configuration let you set your credentials from your ".cs" file.
+                //AccountCredentials credentials = new AccountCredentials("backoffice@lojamodelo.com.br", "256422BF9E66458CA3FE41189AD1C94A");
+
+                /// @todo with you want to get credentials from xml config file uncommend the line below and comment the line above.
+                AccountCredentials credentials = PagSeguroConfiguration.Credentials(isSandbox);
+
+                Uri paymentRedirectUri = payment.Register(credentials);
+            } catch (PagSeguroServiceException exception){
+                Console.WriteLine(exception.Message + "\n");
+
+                foreach (ServiceError element in exception.Errors)
+                {
+                    Console.WriteLine(element + "\n");
+                }
+                throw new ArgumentException("Erro ao registrar pagamento", exception.Message);
+                //Console.ReadKey();
+            }
+        }
+
         [Authorize(Roles = "admin,organizador")]
         public ActionResult Edit(int id = 0)
         {
@@ -439,17 +509,14 @@ namespace Barragem.Controllers
             ViewBag.ClasseInscricao = 0;
             if (inscricao.Count>0){
                 ViewBag.isInscrito = true;
+                ViewBag.statusPagamento = inscricao[0].statusPagamento;
                 ViewBag.ClasseInscricao = inscricao[0].classe;
+                ViewBag.InscricaoId = inscricao[0].Id;
             }
             var jogador = db.UserProfiles.Find(userId);
             
             ViewBag.valor = torneio.valor+"";
-            //if (jogador.barragemId == torneio.barragemId){
-            //    var ranking = db.Rancking.Where(r => r.userProfile_id == userId).Count();
-            //    if (ranking > 10) {
-            //        ViewBag.valor = "gratuito";
-            //    }
-            //}
+            
             mensagem(Msg);
             
             return View(torneio);
@@ -457,11 +524,12 @@ namespace Barragem.Controllers
 
         [Authorize(Roles = "admin,usuario,organizador")]
         [HttpPost]
-        public ActionResult Inscricao(int torneioId, int classeInscricao, int vrInscricao, string operacao="")
+        public ActionResult Inscricao(int torneioId, int classeInscricao, string operacao="", bool isMaisDeUmaClasse=false, int classeInscricao2=0, string observacao="")
         {
             try
             {
                 var userId = WebSecurity.GetUserId(User.Identity.Name);
+                var torneio = db.Torneio.Find(torneioId);
                 var isInscricao = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Count();
                 if (isInscricao>0){
                     InscricaoTorneio it = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Single();
@@ -475,12 +543,36 @@ namespace Barragem.Controllers
                     inscricao.classe = classeInscricao;
                     inscricao.torneioId = torneioId;
                     inscricao.userId = userId;
-                    if(vrInscricao>0){
+                    if (isMaisDeUmaClasse){
+                        inscricao.valor = torneio.valorMaisClasses;
+                    }else{
+                        inscricao.valor = torneio.valor;
+                    }
+                    inscricao.observacao = observacao;
+                    if(torneio.valor > 0){
                         inscricao.isAtivo = false;
                     }else{
                         inscricao.isAtivo = true;
                     }
                     db.InscricaoTorneio.Add(inscricao);
+                    if (isMaisDeUmaClasse) {
+                        InscricaoTorneio inscricao2 = new InscricaoTorneio();
+                        inscricao2.classe = classeInscricao2;
+                        inscricao2.torneioId = torneioId;
+                        inscricao2.userId = userId;
+                        if (isMaisDeUmaClasse){
+                            inscricao2.valor = torneio.valorMaisClasses;
+                        }else{
+                            inscricao2.valor = torneio.valor;
+                        }
+                        inscricao2.observacao = observacao;
+                        if (torneio.valor > 0){
+                            inscricao2.isAtivo = false;
+                        }else{
+                            inscricao2.isAtivo = true;
+                        }
+                        db.InscricaoTorneio.Add(inscricao2);
+                    }
                 }
                 db.SaveChanges();
                 return RedirectToAction("Detalhes", new {id=torneioId,Msg="OK"});

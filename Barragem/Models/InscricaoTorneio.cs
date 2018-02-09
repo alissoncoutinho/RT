@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Barragem.Models
 {
@@ -21,6 +22,7 @@ namespace Barragem.Models
         public virtual UserProfile participante { get; set; }
 
         public bool isAtivo { get; set; }
+
         public int classe { get; set; }
 
         public int torneioId { get; set; }
@@ -30,5 +32,14 @@ namespace Barragem.Models
         public virtual Torneio torneio { get; set; }
 
         public int? colocacao { get; set; }
+
+        public string statusPagamento { get; set; }
+
+        public string formaPagamento { get; set; }
+
+        public string observacao { get; set; }
+
+        public double? valor { get; set; }
+
     }
 }

@@ -49,7 +49,6 @@
                             { @Html.Raw("Sim") }
                             else
                             { @Html.Raw("Não")}
-
                         </div>
                     </div>
                     <div class="row">
@@ -60,7 +59,7 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-                
+
             </div>
             <!-- /.box -->
         </div>
@@ -72,25 +71,29 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                @using (Html.BeginForm("Inscricao", "Torneio", FormMethod.Post, new { @class = "form-horizontal",@name="formInscricao" })){
+                @using (Html.BeginForm("Inscricao", "Torneio", FormMethod.Post, new { @class = "form-horizontal", @name = "formInscricao" }))
+                {
                     <div class="box-body">
                         <div class="row">
                             @Html.Label("Valor", new { @class = "col-sm-4" })
                             <div class="col-sm-8 info-box-text">
                                 @Html.Hidden("operacao", "inscricao")
                                 @Html.Hidden("torneioId", Model.Id)
-                                @if (ViewBag.valor=="gratuito")
+                                @if (ViewBag.valor == "gratuito")
                                 {
                                     @Html.Raw(ViewBag.valor)
-                                    @Html.Hidden("vrInscricao","0");
-                                }else{ 
+                                    @Html.Hidden("vrInscricao", "0");
+                                }
+                                else
+                                {
                                     @Html.Raw("R$ " + Model.valor + ",00")
                                     @Html.Hidden("vrInscricao", Model.valor);
                                 }
-                                
+
                             </div>
                         </div>
-                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse)){
+                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse))
+                        {
                             <div class="row">
                                 @Html.Label("Valor +1 classe", new { @class = "col-sm-4" })
                                 <div class="col-sm-8 info-box-text">
@@ -108,36 +111,38 @@
                             @Html.Label("Categoria", new { @class = "col-sm-4" })
                             <div class="col-sm-8 info-box-text">
                                 <select name="classeInscricao" class="form-control">
-                                        @for (int i = 1; i <= Model.qtddClasses; i++)
-                                        {
-                                            <option value="@i" @if(ViewBag.ClasseInscricao == i) { @Html.Raw("selected") }>@i ª Classe</option>
-                                        }
-                                    </select>
+                                    @for (int i = 1; i <= Model.qtddClasses; i++)
+                                    {
+                                        <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")  }>@i ª Classe</option>
+                                    }
+                                </select>
                             </div>
                         </div>
-                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse)){
+                        @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse))
+                        {
                             <div class="form-group">
                                 <div class="col-sm-6">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="true" name="isMaisDeUmaClasse" /> @Html.Raw("Jogar em +1 Categoria")
+                                            <input type="checkbox" value="true" name="isMaisDeUmaClasse" id="isMaisDeUmaClasse" onclick="segundaOpcaoDeClasse()" /> @Html.Raw("Jogar em +1 Categoria")
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div id="segundaOpcaoClasse" class="row">
                                 @Html.Label("2ª Categoria", new { @class = "col-sm-4" })
                                 <div class="col-sm-8 info-box-text">
                                     <select name="classeInscricao2" class="form-control">
                                         @for (int i = 1; i <= Model.qtddClasses; i++)
                                         {
-                                            <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")  }>@i ª Classe</option>
+                                            <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")   }>@i ª Classe</option>
                                         }
                                     </select>
                                 </div>
                             </div>
                         }
-                        @if (!String.IsNullOrEmpty(Model.observacao)){
+                        @if (!String.IsNullOrEmpty(Model.observacao))
+                        {
                             <br>
                             <div class="boxPadrao">
                                 <div class="row">
@@ -148,24 +153,29 @@
                                 </div>
                             </div>
                         }
-
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         @if (Model.dataFimInscricoes.AddDays(1) >= DateTime.Now)
-                        { 
-                            if (ViewBag.isInscrito){
+                        {
+                            if (ViewBag.isInscrito)
+                            {
                                 <button type="button" class="btn btn-danger pull-right confirmCancel">Cancelar</button>
                                 <button type="button" class="btn btn-info pull-right alterarClasse">Alterar Classe</button>
+                                if (String.IsNullOrEmpty(ViewBag.statusPagamento)) {
+                                    <a href="@Url.Action("EfetuarPagamento", new { inscricaoId = ViewBag.InscricaoId })" class="btn btn-default" data-id="@ViewBag.InscricaoId" title="Efetuar Pagamento">Efetuar Pagamento</a>
+                                }
                             }
                             else
                             {
                                 <button type="button" class="btn btn-info pull-right confirmInscricao">Inscrever-me</button>
                             }
-                        }else{
+                        }
+                        else
+                        {
                             @Html.Raw("Inscrições Encerradas.")
                         }
-                        <a href="@Url.Action("InscricoesTorneio2", new { torneioId = @Model.Id })" class="btn btn-default" data-id="@Model.Id" title="Inscritos">Inscritos</a>        
+                        <a href="@Url.Action("InscricoesTorneio2", new { torneioId = @Model.Id })" class="btn btn-default" data-id="@Model.Id" title="Inscritos">Inscritos</a>
                     </div>
                     <!-- /.box-footer -->
                 }
@@ -176,57 +186,69 @@
     </div>
     <!-- /.row -->
 </section>
-    
+
 </div>
 @section Scripts {
-<script type="text/javascript">
-    $(document).ready(function () {
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-        $(".confirmInscricao").confirm({
-            title: "Confirmação",
-            text: "Aperte SIM para confirmar sua inscrição!",
-            confirm: function (button) {
-                //window.location.href = button.data("link");
-                document.formInscricao.operacao.value = "inscricao";
-                document.formInscricao.submit();
-            },
-            cancel: function (button) {
+            $(".confirmInscricao").confirm({
+                title: "Confirmação",
+                text: "Aperte SIM para confirmar sua inscrição!",
+                confirm: function (button) {
+                    //window.location.href = button.data("link");
+                    document.formInscricao.operacao.value = "inscricao";
+                    document.formInscricao.submit();
+                },
+                cancel: function (button) {
 
-            },
-            confirmButton: "Sim",
-            cancelButton: "Não"
+                },
+                confirmButton: "Sim",
+                cancelButton: "Não"
+            });
+
+            $(".alterarClasse").confirm({
+                title: "Confirmação",
+                text: "Aperte SIM para confirmar a alteração da sua classe!",
+                confirm: function (button) {
+                    //window.location.href = button.data("link");
+                    document.formInscricao.operacao.value = "alterar";
+                    document.formInscricao.submit();
+                },
+                cancel: function (button) {
+
+                },
+                confirmButton: "Sim",
+                cancelButton: "Não"
+            });
+
+            $(".confirmCancel").confirm({
+                title: "Confirmação",
+                text: "Aperte SIM para confirmar o cancelamento da inscrição!",
+                confirm: function (button) {
+                    //window.location.href = button.data("link");
+                    document.formInscricao.operacao.value = "cancelar";
+                    document.formInscricao.submit();
+                },
+                cancel: function (button) {
+
+                },
+                confirmButton: "Sim",
+                cancelButton: "Não"
+            });
+
         });
 
-        $(".alterarClasse").confirm({
-            title: "Confirmação",
-            text: "Aperte SIM para confirmar a alteração da sua classe!",
-            confirm: function (button) {
-                //window.location.href = button.data("link");
-                document.formInscricao.operacao.value = "alterar";
-                document.formInscricao.submit();
-            },
-            cancel: function (button) {
-
-            },
-            confirmButton: "Sim",
-            cancelButton: "Não"
-        });
-
-        $(".confirmCancel").confirm({
-            title: "Confirmação",
-            text: "Aperte SIM para confirmar o cancelamento da inscrição!",
-            confirm: function (button) {
-                //window.location.href = button.data("link");
-                document.formInscricao.operacao.value = "cancelar";
-                document.formInscricao.submit();
-            },
-            cancel: function (button) {
-
-            },
-            confirmButton: "Sim",
-            cancelButton: "Não"
-        });
-
-    });
+        function segundaOpcaoDeClasse() {
+            if (document.getElementById('isMaisDeUmaClasse').checked) {
+                document.getElementById('segundaOpcaoClasse').style.opacity = "1";
+                document.getElementById('segundaOpcaoClasse').style.display = "block";
+            } else {
+                document.getElementById('segundaOpcaoClasse').style.opacity = "0 !important";
+                document.getElementById('segundaOpcaoClasse').style.display = "none";
+            }
+        }
+        document.getElementById('segundaOpcaoClasse').style.opacity = "0";
+        document.getElementById('segundaOpcaoClasse').style.display = "none";
     </script>
 }

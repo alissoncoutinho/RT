@@ -847,6 +847,12 @@
   <ItemGroup>
     <Content Include="Scripts\jquery-2.1.1.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\pagseguro-sdk-dotnet-master\source\Uol.PagSeguro\Uol.PagSeguro.csproj">
+      <Project>{babc5658-6afd-4f8e-81f1-434553663d99}</Project>
+      <Name>Uol.PagSeguro</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
