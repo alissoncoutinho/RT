@@ -205,6 +205,7 @@
     <Compile Include="Controllers\FemininaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JogoController.cs" />
+    <Compile Include="Controllers\NotificacaoController.cs" />
     <Compile Include="Controllers\RanckingController.cs" />
     <Compile Include="Controllers\RodadaController.cs" />
     <Compile Include="Controllers\TemporadaController.cs" />
@@ -345,6 +346,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="PagSeguroConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
     <Content Include="Scripts\back-to-top.js" />
@@ -837,6 +841,7 @@
     <Content Include="Views\Torneio\TabelaJogos.cshtml" />
     <Content Include="Views\Torneio\ListarJogos.cshtml" />
     <Content Include="Views\Torneio\InscricoesTorneio2.cshtml" />
+    <Content Include="Views\Notificacao\RetornoPagamento.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

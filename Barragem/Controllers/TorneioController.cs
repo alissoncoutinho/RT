@@ -411,24 +411,25 @@ namespace Barragem.Controllers
         [Authorize(Roles = "admin,organizador,usuario")]
         public ActionResult EfetuarPagamento(int inscricaoId)
         {
+            string MsgErro = "";
             var inscricao = db.InscricaoTorneio.Find(inscricaoId);
 
             try {
-                Register(inscricao);
+                Uri paymentRedirectUri = Register(inscricao);
+                Response.Redirect(paymentRedirectUri.AbsoluteUri);
             } catch (Exception e) {
-                ViewBag.MsgErro = e.Message;
+                MsgErro = e.Message;
             }
-            
-            return View(inscricao);
+            return RedirectToAction("Detalhes", new { id = inscricao.torneioId, Msg = MsgErro });
         }
 
 
-        private void Register(InscricaoTorneio inscricao)
+        private Uri Register(InscricaoTorneio inscricao)
         {
             //Use global configuration
             //PagSeguroConfiguration.UrlXmlConfiguration = "../../../../../PagSeguroConfig.xml";
 
-            bool isSandbox = false;
+            bool isSandbox = true;
             EnvironmentConfiguration.ChangeEnvironment(isSandbox);
 
             // Instantiate a new payment request
@@ -441,16 +442,17 @@ namespace Barragem.Controllers
             payment.Items.Add(new Item(inscricao.torneioId+"", inscricao.torneio.nome, 1, (decimal)inscricao.valor));
 
             // Sets a reference code for this payment request, it is useful to identify this payment in future notifications.
-            payment.Reference = inscricao.Id+"";
+            payment.Reference = "T-"+inscricao.Id;
 
             // Sets your customer information.
-            payment.Sender = new Sender(inscricao.participante.nome,inscricao.participante.email,new Phone("61", "99999999"));
+            //payment.Sender = new Sender(inscricao.participante.nome,inscricao.participante.email,new Phone("61", "99999999"));
+            payment.Sender = new Sender(inscricao.participante.nome, "c07322876609220741939@sandbox.pagseguro.com.br", new Phone("61", "99999999"));
 
             //SenderDocument document = new SenderDocument(Documents.GetDocumentByType("CPF"), "12345678909");
             //payment.Sender.Documents.Add(document);
 
             // Sets the url used by PagSeguro for redirect user after ends checkout process
-            payment.RedirectUri = new Uri("http://www.rankingdetenis.com.br/ConfirmacaoPagamento");
+            //payment.RedirectUri = new Uri("http://www.rankingdetenis.com.br/ConfirmacaoPagamento");
 
             try{
                 /// Create new account credentials
@@ -460,7 +462,7 @@ namespace Barragem.Controllers
                 /// @todo with you want to get credentials from xml config file uncommend the line below and comment the line above.
                 AccountCredentials credentials = PagSeguroConfiguration.Credentials(isSandbox);
 
-                Uri paymentRedirectUri = payment.Register(credentials);
+                return payment.Register(credentials);
             } catch (PagSeguroServiceException exception){
                 Console.WriteLine(exception.Message + "\n");
 
