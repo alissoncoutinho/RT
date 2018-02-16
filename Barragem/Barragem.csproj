@@ -842,6 +842,7 @@
     <Content Include="Views\Torneio\ListarJogos.cshtml" />
     <Content Include="Views\Torneio\InscricoesTorneio2.cshtml" />
     <Content Include="Views\Notificacao\RetornoPagamento.cshtml" />
+    <Content Include="Views\Home\IndexTorneio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

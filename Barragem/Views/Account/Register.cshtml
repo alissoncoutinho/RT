@@ -7,7 +7,8 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
-<div class="form-horizontal">
+    <input type="hidden" name="barragemId" value="@ViewBag.barragemId">
+    <div class="form-horizontal">
     <legend>Cadastro</legend>
 
     <div class="form-group">
@@ -124,14 +125,6 @@
             @Html.ValidationMessageFor(model => model.classeId)
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.barragemId, new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.DropDownList("barragemId", null, new { @class = "form-control", @readonly = "readonly"})
-            @Html.ValidationMessageFor(model => model.barragemId)
-        </div>
-    </div>
-
     <div class="form-group">
         @Html.LabelFor(m => m.matriculaClube, new { @class = "control-label col-md-2" })
         <div class="col-md-2">

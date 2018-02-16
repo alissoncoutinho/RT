@@ -23,13 +23,17 @@ namespace Barragem.Models
 
         public bool isAtivo { get; set; }
 
-        public int classe { get; set; }
+        [Display(Name = "Classe")]
+        [ForeignKey("classe")]
+        public virtual ClasseTorneio classeTorneio { get; set; }
 
-        public int torneioId { get; set; }
+        public int classe { get; set; }
 
         [Display(Name = "Torneio")]
         [ForeignKey("torneioId")]
         public virtual Torneio torneio { get; set; }
+
+        public int torneioId { get; set; }
 
         public int? colocacao { get; set; }
 

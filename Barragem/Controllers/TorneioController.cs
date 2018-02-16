@@ -57,9 +57,12 @@ namespace Barragem.Controllers
             List<Torneio> torneio = null;
             var userId = WebSecurity.GetUserId(User.Identity.Name);
             int barragemId = (from up in db.UserProfiles where up.UserId == userId select up.barragemId).Single();
-            if (perfil.Equals("admin")){
+            if (perfil.Equals("admin"))
+            {
                 torneio = db.Torneio.OrderByDescending(c => c.Id).ToList();
-            }else{
+            }
+            else
+            {
                 torneio = db.Torneio.Where(r => r.barragemId == barragemId).OrderByDescending(c => c.Id).ToList();
             }
 
@@ -73,14 +76,15 @@ namespace Barragem.Controllers
             var userId = WebSecurity.GetUserId(User.Identity.Name);
             int barragemId = (from up in db.UserProfiles where up.UserId == userId select up.barragemId).Single();
             torneio = db.Torneio.Where(r => r.isAtivo && (r.barragemId == barragemId || r.isOpen)).OrderByDescending(c => c.Id).ToList();
-            
+
 
             return View(torneio);
         }
 
-        
+
         [Authorize(Roles = "admin,organizador")]
-        public ActionResult EfetuarSorteioFase1(int torneioId){
+        public ActionResult EfetuarSorteioFase1(int torneioId)
+        {
             try
             {
                 db.Database.ExecuteSqlCommand("Delete from Jogo where torneioId=" + torneioId + "and faseTorneio=100");
@@ -93,7 +97,8 @@ namespace Barragem.Controllers
                     inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId && r.classe == i && r.isAtivo).ToList();
                     //colocarJogadoresEmLicencaNoRanking(inscricoes);
                     int j = 1;
-                    while(inscricoes.Count>0){
+                    while (inscricoes.Count > 0)
+                    {
                         jogador1 = selecionarAdversario(inscricoes);
                         jogador2 = selecionarAdversario(inscricoes);
                         var jogador2Id = jogador2.userId;
@@ -101,11 +106,13 @@ namespace Barragem.Controllers
                     }
                 }
                 return RedirectToAction("TabelaJogos", new { torneioId = torneioId, Msg = "OK" });
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return RedirectToAction("TabelaJogos", new { torneioId = torneioId, Msg = e.Message });
             }
-            
-            
+
+
         }
 
         public ActionResult EfetuarSorteioFaseRepescagem(int torneioId)
@@ -121,7 +128,8 @@ namespace Barragem.Controllers
                 {
                     inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId && r.classe == i && r.isAtivo && r.colocacao == 101).ToList();
                     int j = 1;
-                    while(inscricoes.Count>0){
+                    while (inscricoes.Count > 0)
+                    {
                         jogador1 = selecionarAdversario(inscricoes);
                         jogador2 = selecionarAdversario(inscricoes);
                         var jogador2Id = jogador2.userId;
@@ -144,29 +152,44 @@ namespace Barragem.Controllers
             return qtddJogadores - qtddInscritos;
         }
 
-        private int informarQtddJogos(int qtddInscritos){
+        private int informarQtddJogos(int qtddInscritos)
+        {
             var isPar = (qtddInscritos % 2 == 0);
-            int jogosNormais = qtddInscritos/2;
-            if (jogosNormais % 2 == 0){
+            int jogosNormais = qtddInscritos / 2;
+            if (jogosNormais % 2 == 0)
+            {
                 jogosNormais = jogosNormais++;
             }
-            if (jogosNormais <=32 && jogosNormais>16){ // fase 1
+            if (jogosNormais <= 32 && jogosNormais > 16)
+            { // fase 1
                 return 32;
-            }else if (jogosNormais <=16 && jogosNormais>8){ // oitavas de final
+            }
+            else if (jogosNormais <= 16 && jogosNormais > 8)
+            { // oitavas de final
                 return 16;
-            }else if (jogosNormais <=8 && jogosNormais>4){ // quartas de final
+            }
+            else if (jogosNormais <= 8 && jogosNormais > 4)
+            { // quartas de final
                 return 8;
-            }else if (jogosNormais <=4 && jogosNormais>2){ // semi-final
+            }
+            else if (jogosNormais <= 4 && jogosNormais > 2)
+            { // semi-final
                 return 4;
-            }else if (jogosNormais <= 2){ // final
+            }
+            else if (jogosNormais <= 2)
+            { // final
                 return 2;
-            }else { return 0; }
+            }
+            else { return 0; }
         }
 
-        private void colocarJogadoresEmLicencaNoRanking(List<InscricaoTorneio> inscricoes){
-            foreach (InscricaoTorneio inscricao in inscricoes) {
+        private void colocarJogadoresEmLicencaNoRanking(List<InscricaoTorneio> inscricoes)
+        {
+            foreach (InscricaoTorneio inscricao in inscricoes)
+            {
                 var user = db.UserProfiles.Find(inscricao.userId);
-                if (user.situacao == "ativo"){
+                if (user.situacao == "ativo")
+                {
                     user.situacao = Tipos.Situacao.licenciado.ToString();
                     db.SaveChanges();
                 }
@@ -183,21 +206,27 @@ namespace Barragem.Controllers
                 InscricaoTorneio jogador1 = null;
                 InscricaoTorneio jogador2 = null;
                 List<InscricaoTorneio> inscricoes = null;
-                for (int i = 1; i <= torneio.qtddClasses; i++){
-                    inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId && r.classe == i && r.isAtivo && (r.colocacao==null || r.colocacao==101)).ToList();
-                    if (inscricoes.Count()==0){
+                for (int i = 1; i <= torneio.qtddClasses; i++)
+                {
+                    inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId && r.classe == i && r.isAtivo && (r.colocacao == null || r.colocacao == 101)).ToList();
+                    if (inscricoes.Count() == 0)
+                    {
                         continue;
                     }
                     //colocarJogadoresEmLicencaNoRanking(inscricoes);
                     int quantidadeJogos = informarQtddJogos(inscricoes.Count());
                     int qtddJogadoresFake = getQtddJogadoresFake(inscricoes.Count(), quantidadeJogos);
                     int ordemJogos = quantidadeJogos;
-                    for (int j = 1; j <= quantidadeJogos; j++){
+                    for (int j = 1; j <= quantidadeJogos; j++)
+                    {
                         var jogador2Id = 0;
                         jogador1 = selecionarAdversario(inscricoes);
-                        if (qtddJogadoresFake > j){
+                        if (qtddJogadoresFake > j)
+                        {
                             jogador2Id = 0;
-                        } else {
+                        }
+                        else
+                        {
                             jogador2 = selecionarAdversario(inscricoes);
                             jogador2Id = jogador2.userId;
                         }
@@ -205,9 +234,11 @@ namespace Barragem.Controllers
                     }
                     int qtddRodadas = getQtddRodadas(quantidadeJogos);
                     int numeroRodada = 2;
-                    for (int k = qtddRodadas; k >= 1; k--) {
+                    for (int k = qtddRodadas; k >= 1; k--)
+                    {
                         var qtddJogosPorRodada = getQtddJogosPorRodada(k);
-                        for (int y = 1; y <= qtddJogosPorRodada; y++){
+                        for (int y = 1; y <= qtddJogosPorRodada; y++)
+                        {
                             criarJogo(0, 0, torneioId, i, numeroRodada, y);
                         }
                         numeroRodada++;
@@ -234,16 +265,20 @@ namespace Barragem.Controllers
         }
         private void ProcessarJogosComBye(int torneioId, int classeId)
         {
-            var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio==1 && r.desafiante_id==0 && r.situacao_Id==4).ToList();
-            foreach(Jogo jogo in jogos){
+            var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio == 1 && r.desafiante_id == 0 && r.situacao_Id == 4).ToList();
+            foreach (Jogo jogo in jogos)
+            {
                 int ordemJogo = 0;
-                if (jogo.ordemJogo % 2 != 0) {
+                if (jogo.ordemJogo % 2 != 0)
+                {
                     int var1 = 1;
                     int teste = (var1 / 2) + 1;
-                    ordemJogo = (int)(jogo.ordemJogo/2) + 1;
+                    ordemJogo = (int)(jogo.ordemJogo / 2) + 1;
                     var proximoJogo = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio == 2 && r.ordemJogo == ordemJogo).Single();
                     proximoJogo.desafiado_id = jogo.desafiado_id;
-                }else{
+                }
+                else
+                {
                     ordemJogo = (int)jogo.ordemJogo / 2;
                     var proximoJogo = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classeId && r.faseTorneio == 2 && r.ordemJogo == ordemJogo).Single();
                     proximoJogo.desafiante_id = jogo.desafiado_id;
@@ -252,44 +287,72 @@ namespace Barragem.Controllers
             }
         }
 
-        private int getQtddJogosPorRodada(int numeroRodada) {
-            if (numeroRodada == 6) {
+        private int getQtddJogosPorRodada(int numeroRodada)
+        {
+            if (numeroRodada == 6)
+            {
                 return 32;
-            }else if(numeroRodada == 5) {
+            }
+            else if (numeroRodada == 5)
+            {
                 return 16;
-            }else if(numeroRodada == 4) {
+            }
+            else if (numeroRodada == 4)
+            {
                 return 8;
-            }else if(numeroRodada == 3) {
+            }
+            else if (numeroRodada == 3)
+            {
                 return 4;
-            }else if (numeroRodada == 2) {
+            }
+            else if (numeroRodada == 2)
+            {
                 return 2;
-            }else if (numeroRodada == 1) {
+            }
+            else if (numeroRodada == 1)
+            {
                 return 1;
-            }else {
+            }
+            else
+            {
                 return 0;
             }
         }
 
         private int getQtddRodadas(int qtddJogos)
         {
-            if (qtddJogos == 64){
+            if (qtddJogos == 64)
+            {
                 return 6;
-            }else if (qtddJogos == 32) {
+            }
+            else if (qtddJogos == 32)
+            {
                 return 5;
-            }else if (qtddJogos == 16) {
+            }
+            else if (qtddJogos == 16)
+            {
                 return 4;
-            }else if (qtddJogos == 8) {
+            }
+            else if (qtddJogos == 8)
+            {
                 return 3;
-            }else if (qtddJogos == 4) {
+            }
+            else if (qtddJogos == 4)
+            {
                 return 2;
-            }else if (qtddJogos == 2) {
+            }
+            else if (qtddJogos == 2)
+            {
                 return 1;
-            }else {
+            }
+            else
+            {
                 return 0;
             }
         }
 
-        private void criarJogo(int jogador1, int jogador2, int torneioId, int classeTorneio, int faseTorneio, int ordemJogo){
+        private void criarJogo(int jogador1, int jogador2, int torneioId, int classeTorneio, int faseTorneio, int ordemJogo)
+        {
             Jogo jogo = new Jogo();
             jogo.desafiado_id = jogador1;
             jogo.desafiante_id = jogador2;
@@ -298,7 +361,8 @@ namespace Barragem.Controllers
             jogo.classeTorneio = classeTorneio;
             jogo.faseTorneio = faseTorneio;
             jogo.ordemJogo = ordemJogo;
-            if ((jogador2==0)&&(jogador1!=0)){
+            if ((jogador2 == 0) && (jogador1 != 0))
+            {
                 jogo.situacao_Id = 4;
                 jogo.qtddGames1setDesafiado = 6;
                 jogo.qtddGames2setDesafiado = 6;
@@ -310,12 +374,16 @@ namespace Barragem.Controllers
             db.SaveChanges();
         }
 
-        private InscricaoTorneio selecionarAdversario(List<InscricaoTorneio> participantes){
+        private InscricaoTorneio selecionarAdversario(List<InscricaoTorneio> participantes)
+        {
             var adversario = new InscricaoTorneio();
-            if (participantes.Count == 0){
+            if (participantes.Count == 0)
+            {
                 adversario.Id = 0;
                 return adversario;
-            } else if (participantes.Count == 1) {
+            }
+            else if (participantes.Count == 1)
+            {
                 adversario = participantes[0]; //add it 
                 participantes.RemoveAt(0);
                 return adversario;
@@ -331,9 +399,10 @@ namespace Barragem.Controllers
         public ActionResult ListarJogos(int torneioId)
         {
             string msg = "";
-            try{
+            try
+            {
                 var jogo = db.Jogo.Include(j => j.desafiado).Include(j => j.desafiante).
-                    Where(j => j.torneioId == torneioId && j.desafiado_id!=0 && j.desafiante_id!=0).OrderBy(j => j.classeTorneio).ThenBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
+                    Where(j => j.torneioId == torneioId && j.desafiado_id != 0 && j.desafiante_id != 0).OrderBy(j => j.classeTorneio).ThenBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
                 var torneio = db.Torneio.Find(torneioId);
                 ViewBag.Classes = db.Classe.Where(c => c.barragemId == torneio.barragemId).ToList();
                 return View(jogo);
@@ -347,12 +416,12 @@ namespace Barragem.Controllers
         }
 
         [Authorize(Roles = "admin,organizador,usuario")]
-        public ActionResult TabelaJogos(int torneioId, int classe = 1, string Msg="")
+        public ActionResult TabelaJogos(int torneioId, int classe = 1, string Msg = "")
         {
             var torneio = db.Torneio.Find(torneioId);
             ViewBag.temRepescagem = torneio.temRepescagem;
-            var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio==classe).OrderBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
-            var rodada = jogos.Where(r => r.torneioId == torneioId && r.classeTorneio==classe && r.faseTorneio<100).Max(r => r.faseTorneio);
+            var jogos = db.Jogo.Where(r => r.torneioId == torneioId && r.classeTorneio == classe).OrderBy(r => r.faseTorneio).ThenBy(r => r.ordemJogo).ToList();
+            var rodada = jogos.Where(r => r.torneioId == torneioId && r.classeTorneio == classe && r.faseTorneio < 100).Max(r => r.faseTorneio);
             ViewBag.JogosFaseClassificatoria = jogos.Where(r => r.faseTorneio == 100).ToList();
             ViewBag.JogosFaseRepescagem = jogos.Where(r => r.faseTorneio == 101).ToList();
             var JogosFase2 = jogos.Where(r => r.faseTorneio == 2).ToList();
@@ -361,40 +430,46 @@ namespace Barragem.Controllers
             ViewBag.JogosFase5 = jogos.Where(r => r.faseTorneio == 5).ToList();
             ViewBag.JogosFase6 = jogos.Where(r => r.faseTorneio == 6).ToList();
 
-            var x= jogos.Count();
+            var x = jogos.Count();
 
             var y = JogosFase2.Count();
             ViewBag.JogosFase2 = JogosFase2;
             ViewBag.QtddRodada = rodada;
             ViewBag.torneioId = torneioId;
-            ViewBag.Classe = classe+"";
+            ViewBag.Classe = classe + "";
             ViewBag.isSorteado = 0;
             string perfil = Roles.GetRolesForUser(User.Identity.Name)[0];
-            if ((perfil.Equals("admin")) || (perfil.Equals("organizador"))){
+            if ((perfil.Equals("admin")) || (perfil.Equals("organizador")))
+            {
                 ViewBag.isSorteado = db.Jogo.Where(r => r.torneioId == torneioId).Count();
             }
 
             mensagem(Msg);
-            return View(jogos.Where(r => r.faseTorneio==1).ToList());
+            return View(jogos.Where(r => r.faseTorneio == 1).ToList());
         }
 
-        private void mensagem(string Msg){
-            if (Msg != ""){
-                if (Msg == "OK"){
+        private void mensagem(string Msg)
+        {
+            if (Msg != "")
+            {
+                if (Msg == "OK")
+                {
                     ViewBag.Ok = "Operação realizada com sucesso!";
-                }else{
+                }
+                else
+                {
                     ViewBag.MsgErro = Msg;
                 }
             }
         }
 
         [Authorize(Roles = "admin,organizador")]
-        public ActionResult InscricoesTorneio(int torneioId, string Msg="")
+        public ActionResult InscricoesTorneio(int torneioId, string Msg = "")
         {
-            var inscricoes = db.InscricaoTorneio.Where(r => r.torneioId==torneioId).OrderBy(r => r.classe).ThenBy(r=>r.participante.nome).ToList();
+            var inscricoes = db.InscricaoTorneio.Where(r => r.torneioId == torneioId).OrderBy(r => r.classe).ThenBy(r => r.participante.nome).ToList();
 
             mensagem(Msg);
-            
+
             return View(inscricoes);
         }
 
@@ -414,10 +489,13 @@ namespace Barragem.Controllers
             string MsgErro = "";
             var inscricao = db.InscricaoTorneio.Find(inscricaoId);
 
-            try {
+            try
+            {
                 Uri paymentRedirectUri = Register(inscricao);
                 Response.Redirect(paymentRedirectUri.AbsoluteUri);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 MsgErro = e.Message;
             }
             return RedirectToAction("Detalhes", new { id = inscricao.torneioId, Msg = MsgErro });
@@ -439,10 +517,10 @@ namespace Barragem.Controllers
             payment.Currency = Currency.Brl;
 
             // Add an item for this payment request
-            payment.Items.Add(new Item(inscricao.torneioId+"", inscricao.torneio.nome, 1, (decimal)inscricao.valor));
+            payment.Items.Add(new Item(inscricao.torneioId + "", inscricao.torneio.nome, 1, (decimal)inscricao.valor));
 
             // Sets a reference code for this payment request, it is useful to identify this payment in future notifications.
-            payment.Reference = "T-"+inscricao.Id;
+            payment.Reference = "T-" + inscricao.Id;
 
             // Sets your customer information.
             //payment.Sender = new Sender(inscricao.participante.nome,inscricao.participante.email,new Phone("61", "99999999"));
@@ -454,7 +532,8 @@ namespace Barragem.Controllers
             // Sets the url used by PagSeguro for redirect user after ends checkout process
             //payment.RedirectUri = new Uri("http://www.rankingdetenis.com.br/ConfirmacaoPagamento");
 
-            try{
+            try
+            {
                 /// Create new account credentials
                 /// This configuration let you set your credentials from your ".cs" file.
                 //AccountCredentials credentials = new AccountCredentials("backoffice@lojamodelo.com.br", "256422BF9E66458CA3FE41189AD1C94A");
@@ -463,7 +542,9 @@ namespace Barragem.Controllers
                 AccountCredentials credentials = PagSeguroConfiguration.Credentials(isSandbox);
 
                 return payment.Register(credentials);
-            } catch (PagSeguroServiceException exception){
+            }
+            catch (PagSeguroServiceException exception)
+            {
                 Console.WriteLine(exception.Message + "\n");
 
                 foreach (ServiceError element in exception.Errors)
@@ -502,43 +583,57 @@ namespace Barragem.Controllers
         }
 
         [Authorize(Roles = "admin,usuario,organizador")]
-        public ActionResult Detalhes(int id = 0, String Msg="")
+        public ActionResult Detalhes(int id = 0, String Msg = "")
         {
             Torneio torneio = db.Torneio.Find(id);
             var userId = WebSecurity.GetUserId(User.Identity.Name);
             ViewBag.isInscrito = false;
-            var inscricao = db.InscricaoTorneio.Where(i => i.torneioId == id && i.userId == userId).ToList();
+            var inscricao = db.InscricaoTorneio.Where(i => i.torneio.Id == id && i.userId == userId).ToList();
+            var classes = db.ClasseTorneio.Where(i => i.torneioId == id).OrderBy(c => c.nome).ToList();
+            ViewBag.Classes = classes;
             ViewBag.ClasseInscricao = 0;
-            if (inscricao.Count>0){
+            ViewBag.ClasseInscricao2 = 0;
+            if (inscricao.Count > 0)
+            {
                 ViewBag.isInscrito = true;
                 ViewBag.statusPagamento = inscricao[0].statusPagamento;
                 ViewBag.ClasseInscricao = inscricao[0].classe;
                 ViewBag.InscricaoId = inscricao[0].Id;
+
+                if (inscricao.Count > 1)
+                {
+                    ViewBag.ClasseInscricao2 = inscricao[1].classe;
+                }
             }
             var jogador = db.UserProfiles.Find(userId);
-            
-            ViewBag.valor = torneio.valor+"";
-            
+
+            ViewBag.valor = torneio.valor + "";
+
             mensagem(Msg);
-            
+
             return View(torneio);
         }
 
         [Authorize(Roles = "admin,usuario,organizador")]
         [HttpPost]
-        public ActionResult Inscricao(int torneioId, int classeInscricao, string operacao="", bool isMaisDeUmaClasse=false, int classeInscricao2=0, string observacao="")
+        public ActionResult Inscricao(int torneioId, int classeInscricao, string operacao = "", bool isMaisDeUmaClasse = false, int classeInscricao2 = 0, string observacao = "")
         {
             try
             {
                 var userId = WebSecurity.GetUserId(User.Identity.Name);
                 var torneio = db.Torneio.Find(torneioId);
                 var isInscricao = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Count();
-                if (isInscricao>0){
-                    InscricaoTorneio it = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).Single();
+                if (isInscricao > 0)
+                {
+                    var it = db.InscricaoTorneio.Where(i => i.torneioId == torneioId && i.userId == userId).ToList();
                     if (operacao == "cancelar"){
-                        db.InscricaoTorneio.Remove(it);
-                    } else {
-                        it.classe = classeInscricao;
+                        db.InscricaoTorneio.Remove(it[0]);
+                        if (it.Count() > 1)
+                        {
+                            db.InscricaoTorneio.Remove(it[1]);
+                        }
+                    }else{
+                        it[0].classe = classeInscricao;
                     }
                 }else{
                     InscricaoTorneio inscricao = new InscricaoTorneio();
@@ -551,13 +646,13 @@ namespace Barragem.Controllers
                         inscricao.valor = torneio.valor;
                     }
                     inscricao.observacao = observacao;
-                    if(torneio.valor > 0){
+                    if (torneio.valor > 0){
                         inscricao.isAtivo = false;
                     }else{
                         inscricao.isAtivo = true;
                     }
                     db.InscricaoTorneio.Add(inscricao);
-                    if (isMaisDeUmaClasse) {
+                    if (isMaisDeUmaClasse){
                         InscricaoTorneio inscricao2 = new InscricaoTorneio();
                         inscricao2.classe = classeInscricao2;
                         inscricao2.torneioId = torneioId;
@@ -577,8 +672,10 @@ namespace Barragem.Controllers
                     }
                 }
                 db.SaveChanges();
-                return RedirectToAction("Detalhes", new {id=torneioId,Msg="OK"});
-            }catch (Exception ex){
+                return RedirectToAction("Detalhes", new { id = torneioId, Msg = "OK" });
+            }
+            catch (Exception ex)
+            {
                 return RedirectToAction("Detalhes", new { id = torneioId, Msg = ex.Message });
             }
         }
@@ -588,9 +685,12 @@ namespace Barragem.Controllers
             var inscricao = db.InscricaoTorneio.Find(inscricaoId);
             try
             {
-                if (inscricao.isAtivo){
+                if (inscricao.isAtivo)
+                {
                     inscricao.isAtivo = false;
-                }else{
+                }
+                else
+                {
                     inscricao.isAtivo = true;
                 }
                 db.SaveChanges();
@@ -616,9 +716,12 @@ namespace Barragem.Controllers
                 return RedirectToAction("Index");
             }
             var barragemId = 0;
-            if (perfil.Equals("admin")){
+            if (perfil.Equals("admin"))
+            {
                 barragemId = torneio.barragemId;
-            }else{
+            }
+            else
+            {
                 barragemId = (from up in db.UserProfiles where up.UserId == userId select up.barragemId).Single();
             }
             ViewBag.barraId = barragemId;

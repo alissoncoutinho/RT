@@ -59,7 +59,6 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-
             </div>
             <!-- /.box -->
         </div>
@@ -89,7 +88,6 @@
                                     @Html.Raw("R$ " + Model.valor + ",00")
                                     @Html.Hidden("vrInscricao", Model.valor);
                                 }
-
                             </div>
                         </div>
                         @if ((Model.isMaisUmaClasse != null) || (!(bool)Model.isMaisUmaClasse))
@@ -111,9 +109,9 @@
                             @Html.Label("Categoria", new { @class = "col-sm-4" })
                             <div class="col-sm-8 info-box-text">
                                 <select name="classeInscricao" class="form-control">
-                                    @for (int i = 1; i <= Model.qtddClasses; i++)
+                                    @foreach (var item in ViewBag.Classes)
                                     {
-                                        <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")  }>@i ª Classe</option>
+                                        <option value="@item.Id" @if (ViewBag.ClasseInscricao == item.Id) { @Html.Raw("selected")    }>@item.nome</option>
                                     }
                                 </select>
                             </div>
@@ -133,9 +131,9 @@
                                 @Html.Label("2ª Categoria", new { @class = "col-sm-4" })
                                 <div class="col-sm-8 info-box-text">
                                     <select name="classeInscricao2" class="form-control">
-                                        @for (int i = 1; i <= Model.qtddClasses; i++)
+                                        @foreach (var item in ViewBag.Classes)
                                         {
-                                            <option value="@i" @if (ViewBag.ClasseInscricao == i) { @Html.Raw("selected")   }>@i ª Classe</option>
+                                            <option value="@item.Id" @if (ViewBag.ClasseInscricao2 == item.Id) { @Html.Raw("selected")     }>@item.nome</option>
                                         }
                                     </select>
                                 </div>
@@ -162,7 +160,8 @@
                             {
                                 <button type="button" class="btn btn-danger pull-right confirmCancel">Cancelar</button>
                                 <button type="button" class="btn btn-info pull-right alterarClasse">Alterar Classe</button>
-                                if (String.IsNullOrEmpty(ViewBag.statusPagamento)) {
+                                if (String.IsNullOrEmpty(ViewBag.statusPagamento))
+                                {
                                     <a href="@Url.Action("EfetuarPagamento", new { inscricaoId = ViewBag.InscricaoId })" class="btn btn-default" data-id="@ViewBag.InscricaoId" title="Efetuar Pagamento">Efetuar Pagamento</a>
                                 }
                             }
@@ -186,7 +185,6 @@
     </div>
     <!-- /.row -->
 </section>
-
 </div>
 @section Scripts {
     <script type="text/javascript">
@@ -250,5 +248,6 @@
         }
         document.getElementById('segundaOpcaoClasse').style.opacity = "0";
         document.getElementById('segundaOpcaoClasse').style.display = "none";
+        
     </script>
 }

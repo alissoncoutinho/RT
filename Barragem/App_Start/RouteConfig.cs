@@ -18,13 +18,19 @@ namespace Barragem
                 url: "ranking-{id}",
                 defaults: new { controller = "Home", action = "IndexBarragem", id = UrlParameter.Optional }
             );
-            
+
+            routes.MapRoute(
+               name: "Torneios",
+               url: "torneio-{id}",
+               defaults: new { controller = "Home", action = "IndexTorneio", id = UrlParameter.Optional }
+           );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-                        
+
         }
     }
 }

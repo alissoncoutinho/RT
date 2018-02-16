@@ -28,11 +28,22 @@ namespace Barragem.Controllers
         public ActionResult Index(int rodadaId=0)
         {
             string msg = "";
+            int barragemId = 0;
             try{
-                if (rodadaId == 0)
-                {
+                if (rodadaId == 0){
                     UserProfile usuario = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+                    barragemId = usuario.barragemId;
                     rodadaId = db.Rodada.Where(r=> r.isRodadaCarga==false && r.barragemId==usuario.barragemId).Max(r => r.Id);
+                    if (usuario == null){
+                        if (Request.Cookies["_barragemId"] != null){
+                            HttpCookie cookie = new HttpCookie("_barragemId");
+                            barragemId = Convert.ToInt32(cookie.Value.ToString());
+                        }else{
+                            barragemId = 1;
+                        }
+                    } else {
+                        barragemId = usuario.barragemId;
+                    }
                 }
             }catch (InvalidOperationException) { }
             try
@@ -40,11 +51,10 @@ namespace Barragem.Controllers
                 var jogo = db.Jogo.Include(j => j.desafiado).Include(j => j.desafiante).Include(j => j.rodada).
                     Where(j => j.rodada_id == rodadaId).OrderBy(j => j.desafiado.classe.nivel).ToList();
                 msg = "jogos";
-                int barragemId = jogo[0].rodada.barragemId;
-                msg = "barragemId";
                 ViewBag.Classes = db.Classe.Where(c => c.barragemId == barragemId).ToList();
                 if (jogo.Count() > 0)
                 {
+                    barragemId = jogo[0].rodada.barragemId;
                     ViewBag.Rodada = jogo[0].rodada.codigoSeq;
                     ViewBag.DataInicial = jogo[0].rodada.dataInicio;
                     ViewBag.DataFinal = jogo[0].rodada.dataFim;

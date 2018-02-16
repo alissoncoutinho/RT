@@ -86,7 +86,7 @@ namespace Barragem.Controllers
             {
                 barragemId = Convert.ToInt32(cookie.Value.ToString());
             }
-            ViewBag.barragemId = new SelectList(db.BarragemView, "Id", "nome", barragemId);
+            ViewBag.barragemId = barragemId;
             ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == barragemId).ToList(), "Id", "nome");
             return View();
         }

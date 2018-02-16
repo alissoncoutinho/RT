@@ -21,8 +21,8 @@ namespace Barragem.Controllers
         public ActionResult Index(int id=0)
         {
             List<Rancking> rancking;
+            int barragemId = 0;
             try{
-                int barragemId = 0;
                 if (id == 0){
                     UserProfile usuario = null;
                     if (User.Identity.Name != ""){
@@ -46,11 +46,10 @@ namespace Barragem.Controllers
             }
             rancking = db.Rancking.Include(r => r.userProfile).Include(r => r.rodada).
                 Where(r => r.rodada_id == id && r.posicao > 0 && r.userProfile.situacao != "desativado" && r.userProfile.situacao != "inativo").OrderBy(r=>r.classe.nivel).ThenBy(r => r.posicao).ToList();
-
+            ViewBag.Classes = db.Classe.Where(c => c.barragemId == barragemId).ToList();
             ViewBag.rankingGeral = rancking.OrderBy(r => r.posicao).ToList();
-            var barragem = rancking[0].rodada.barragemId;
-            ViewBag.Classes = db.Classe.Where(c => c.barragemId == barragem).ToList();
             if (rancking.Count() > 0){
+                var barragem = rancking[0].rodada.barragemId;
                 ViewBag.Rodada = rancking[0].rodada.codigoSeq;
                 ViewBag.RodadaId = rancking[0].rodada.Id;
                 ViewBag.dataRodada = (rancking[0].rodada.dataFim + "").Substring(0, 10);

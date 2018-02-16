@@ -42,6 +42,8 @@ namespace Barragem.Context
         public DbSet<InscricaoTorneio> InscricaoTorneio { get; set; }
 
         public DbSet<Classe> Classe { get; set; }
+
+        public DbSet<ClasseTorneio> ClasseTorneio { get; set; }
                 
 
 

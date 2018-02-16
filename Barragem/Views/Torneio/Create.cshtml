@@ -58,13 +58,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.qtddClasses, new { @class = "col-sm-2 control-label" })
                 <div class="col-sm-4 input-group">
-                    <select id="qtddClasses" name="qtddClasses" class="form-control">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                    <input type="number" id="qtddClasses" name="qtddClasses" class="form-control"/>
                 </div>
                 @Html.ValidationMessageFor(model => model.qtddClasses)
             </div>
@@ -72,7 +66,7 @@
                 <div class="col-sm-offset-2 col-sm-6">
                     <div class="checkbox">
                         <label>
-                            @Html.CheckBoxFor(model => model.isMaisUmaClasse, new { @checked = "checked" }) Inscrição em + de 1 classe
+                            <input type="checkbox" value="true" name="isMaisUmaClasse" /> @Html.Raw("Inscrição em + de 1 classe")
                         </label>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ namespace Barragem.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public void Request(HttpRequest Request)
         {
             bool isSandbox = true;

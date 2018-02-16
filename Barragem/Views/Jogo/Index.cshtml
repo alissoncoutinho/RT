@@ -1,13 +1,19 @@
 ﻿@{
     //Layout = "~/Views/Shared/_LayoutExterno.cshtml";
     ViewBag.Title = "Jogos";
-    string dataIni = (String)ViewBag.dataInicial.ToString("dd/MM/yyyy");
-    string dataFim = (String)ViewBag.dataFinal.ToString("dd/MM/yyyy");
+    string dataIni = "";
+    string dataFim = "";
+    if (!String.IsNullOrEmpty(ViewBag.dataInicial)) { 
+        dataIni = (String)ViewBag.dataInicial.ToString("dd/MM/yyyy");
+        dataFim = (String)ViewBag.dataFinal.ToString("dd/MM/yyyy");
+    }
 }
 @model IEnumerable<Barragem.Models.Jogo>
 
     <h4>
-        @ViewBag.Temporada - até @dataFim
+        @if (!String.IsNullOrEmpty(ViewBag.dataInicial)) { 
+            @Html.Raw(ViewBag.Temporada + " - até " + dataFim)
+        }
     </h4>
     <ul class="nav nav-tabs" id="myTab">
     @{var classes = ViewBag.Classes;}

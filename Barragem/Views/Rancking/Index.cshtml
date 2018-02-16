@@ -6,7 +6,9 @@
     <h4>Rodada @ViewBag.Rodada - @ViewBag.dataRodada</h4>
 
     <p>
-        @Html.ActionLink("Ranking anteriores", "listarRancking", new { idRodadaAtual = ViewBag.RodadaId })
+        @if (Model.Count() > 0) { 
+            @Html.ActionLink("Ranking anteriores", "listarRancking", new { idRodadaAtual = ViewBag.RodadaId })
+        }
     </p>
     <ul class="nav nav-tabs" id="myTab">
         @{var classes = ViewBag.Classes;}
