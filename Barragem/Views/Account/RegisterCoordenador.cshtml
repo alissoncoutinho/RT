@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "RegisterCoordenador";
+}
+
+<h3>Selecionar Ranking</h3>
+
+<div class="col-md-4">
+    @Html.DropDownList("barragemId", null, new { @class = "form-control" })
+</div>
+<div class="col-md-4">
+    <a onclick="Selecionar()" class="btn btn-primary btn-small">Selecionar</a>
+</div>
+<br><br><br>
+@section Scripts {
+    <script type="text/javascript">
+        function Selecionar() {
+            var barragemId = document.getElementById('barragemId').value;
+            window.location = "Register?barragemId="+barragemId;
+        }
+    </script>
+}
+
+

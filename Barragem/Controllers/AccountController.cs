@@ -91,6 +91,11 @@ namespace Barragem.Controllers
             return View();
         }
 
+        public ActionResult RegisterCoordenador()
+        {
+            ViewBag.barragemId = new SelectList(db.BarragemView.ToList(), "Id", "nome");
+            return View();
+        }
         //
         // POST: /Account/Register
 

@@ -10,7 +10,7 @@
     @if ((Roles.IsUserInRole("admin")) || (Roles.IsUserInRole("organizador")))
     {
         <p>
-            <a href="@Url.Action("Register")" class="btn btn-primary btn-small"><span class="glyphicon glyphicon-plus"></span> Novo</a>
+            <a href="@Url.Action("RegisterCoordenador")" class="btn btn-primary btn-small"><span class="glyphicon glyphicon-plus"></span> Novo</a>
         </p>
         using (Html.BeginForm())
         {

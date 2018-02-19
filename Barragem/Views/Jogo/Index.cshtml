@@ -3,7 +3,7 @@
     ViewBag.Title = "Jogos";
     string dataIni = "";
     string dataFim = "";
-    if (!String.IsNullOrEmpty(ViewBag.dataInicial)) { 
+    if (ViewBag.dataInicial != null) { 
         dataIni = (String)ViewBag.dataInicial.ToString("dd/MM/yyyy");
         dataFim = (String)ViewBag.dataFinal.ToString("dd/MM/yyyy");
     }
@@ -11,7 +11,7 @@
 @model IEnumerable<Barragem.Models.Jogo>
 
     <h4>
-        @if (!String.IsNullOrEmpty(ViewBag.dataInicial)) { 
+        @if (ViewBag.dataInicial != null) { 
             @Html.Raw(ViewBag.Temporada + " - até " + dataFim)
         }
     </h4>
