@@ -27,10 +27,11 @@ namespace Barragem.Controllers
         // GET: /Account/Login
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(string returnUrl="", string userName="")
         {
-            //ViewBag.ReturnUrl = returnUrl;
-            ViewBag.ReturnUrl = "";
+            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.userName = userName;
+            //ViewBag.ReturnUrl = "";
             return View();
         }
 
@@ -55,7 +56,12 @@ namespace Barragem.Controllers
                 cookieNome.Value = Server.UrlEncode(usuario.barragem.nome);
                 cookieNome.Expires = dtNow + tsMinute;
                 Response.Cookies.Add(cookieNome);
-                return RedirectToLocal(returnUrl);
+                if (String.IsNullOrEmpty(returnUrl)) { 
+                    return RedirectToAction("Index2", "Home");
+                }else{
+                    return RedirectToAction("RegisterTorneio", "Account");
+                }
+                //return RedirectToLocal(returnUrl);
             }
 
             // If we got this far, something failed, redisplay form
@@ -88,6 +94,44 @@ namespace Barragem.Controllers
             }
             ViewBag.barragemId = barragemId;
             ViewBag.classeId = new SelectList(db.Classe.Where(c => c.barragemId == barragemId).ToList(), "Id", "nome");
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult RegisterEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult RegisterEmail(VerificacaoCadastro model)
+        {
+            if (ModelState.IsValid){
+                if (!Funcoes.IsValidEmail(model.email)){
+                        ViewBag.MsgErro = string.Format("E-mail inválido. '{0}'", model.email);
+                        return View(model);
+                }else{
+                    var registers = db.UserProfiles.Where(u=> u.email.Equals(model.email) && !u.situacao.Equals("desativado")).ToList();
+                    if (registers.Count()>0){
+                        var usuario = registers[0];
+                        return RedirectToAction("Login", new { returnUrl = "RegisterTorneio", userName = usuario.UserName });
+                    }else{
+                        return RedirectToAction("RegisterTorneio", new { email = model.email });
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterTorneio(string email)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                UserProfile usu = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+                return View(usu);
+            }
+            ViewBag.email = email;
             return View();
         }
 

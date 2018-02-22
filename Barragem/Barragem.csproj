@@ -844,6 +844,10 @@
     <Content Include="Views\Notificacao\RetornoPagamento.cshtml" />
     <Content Include="Views\Home\IndexTorneio.cshtml" />
     <Content Include="Views\Account\RegisterCoordenador.cshtml" />
+    <Content Include="Views\Notificacao\TesteRequest.cshtml" />
+    <Content Include="Views\Shared\_LayoutTorneio.cshtml" />
+    <Content Include="Views\Account\RegisterTorneio.cshtml" />
+    <Content Include="Views\Account\RegisterEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -21,8 +21,13 @@ namespace Barragem.Controllers
         {
             return View();
         }
+
+        public ActionResult TesteRequest()
+        {
+            return View();
+        }
         [HttpPost]
-        public void Request(HttpRequest Request)
+        public void Receber(string notificationCode, string notificationType)
         {
             bool isSandbox = true;
 
@@ -30,8 +35,8 @@ namespace Barragem.Controllers
 
             AccountCredentials credentials = PagSeguroConfiguration.Credentials(isSandbox);
 
-            string notificationType = Request.Form["notificationType"];
-            string notificationCode = Request.Form["notificationCode"];
+            //string notificationType = Request.Form["notificationType"];
+            //string notificationCode = Request.Form["notificationCode"];
 
             if (notificationType == "transaction")
             {
@@ -73,7 +78,8 @@ namespace Barragem.Controllers
 
                 string[] refs = reference.Split('-');
                 if (refs[0].Equals("T")){ // se for torneio
-                    var inscricao = db.InscricaoTorneio.Find(refs[1]);
+                    int idInscricao = Convert.ToInt32(refs[1]);
+                    var inscricao = db.InscricaoTorneio.Find(idInscricao);
                     if (status == 3) {
                         inscricao.isAtivo = true;
                     }

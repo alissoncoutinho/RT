@@ -91,6 +91,7 @@ namespace Barragem.Controllers
                 Response.Cookies.Add(cookieNome);
                 var barragemId = barragem[0].Id;
                 var torneio = db.Torneio.Where(t => t.barragemId == barragemId && t.isAtivo).ToList();
+                ViewBag.contato = (from bg in db.Barragens where bg.Id == barragemId select bg.contato).Single();
                 if (torneio.Count() > 0)
                 {
                     return View(torneio[0]);

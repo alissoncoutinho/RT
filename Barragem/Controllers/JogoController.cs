@@ -51,6 +51,9 @@ namespace Barragem.Controllers
                 var jogo = db.Jogo.Include(j => j.desafiado).Include(j => j.desafiante).Include(j => j.rodada).
                     Where(j => j.rodada_id == rodadaId).OrderBy(j => j.desafiado.classe.nivel).ToList();
                 msg = "jogos";
+                if ((rodadaId > 0) && (jogo.Count() > 0)){
+                    barragemId = jogo[0].rodada.barragemId;
+                }
                 ViewBag.Classes = db.Classe.Where(c => c.barragemId == barragemId).ToList();
                 if (jogo.Count() > 0)
                 {

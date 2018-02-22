@@ -226,4 +226,10 @@ namespace Barragem.Models
         [Required(ErrorMessage = "Campo obrigatório")]
         public string SenhaConfirmacao { get; set; }
     }
+    public class VerificacaoCadastro
+    {
+        [Required(ErrorMessage = "O campo email é obrigatório")]
+        [DataType(DataType.EmailAddress)]
+        public string email { get; set; }
+    }
 }

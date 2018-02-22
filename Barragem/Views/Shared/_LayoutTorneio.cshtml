@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+    HttpCookie cookie = Request.Cookies["_barragemId"];
+    HttpCookie cookieNome = Request.Cookies["_barragemNome"];
+    var barraId = 0;
+    var barraNome = "Ranking de Tênis";
+    if (cookie != null)
+    {
+        barraId = Convert.ToInt32(cookie.Value.ToString());
+    }
+    if (cookieNome != null)
+    {
+        barraNome = Server.UrlDecode(cookieNome.Value);
+    }
+    var scrLogo = "/Content/image/logo" + barraId + ".png";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jogue tênis de maneira inovadora</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/Content/image/logo.jpg">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
+    @Styles.Render("~/css")
+    @if ((barraId == 1010) || (barraId == 1012))
+    {
+        @Styles.Render("~/css4")
+    }
+    else if (barraId > 7)
+    {
+        @Styles.Render("~/css7")
+    }
+    else
+    {
+        @Styles.Render("~/css" + barraId)
+    }
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="home-page">
+    <!-- ******HEADER****** -->
+    <header id="header" class="header navbar-fixed-top">
+        <div class="container">
+            <h1 class="logo">
+                <a href="~/Home/IndexBarragens">
+                    <span class="text">
+                        @if ((barraId != 0) && (barraId < 9999))
+                        {<img width="50" height="50" src="@scrLogo">}&nbsp;@Html.Raw(barraNome)
+                    </span>
+                </a>
+            </h1><!--//logo-->
+            <nav class="main-nav navbar-right" role="navigation">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        Menu
+                    </button><!--//nav-toggle-->
+                </div><!--//navbar-header-->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active nav-item"><a href="/Home/IndexBarragens">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" href="#">Torneio <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Inscritos", "Inscricao", "Torneio")</li>
+                                <li>@Html.ActionLink("Inscrição", "Inscricao", "Torneio")</li>
+                                <li>@Html.ActionLink("Tabela", "Tabela", "Torneio")</li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" href="#">Informações <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Regulamento", "Regulamento2", "Home")</li>
+                                <li>@Html.ActionLink("Quem somos", "QuemSomos2", "Home")</li>
+                                <li>@Html.ActionLink("Fale Conosco", "FaleConosco2", "Home")</li>
+                            </ul>
+                        </li><!--//dropdown-->
+                        <li class="nav-item"><a href="/Account/Login">Log in</a></li>
+                        <li class="nav-item nav-item-cta last">
+                            <a class="btn btn-cta btn-cta-secondary" href="@Url.Action("RegisterEmail", "Account")">
+                                Inscreva-se
+                            </a>
+                        </li>
+                    </ul><!--//nav-->
+                </div><!--//navabr-collapse-->
+            </nav><!--//main-nav-->
+        </div><!--//container-->
+    </header><!--//header-->
+    @RenderBody()
+    @Html.Partial("_Rodape2")
+    <!-- Javascript -->
+    @Scripts.Render("~/js")
+    @Scripts.Render("~/bundles/load-image")
+    @RenderSection("scripts", required: false)
+    <!-- Vimeo video API -->
+    <!--script-- src="http://a.vimeocdn.com/js/froogaloop2.min.js"></!--script-->
+</body>
+</html>

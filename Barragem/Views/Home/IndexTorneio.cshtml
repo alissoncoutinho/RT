@@ -1,7 +1,7 @@
 ﻿@model Barragem.Models.Torneio
 @{
     ViewBag.Title = "Torneio de Tênis";
-    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+    Layout = "~/Views/Shared/_LayoutTorneio.cshtml";
 }
 <div class="bg-slider-wrapper">
     <div class="flexslider bg-slider">
@@ -13,106 +13,28 @@
 <section class="promo section section-on-bg">
     <div class="container text-center">
         <h2 class="title">@Html.Raw(Model.nome)</h2>
-        <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-    </div><!--//container-->
-</section><!--//promo-->
+        <p class="intro">De @Html.Raw(String.Format("{0:dd/MM/yyyy}", Model.dataInicio)) até @Html.Raw(String.Format("{0:dd/MM/yyyy}", Model.dataFim))</p>
+        <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("RegisterTorneio", "Account")">Inscreva-se</a> <a class="btn btn-cta btn-cta-primary" href="@Url.Action("Informacao", "Torneio")">Mais Informações</a></p>
+    </div>
+</section>
 <div class="sections-wrapper">
-    <!-- ******Why Section****** -->
-    <section id="why" class="section why">
+    <section class="steps section">
         <div class="container">
-            <h2 class="title text-center">De @Html.Raw(Model.dataInicio) até @Html.Raw(Model.dataFim)</h2>
-            <p class="intro text-center">Inscrições abertas até o dia @Html.Raw(Model.dataFimInscricoes)</p>
-            <div class="row item">
-                <div class="content col-md-4 col-sm-12 col-xs-12">
-                    <h3 class="title">Venha competir conosco</h3>
-                    <div class="desc">
-                        <p>Nós acreditamos que a melhor maneira de explorar todos os benefícios que este esporte pode oferecer é jogando com o maior número de pessoas posssíveis.</p>
-                        <p>Independente do seu nível de jogo, quando mais cedo você começar a realizar jogos, mais rápido você entenderá a dinâmica deste maravilhoso esporte.</p>
-                    </div>
-                    <!--div class="quote">
-                        <div class="quote-profile">
-                            <img class="img-responsive img-circle" src="~/Images/people/profile-s-1.png" alt="" />
-                        </div>
-                        <div class="quote-content">
-                            <blockquote><p><a href="https://twitter.com/3rdwave_themes" target="_blank">lia</a> De mais! Tenho apenas dois anos no tênis e depois que passei a utilizar a plataforma meu jogo melhorou bastante. :)</p></blockquote>
-                            <p class="source">Lia, Taguatinga</p>
-                        </div>
-                    </div-->
-                </div><!--//content-->
-                <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-offset-1 col-sm-offset-0 col-xs-offset-0 col-lg-4">
-                    <img class="img-responsive" src="~/Content/image/grafico.png" alt="" />
-                </figure>
-                <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-            </div><!--//item-->
-            <div class="row item">
-                <div class="content col-md-4 col-sm-12 col-xs-12 col-md-push-8 col-sm-push-0 col-xs-push-0">
-                    <h3 class="title">Sistema inspirado no ranking da APT</h3>
-                    <div class="desc">
-                        <p>Acompanhe a sua evolução com dados estatísticos, descubra o nível do seu jogo, crie novas metas, faça um treino direcionado e muito mais.</p>
-                    </div>
-                    <!--div class="quote">
-                        <div class="quote-profile">
-                            <img class="img-responsive img-circle" src="~/Images/people/profile-s-2.png" alt="" />
-                        </div>
-                        <div class="quote-content">
-                            <blockquote><p>Os treinamentos direcionados e em equipe foram fundamentais para eu soltar mais o meu jogo.</p></blockquote>
-                            <p class="source">Chico, Águas Claras</p>
-                        </div>
-                    </div-->
-                </div><!--//content-->
-                <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-pull-4 col-sm-pull-0 col-xs-pull-0">
-                    <img class="img-responsive" src="~/Content/image/quadra.png" alt="" />
-                    <!--div class="control text-center"-->
-                    <!--button type="button" class="play-trigger" data-toggle="modal" data-target="#modal-video"><i class="fa fa-play"></i></button-->
-                    <!--/div --><!--//control-->
-                </figure>
-                <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-            </div><!--//item-->
-            <div class="row item">
-                <div class="content col-md-4 col-sm-12 col-xs-12">
-                    <h3 class="title">Premiação</h3>
-                    <div class="desc">
-                        <p>@Html.Raw(Model.premiacao)</p>
-                    </div>
-                    <!--div class="quote">
-                        <div class="quote-profile">
-                            <img class="img-responsive img-circle" src="~/Images/people/profile-s-3.png" alt="" />
-                        </div>
-                        <div class="quote-content">
-                            <blockquote>
-                                <p>
-                                    Adoro esta adrenalida antes das partidas, a dopamina durante os jogos e o relaxamento pós-jogo. Ser desafiado nos mantem mais estimulados.
-                                </p>
-                            </blockquote>
-                            <p class="source"><a href="#">Andreia</a>, Asa sul</p>
-                        </div>
-                    </div-->
-                </div>
-                <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-offset-1 col-sm-offset-0 col-xs-offset-0">
-                    <img class="img-responsive" src="~/Content/image/desafio.png" alt="" />
-                </figure>
-                <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-            </div><!--//item-->
-            <div class="row item last-item">
-                <div class="content col-md-4 col-sm-12 col-xs-12 col-md-push-8 col-sm-push-0 col-xs-push-0">
-                    <h3 class="title">Faça amigos</h3>
-                    <div class="desc">
-                        <p>Conheça pessoas novas, faça novos amigos. Descubra o "fair play" que há no tênis.</p>
-                        <p>Conecte-se a pessoas com a mesma paixão pelo tênis que você.</p>
-                    </div>
-                </div>
-                <figure class="figure col-md-7 col-sm-12 col-xs-12 col-md-pull-4 col-sm-pull-0 col-xs-pull-0">
-                    <img class="img-responsive" src="~/Content/image/amigos.png" alt="" />
-                </figure>
-                <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-            </div><!--//item-->
+            <div class="row">
+                <div class="step text-center col-xs-12 col-sm-4">
+                    <h3 class="title"><span class="number"><span class="glyphicon glyphicon-list"></span></span><br><span class="text">Inscrições</span></h3>
+                    <p>As inscrições do Torneio vão até o dia @Html.Raw(Model.dataFimInscricoes). O valor da inscrição é R$ @Html.Raw(Model.valor),00</p>
+                </div><!--//step-->
+                <div class="step text-center col-xs-12 col-sm-4">
+                    <h3 class="title"><span class="number"><img style="padding-bottom:15px" src="/Content/image/trophy_win.png" width="40" height="50"></span><br><span class="text">Premiação</span></h3>
+                    <p>@Html.Raw(Model.premiacao)</p>
+                </div><!--//step-->
+                <div class="step text-center col-xs-12 col-sm-4">
+                    <h3 class="title"><span class="number"><span class="glyphicon glyphicon-phone"></span></span><br><span class="text">Contato</span></h3>
+                    <p>@Html.Raw(ViewBag.contato)</p>
+                </div><!--//step-->
+            </div><!--//row-->
+            <div class="text-center"><a class="btn btn-cta btn-cta-primary" href="@Url.Action("RegisterTorneio", "Account")">Inscreva-se</a></div>
         </div><!--//container-->
-    </section><!--//why-->
-    <!-- ******CTA Section****** -->
-    <section id="cta-section" class="section cta-section text-center home-cta-section">
-        <div class="container">
-            <h2 class="title">Não fique sozinho. Venha jogar conosco.</h2>
-            <p><a class="btn btn-cta btn-cta-primary" href="@Url.Action("Register", "Account")">Cadastre-se</a></p>
-        </div><!--//container-->
-    </section><!--//cta-section-->
-</div><!--//section-wrapper-->
+    </section>
+</div>
